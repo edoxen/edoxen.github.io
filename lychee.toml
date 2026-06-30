@@ -1,0 +1,30 @@
+# Lychee Link Checker Configuration
+# For Documentation: https://github.com/lycheeverse/lychee
+
+# Cache results to avoid re-checking same URLs
+cache = true
+max_cache_age = "1d"
+
+# Check both source files and built site
+include_verbatim = true
+
+# File types to check
+include = [
+  ".vitepress/dist/**/*.html"
+]
+
+# Exclude patterns for URLs.
+# Strings are exact matches; patterns starting with "^" are regex.
+exclude = [
+  ".git",
+  ".github",
+  "node_modules",
+  "vendor",
+  ".bundle",
+  ".sass-cache",
+  ".jekyll-cache",
+  # The docs include example OIML PDF URLs with literal "..." placeholders.
+  # Those would always 404 since /.../ is not a real path on oiml.org.
+  # Real OIML URLs (in source-url.md) are not affected by this rule.
+  "^https?://(www\\.)?oiml\\.org/[^ ]*\\.\\.\\.",
+]

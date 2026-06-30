@@ -1,0 +1,73 @@
+---
+title: Edoxen 1.0 — A common model for resolutions across ISO, IEC, ITU, BIPM, OIML, and ILO
+description: The first stable release of the Edoxen information model, the Ruby gem, and the JSON Schema. 1,640 OIML resolutions across 28 meetings encoded in EN + FR serve as the reference corpus.
+authors:
+  - Ribose
+date: 2026-06-30
+---
+
+# Edoxen 1.0 — A common model for resolutions across ISO, IEC, ITU, BIPM, OIML, and ILO
+
+<BlogByline />
+
+We're pleased to announce **Edoxen 1.0**, the first stable release
+of the Edoxen information model, the `edoxen` Ruby gem, and the JSON
+Schema that locks the wire format.
+
+## What's in 1.0
+
+Edoxen provides a single, multilingual representation for formal
+**resolutions** — regardless of which standards body issued them.
+ISO, IEC, ITU, BIPM, OIML, and ILO each carry their own publication
+convention; Edoxen is the common substrate across all of them.
+
+The 1.0 release ships:
+
+- **`metanorma/edoxen-model`** — the LutaML/UML information-model
+  definition, with one class per real-world concept
+  (`ResolutionSet`, `Resolution`, `Localization`, `Action`,
+  `Consideration`, `Approval`, `SourceUrl`, …).
+- **`metanorma/edoxen`** — the Ruby gem and JSON Schema, plus a CLI:
+  `edoxen validate <glob>` and `edoxen normalize <glob>`.
+- **This site** — the user-facing documentation, including the data
+  model reference and a deep-dive on
+  [EN+FR localisation](/docs/localization).
+
+## Reference corpus
+
+The schema and the gem were validated against the full
+**OIML Resolutions** archive — **1,640 resolutions** spread across
+**28 meetings**, each represented once in English and once in French.
+
+That's 3,280 `Localization` entries exercising every code path:
+
+- bilingual `localizations[]` arrays
+- per-language `source_urls[]`
+- DOI / URN assignment
+- `decides`, `approves`, `notes`, `requests`, `authorises`, and the
+  rest of the action-verb enum
+- `Consideration`, `Approval`, and `ResolutionDate` edges
+
+If a YAML serializes and re-parses cleanly through OIML, it serializes
+and re-parses cleanly through anything.
+
+## Why "Edoxen"
+
+The name is the Ancient Greek formula with which every Athenian
+decree opened — **ἔδοξεν** (*edoxen*): *"it was the opinion of…"*
+— the same stock phrase that begins "it was resolved…", "it seemed
+good to…", "il a été décidé…" down to the present day. The full
+etymology is on the [About](/about) page.
+
+## Get started
+
+```sh
+gem install edoxen
+edoxen validate resolutions/*.yaml
+```
+
+Then read the [Introduction](/docs/introduction) or jump straight to
+the [Localization deep-dive](/docs/localization) for an annotated
+tour of the EN+FR sync flow.
+
+— *The Edoxen maintainers*

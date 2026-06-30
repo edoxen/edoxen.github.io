@@ -5,6 +5,9 @@
   --vp-c-brand-2: #035a8f;
   --vp-c-brand-3: #013a5e;
   --vp-c-brand-soft: rgba(14, 116, 144, 0.14);
+
+  /* Make the navbar logo large enough for the stoichedon mark to read clearly. */
+  --vp-nav-logo-height: 40px;
 }
 
 .VPNavBarTitle .title {
@@ -17,3 +20,13 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* Dark-mode brand colours — lighter, brighter so contrast holds on #1b1b1f. */
+.dark {
+  --vp-c-brand-1: #67e8f9;
+  --vp-c-brand-2: #38bdf8;
+  --vp-c-brand-3: #0ea5e9;
+}
+
+/* The about-page styling is scoped via <style scoped> blocks embedded in
+   about.md itself; no global rules here. */

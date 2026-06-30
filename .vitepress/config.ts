@@ -11,14 +11,25 @@ export default defineConfig({
   ],
 
   themeConfig: {
-    logo: '/edoxen-logo.svg',
+    logo: {
+      light: '/edoxen-logo-full.svg',
+      dark: '/edoxen-logo-full-dark.svg',
+    },
+    siteTitle: false,
 
     nav: [
       { text: 'Introduction', link: '/docs/introduction' },
       { text: 'Schema', link: '/docs/schema' },
       { text: 'Multilingual', link: '/docs/multilingual' },
-      { text: 'Ruby gem', link: 'https://github.com/metanorma/edoxen' },
-      { text: 'Models', link: 'https://github.com/metanorma/edoxen-model' },
+      { text: 'Blog', link: '/blog/' },
+      { text: 'About', link: '/about' },
+      {
+        text: 'Repos',
+        items: [
+          { text: 'Ruby gem', link: 'https://github.com/metanorma/edoxen' },
+          { text: 'LutaML models', link: 'https://github.com/metanorma/edoxen-model' },
+        ],
+      },
     ],
 
     socialLinks: [
@@ -57,6 +68,7 @@ export default defineConfig({
           items: [
             { text: 'Overview', link: '/docs/multilingual' },
             { text: 'Localization', link: '/docs/localization' },
+            { text: 'Sync flow (deep-dive)', link: '/docs/localization-sync' },
             { text: 'Source URL', link: '/docs/source-url' },
           ],
         },

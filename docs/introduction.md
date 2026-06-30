@@ -57,9 +57,13 @@ resolutions:
 
 ## Where to next?
 
+- [Architecture](/docs/architecture) — the three-layer model, the
+  round-trip pipeline, and the EN+FR plumbing, with diagrams.
 - [Installation](/docs/installation) — set up the gem in your project.
 - [Schema](/docs/schema) — see the full JSON Schema reference.
 - [Multilingual support](/docs/multilingual) — how to author EN/FR
   (or any language pair) resolution sets.
+- [Localization sync (deep-dive)](/docs/localization-sync) — how EN+FR
+  alignment is preserved inside a single file.
 - [CLI](/docs/cli) — `edoxen validate` and `edoxen normalize` from
   the command line.

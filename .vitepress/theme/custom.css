@@ -1,0 +1,19 @@
+/* Edoxen VitePress custom styles. */
+
+:root {
+  --vp-c-brand-1: #0e7490;
+  --vp-c-brand-2: #035a8f;
+  --vp-c-brand-3: #013a5e;
+  --vp-c-brand-soft: rgba(14, 116, 144, 0.14);
+}
+
+.VPNavBarTitle .title {
+  font-weight: 600;
+}
+
+.VPHero .name {
+  background: linear-gradient(120deg, var(--vp-c-brand-1), var(--vp-c-brand-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

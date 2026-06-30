@@ -1,43 +1,122 @@
 <script setup lang="ts">
-// Tiny YAML syntax highlighter — wraps tokens in spans.
-// Deliberately minimal: keys, strings, numbers, comments, punctuation.
-// Anything more sophisticated belongs in Shiki, but Shiki inside a Vue
-// template requires async loading; this is good enough for a hero specimen.
+// Tiny single-pass YAML tokenizer.
+// Earlier iterations used chained regex replacements and ended up
+// double-wrapping the class-attribute strings inside their own spans.
+// This version walks the string left-to-right and never re-processes
+// its own output.
 
-function highlight(yaml: string): string {
-  // Escape HTML first
-  let s = yaml
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
+type TokenType = 'k' | 's' | 'n' | 'c' | 'p' | 't' | 'ws'
+type Token = [TokenType, string]
 
-  // Comments
-  s = s.replace(/(^|\s)(#.*)$/gm, '$1<span class="y-c">$2</span>')
+function tokenize(yaml: string): Token[] {
+  const tokens: Token[] = []
+  const n = yaml.length
+  let i = 0
 
-  // Keys (word: at start of line or after dash-space)
-  s = s.replace(
-    /^(\s*-?\s*)([A-Za-z_][A-Za-z0-9_]*)(:)/gm,
-    '$1<span class="y-k">$2</span>$3'
-  )
+  while (i < n) {
+    const rest = yaml.slice(i)
 
-  // Inline-table keys { key: ... }
-  s = s.replace(
-    /(\{|,\s*)([A-Za-z_][A-Za-z0-9_]*)(:)/g,
-    '$1<span class="y-k">$2</span>$3'
-  )
+    // Whitespace (spaces and tabs)
+    const ws = rest.match(/^[ \t]+/)
+    if (ws) {
+      tokens.push(['ws', ws[0]])
+      i += ws[0].length
+      continue
+    }
 
-  // Strings — double-quoted
-  s = s.replace(/"([^"]*)"/g, '<span class="y-s">"$1"</span>')
-  // Strings — single-quoted
-  s = s.replace(/'([^']*)'/g, "<span class=\"y-s\">'$1'</span>")
+    // Newline
+    if (rest[0] === '\n') {
+      tokens.push(['ws', '\n'])
+      i++
+      continue
+    }
 
-  // Numbers
-  s = s.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="y-n">$1</span>')
+    // Comment
+    const comment = rest.match(/^#[^\n]*/)
+    if (comment) {
+      tokens.push(['c', comment[0]])
+      i += comment[0].length
+      continue
+    }
 
-  // Block scalars (|)
-  s = s.replace(/(\|)(\s*)$/gm, '<span class="y-p">$1</span>$2')
+    // Key — identifier followed by ':' then whitespace or EOL
+    const keyMatch = rest.match(/^([A-Za-z_][A-Za-z0-9_]*):(?=[\s]|$)/)
+    if (keyMatch) {
+      tokens.push(['k', keyMatch[1]])
+      tokens.push(['p', ':'])
+      i += keyMatch[1].length + 1
+      continue
+    }
 
-  return s
+    // String — double-quoted
+    const strD = rest.match(/^"(?:[^"\\]|\\.)*"/)
+    if (strD) {
+      tokens.push(['s', strD[0]])
+      i += strD[0].length
+      continue
+    }
+
+    // String — single-quoted
+    const strS = rest.match(/^'(?:[^'\\]|\\.)*'/)
+    if (strS) {
+      tokens.push(['s', strS[0]])
+      i += strS[0].length
+      continue
+    }
+
+    // Number
+    const num = rest.match(/^-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/)
+    if (num) {
+      tokens.push(['n', num[0]])
+      i += num[0].length
+      continue
+    }
+
+    // Block-scalar markers
+    if (rest[0] === '|' || rest[0] === '>') {
+      tokens.push(['p', rest[0]])
+      i++
+      continue
+    }
+
+    // Punctuation
+    if (rest[0] && '{}[],:-'.includes(rest[0])) {
+      tokens.push(['p', rest[0]])
+      i++
+      continue
+    }
+
+    // Plain scalar run — maximal sequence of chars that aren't
+    // special. This catches unquoted values like 'Berlin, Germany'
+    // or 'CIML/2004/1' as a single text token (so numbers inside
+    // them aren't单独 highlighted).
+    const scalar = rest.match(/^[^{}\[\],:\s#"'|>][^{}\[\],:\s#"'|>]*/)
+    if (scalar) {
+      tokens.push(['t', scalar[0]])
+      i += scalar[0].length
+      continue
+    }
+
+    // Fallback
+    tokens.push(['t', rest[0]])
+    i++
+  }
+
+  return tokens
+}
+
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
+function render(tokens: Token[]): string {
+  return tokens
+    .map(([type, value]) => {
+      const esc = escapeHtml(value)
+      if (type === 'ws' || type === 't' || type === 'p') return esc
+      return `<span class="y-${type}">${esc}</span>`
+    })
+    .join('')
 }
 
 const specimenYaml = `metadata:
@@ -72,7 +151,7 @@ resolutions:
               Le Comité a approuvé le procès-verbal de sa 38e réunion
               sans modification.`
 
-const highlighted = highlight(specimenYaml)
+const highlighted = render(tokenize(specimenYaml))
 </script>
 
 <template>

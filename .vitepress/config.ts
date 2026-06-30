@@ -8,6 +8,15 @@ export default defineConfig({
 
   head: [
     ['meta', { name: 'theme-color', content: '#0e7490' }],
+    // Fraunces — expressive variable serif for display.
+    // IBM Plex Sans — engineered sans for body.
+    // JetBrains Mono — code & YAML.
+    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
+    ['link', {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap',
+    }],
   ],
 
   themeConfig: {
@@ -19,6 +28,7 @@ export default defineConfig({
 
     nav: [
       { text: 'Introduction', link: '/docs/introduction' },
+      { text: 'Architecture', link: '/docs/architecture' },
       { text: 'Schema', link: '/docs/schema' },
       { text: 'Multilingual', link: '/docs/multilingual' },
       { text: 'Blog', link: '/blog/' },
@@ -37,7 +47,7 @@ export default defineConfig({
     ],
 
     footer: {
-      message: 'An open source project of <a href="https://www.ribose.com">Ribose</a>',
+      message: 'An open source project of <a href="https://www.ribose.com">Ribose</a> · 2-Clause BSD',
       copyright: 'Copyright © 2026 Ribose',
     },
 
@@ -47,6 +57,7 @@ export default defineConfig({
           text: 'Getting started',
           items: [
             { text: 'Introduction', link: '/docs/introduction' },
+            { text: 'Architecture', link: '/docs/architecture' },
             { text: 'Origin', link: '/docs/origin' },
             { text: 'Installation', link: '/docs/installation' },
           ],

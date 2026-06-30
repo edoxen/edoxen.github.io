@@ -1,32 +1,269 @@
-/* Edoxen VitePress custom styles. */
+/* ===========================================================================
+   Edoxen — Editorial Inscription theme
+   =========================================================================== */
+
+/* ---------- Fonts ------------------------------------------------------- */
 
 :root {
-  --vp-c-brand-1: #0e7490;
-  --vp-c-brand-2: #035a8f;
-  --vp-c-brand-3: #013a5e;
-  --vp-c-brand-soft: rgba(14, 116, 144, 0.14);
+  --edoxen-font-display: 'Fraunces', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --edoxen-font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --edoxen-font-mono: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Cascadia Code', monospace;
+
+  /* Warm parchment light mode */
+  --edoxen-parchment: #faf7f0;
+  --edoxen-parchment-deep: #f3eee2;
+  --edoxen-ink: #1a1f2e;
+  --edoxen-ink-soft: #4a5468;
+  --edoxen-rule: #d8cfbe;
+  --edoxen-gold: #b45309;
+
+  /* Brand cyan (kept from prior identity) */
+  --edoxen-cyan: #0e7490;
+  --edoxen-cyan-deep: #035a8f;
+  --edoxen-cyan-ink: #013a5e;
+}
+
+/* Map onto VitePress tokens so the rest of the theme inherits the look. */
+:root {
+  --vp-font-family-base: var(--edoxen-font-body);
+  --vp-font-family-mono: var(--edoxen-font-mono);
+
+  --vp-c-bg: var(--edoxen-parchment);
+  --vp-c-bg-soft: var(--edoxen-parchment-deep);
+  --vp-c-bg-alt: #ffffff;
+  --vp-c-bg-elv: #ffffff;
+
+  --vp-c-text-1: var(--edoxen-ink);
+  --vp-c-text-2: var(--edoxen-ink-soft);
+  --vp-c-text-3: #6b7280;
+
+  --vp-c-divider: var(--edoxen-rule);
+  --vp-c-divider-light: #e6dccb;
+  --vp-c-divider-lighter: #efe9da;
+
+  --vp-c-brand-1: var(--edoxen-cyan);
+  --vp-c-brand-2: var(--edoxen-cyan-deep);
+  --vp-c-brand-3: var(--edoxen-cyan-ink);
+  --vp-c-brand-soft: rgba(14, 116, 144, 0.12);
+
+  --vp-c-gold: var(--edoxen-gold);
 
   /* Make the navbar logo large enough for the stoichedon mark to read clearly. */
   --vp-nav-logo-height: 40px;
 }
 
-.VPNavBarTitle .title {
-  font-weight: 600;
+.dark {
+  /* Deep archive-night */
+  --edoxen-parchment: #0c1118;
+  --edoxen-parchment-deep: #141b26;
+  --edoxen-ink: #f3eedf;
+  --edoxen-ink-soft: #c8c0ab;
+  --edoxen-rule: #2a3445;
+  --edoxen-gold: #f59e0b;
+
+  --vp-c-bg: var(--edoxen-parchment);
+  --vp-c-bg-soft: var(--edoxen-parchment-deep);
+  --vp-c-bg-alt: #161e29;
+  --vp-c-bg-elv: #181f2b;
+
+  --vp-c-text-1: var(--edoxen-ink);
+  --vp-c-text-2: var(--edoxen-ink-soft);
+  --vp-c-text-3: #94a3b8;
+
+  --vp-c-divider: var(--edoxen-rule);
+  --vp-c-divider-light: #232e3e;
+  --vp-c-divider-lighter: #1c2533;
+
+  --vp-c-brand-1: #67e8f9;
+  --vp-c-brand-2: #38bdf8;
+  --vp-c-brand-3: #0ea5e9;
+  --vp-c-brand-soft: rgba(103, 232, 249, 0.12);
+
+  --vp-c-gold: var(--edoxen-gold);
 }
 
+/* ---------- Type system ------------------------------------------------- */
+
+h1, h2, h3, h4, h5, h6,
+.VPNavBarTitle .title,
+.vp-doc h1, .vp-doc h2, .vp-doc h3, .vp-doc h4 {
+  font-family: var(--edoxen-font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  font-feature-settings: "ss01", "ss02", "liga";
+}
+
+.vp-doc h1 {
+  font-size: 2.6rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+
+.vp-doc h2 {
+  font-size: 1.8rem;
+  margin-top: 3rem;
+  padding-bottom: 0.4rem;
+  border-top: 1px solid var(--vp-c-divider);
+  padding-top: 2.4rem;
+}
+
+.vp-doc h2:first-of-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.vp-doc h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-top: 2rem;
+}
+
+.vp-doc {
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.vp-doc p,
+.vp-doc li {
+  font-family: var(--edoxen-font-body);
+}
+
+/* Inline code: distinct mono + soft tint */
+.vp-doc :not(pre) > code {
+  font-family: var(--edoxen-font-mono);
+  font-size: 0.88em;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  padding: 0.12em 0.4em;
+  border-radius: 4px;
+  border: 1px solid var(--vp-c-divider-light);
+  font-weight: 500;
+}
+
+.vp-doc pre {
+  font-family: var(--edoxen-font-mono);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+/* Display serif for the hero name */
 .VPHero .name {
+  font-family: var(--edoxen-font-display);
+  font-weight: 500;
   background: linear-gradient(120deg, var(--vp-c-brand-1), var(--vp-c-brand-2));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Dark-mode brand colours — lighter, brighter so contrast holds on #1b1b1f. */
-.dark {
-  --vp-c-brand-1: #67e8f9;
-  --vp-c-brand-2: #38bdf8;
-  --vp-c-brand-3: #0ea5e9;
+.VPNavBarTitle .title {
+  font-family: var(--edoxen-font-display);
+  font-weight: 500;
 }
 
-/* The about-page styling is scoped via <style scoped> blocks embedded in
-   about.md itself; no global rules here. */
+/* ---------- Buttons ---------------------------------------------------- */
+
+.vp-button {
+  font-family: var(--edoxen-font-body);
+}
+
+.vp-button.brand {
+  border-color: transparent;
+  background: var(--vp-c-brand-1);
+  color: #fff;
+}
+
+.vp-button.brand:hover {
+  background: var(--vp-c-brand-2);
+  border-color: transparent;
+}
+
+.vp-button.alt {
+  border-color: var(--vp-c-divider);
+  background: transparent;
+  color: var(--vp-c-text-1);
+}
+
+.vp-button.alt:hover {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+
+/* ---------- Tables ----------------------------------------------------- */
+
+.vp-doc table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.vp-doc thead {
+  background: var(--vp-c-bg-soft);
+}
+
+.vp-doc thead th {
+  font-family: var(--edoxen-font-display);
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 1px solid var(--vp-c-divider);
+  padding: 0.75rem 1rem;
+}
+
+.vp-doc tbody td {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--vp-c-divider-light);
+}
+
+.vp-doc tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.vp-doc tbody tr:hover td {
+  background: var(--vp-c-bg-soft);
+}
+
+/* ---------- Blockquotes & custom blocks -------------------------------- */
+
+.vp-doc blockquote {
+  font-family: var(--edoxen-font-display);
+  font-style: italic;
+  font-size: 1.15rem;
+  font-weight: 400;
+  border-left: 3px solid var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+  padding: 1rem 1.5rem;
+  border-radius: 0 8px 8px 0;
+  color: var(--vp-c-text-1);
+}
+
+.vp-doc .custom-block.tip {
+  border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+}
+
+/* ---------- Misc ------------------------------------------------------- */
+
+::selection {
+  background: var(--vp-c-brand-1);
+  color: #fff;
+}
+
+/* Hairline scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--vp-c-divider);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vp-c-text-3);
+}

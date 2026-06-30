@@ -349,43 +349,8 @@ edoxen validate resolutions/*.yaml</code></pre>
   animation: fadeUp 0.7s 0.3s ease both;
 }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: var(--edoxen-font-body);
-  font-size: 0.92rem;
-  font-weight: 600;
-  padding: 0.7rem 1.2rem;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background: var(--vp-c-brand-1);
-  color: #fff;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset, 0 6px 16px -6px rgba(14, 116, 144, 0.5);
-}
-
-.btn-primary:hover {
-  background: var(--vp-c-brand-2);
-  transform: translateY(-1px);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset, 0 10px 22px -6px rgba(14, 116, 144, 0.55);
-}
-
-.btn-ghost {
-  background: transparent;
-  color: var(--vp-c-text-1);
-  border-color: var(--vp-c-divider);
-}
-
-.btn-ghost:hover {
-  border-color: var(--vp-c-brand-1);
-  color: var(--vp-c-brand-1);
-}
+/* (.btn, .btn-primary, .btn-ghost live in custom.css so they're
+   reusable across pages — about, blog CTAs, etc.) */
 
 .stats {
   display: grid;

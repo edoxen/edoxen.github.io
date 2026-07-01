@@ -194,6 +194,8 @@ const highlighted = render(tokenize(specimenYaml))
     0 30px 60px -20px rgba(14, 116, 144, 0.18),
     0 12px 24px -12px rgba(0, 0, 0, 0.08);
   font-family: var(--edoxen-font-mono);
+  /* position:relative so the ::after fade can anchor to the card. */
+  position: relative;
 }
 
 .dark .specimen {
@@ -324,9 +326,71 @@ const highlighted = render(tokenize(specimenYaml))
 }
 
 @media (max-width: 768px) {
-  .specimen-code {
-    font-size: 0.72rem;
-    padding: 0.9rem 1rem;
+  .specimen {
+    border-radius: 12px;
   }
+  .specimen-head {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.72rem;
+    gap: 0.5rem;
+  }
+  .specimen-tag {
+    font-size: 0.62rem;
+    padding: 0.12rem 0.4rem;
+    letter-spacing: 0.12em;
+  }
+  .specimen-code {
+    font-size: 0.68rem;
+    padding: 0.85rem 0.9rem;
+    line-height: 1.55;
+  }
+  /* Right-edge fade — communicates "swipe to see more" without a
+     page-level scrollbar. Anchored to the card, not the <pre>, so
+     it stays fixed while the YAML scrolls underneath. */
+  .specimen::after {
+    content: '';
+    position: absolute;
+    top: 2.1rem;
+    right: 0;
+    bottom: 2.4rem;
+    width: 28px;
+    background: linear-gradient(to right, transparent 0%, var(--vp-c-bg-alt) 85%);
+    pointer-events: none;
+    z-index: 1;
+    border-bottom-right-radius: 12px;
+  }
+}
+
+/* Very narrow phones (≤380px) — shrink further so a typical YAML
+   line has a fighting chance of fitting without scroll. */
+@media (max-width: 380px) {
+  .specimen-code {
+    font-size: 0.62rem;
+    padding: 0.75rem 0.8rem;
+    line-height: 1.5;
+  }
+  .specimen::after {
+    width: 22px;
+  }
+}
+
+/* Slim, unobtrusive scrollbar inside the specimen — the default
+   chunky scrollbar dominates the card on mobile. */
+.specimen-code {
+  scrollbar-width: thin;
+  scrollbar-color: var(--vp-c-divider) transparent;
+}
+.specimen-code::-webkit-scrollbar {
+  height: 6px;
+}
+.specimen-code::-webkit-scrollbar-track {
+  background: transparent;
+}
+.specimen-code::-webkit-scrollbar-thumb {
+  background: var(--vp-c-divider);
+  border-radius: 3px;
+}
+.specimen-code::-webkit-scrollbar-thumb:hover {
+  background: var(--vp-c-text-3);
 }
 </style>

@@ -1,7 +1,7 @@
 # Schema
 
 The Edoxen schema is published as a JSON Schema (Draft 7) YAML file
-in [`schema/edoxen.yaml`](https://github.com/metanorma/edoxen/blob/main/schema/edoxen.yaml)
+in [`schema/edoxen.yaml`](https://github.com/edoxen/edoxen/blob/main/schema/edoxen.yaml)
 in the Ruby gem repo.
 
 ## Loading

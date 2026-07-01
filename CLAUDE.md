@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repository is
 
 Source for **edoxen.github.io**, the public documentation site for the
-[Edoxen](https://github.com/metanorma/edoxen) information model. Built with
+[Edoxen](https://github.com/edoxen/edoxen) information model. Built with
 [VitePress](https://vitepress.dev), deployed to GitHub Pages.
 
 This repo does **not** contain the gem, the LutaML models, or any
@@ -13,8 +13,8 @@ resolution data. It only documents them. The neighbouring repos are:
 
 | Repo | Purpose |
 |---|---|
-| `metanorma/edoxen` | Ruby gem, JSON Schema, CLI |
-| `metanorma/edoxen-model` | LutaML/UML information-model definition |
+| `edoxen/edoxen` | Ruby gem, JSON Schema, CLI |
+| `edoxen/edoxen-model` | LutaML/UML information-model definition |
 | `oimlsmart/resolutions-data` | Reference YAML corpus (CIML/OIML) |
 | `isotc154/resolutions-data` | Reference YAML corpus (ISO/TC 154) |
 | `isotc184sc4/resolutions` | Reference YAML corpus (ISO/TC 184/SC 4) |
@@ -92,8 +92,8 @@ H1 (see any existing post for the pattern).
 - **Country codes** — ISO 3166-1 alpha-2 (`FR`, `DE`, `JP`).
 - **City codes** — IATA three-letter (`PAR`, `BER`, `TYO`).
 - **Doc IDs** — when a doc names a specific object, link to the gem:
-  `https://github.com/metanorma/edoxen`. When it points at the model,
-  use `https://github.com/metanorma/edoxen-model`.
+  `https://github.com/edoxen/edoxen`. When it points at the model,
+  use `https://github.com/edoxen/edoxen-model`.
 - **Sidebar order** — controlled in `.vitepress/config.ts` under
   `themeConfig.sidebar['/docs/']`. Add a new entry whenever you add a
   new file under `docs/`.
@@ -135,5 +135,5 @@ commit on `main` is live within ~60 seconds.
   `.VPNavBarTitle`. If you replace the SVG, preserve this — otherwise
   the logo will be invisible in dark mode.
 
-- **No tests** — validation happens in the gem repo (`metanorma/edoxen`),
+- **No tests** — validation happens in the gem repo (`edoxen/edoxen`),
   not here. This site is content; the gem is behaviour.

@@ -25,6 +25,6 @@ Edoxen builds on:
 - **lutaml-model** — the Ruby serialization framework it uses for
   YAML/JSON round-tripping.
 - **LutaML UML** — the formal information-model notation used in
-  [edoxen-model](https://github.com/metanorma/edoxen-model).
+  [edoxen-model](https://github.com/edoxen/edoxen-model).
 - **Glossarist** — the multilingual concept-model framework whose
   `LocalizedConcept` pattern inspired Edoxen's `localizations[]`.

@@ -243,9 +243,9 @@ Concretely:
 
 | Project | Description | Category |
 |---|---|---|
-| [`metanorma/edoxen-model`](https://github.com/metanorma/edoxen-model) | LutaML/UML information-model definition (class diagrams, attribute types) | Core |
-| [`metanorma/edoxen`](https://github.com/metanorma/edoxen) | Ruby gem, JSON Schema, CLI (`edoxen validate`, `edoxen normalize`) | Core |
-| [`metanorma/edoxen.github.io`](https://github.com/metanorma/edoxen.github.io) | This site — user-facing documentation | Core |
+| [`edoxen/edoxen-model`](https://github.com/edoxen/edoxen-model) | LutaML/UML information-model definition (class diagrams, attribute types) | Core |
+| [`edoxen/edoxen`](https://github.com/edoxen/edoxen) | Ruby gem, JSON Schema, CLI (`edoxen validate`, `edoxen normalize`) | Core |
+| [`edoxen/edoxen.github.io`](https://github.com/edoxen/edoxen.github.io) | This site — user-facing documentation | Core |
 | [`oimlsmart/resolutions-data`](https://github.com/oimlsmart/resolutions-data) | Reference corpus: 1,640 OIML resolutions × EN+FR | Reference data |
 | [`isotc154/resolutions-data`](https://github.com/isotc154/resolutions-data) | Reference corpus: ISO/TC 154 resolutions | Reference data |
 | [`isotc184sc4/resolutions`](https://github.com/isotc184sc4/resolutions) | Reference corpus: ISO/TC 184/SC 4 resolutions | Reference data |
@@ -342,9 +342,9 @@ Edoxen is an open source project of [Ribose](https://www.ribose.com),
 released under the [2-Clause BSD License](https://opensource.org/licenses/BSD-2-Clause).
 
 - **GitHub organization** — [github.com/metanorma](https://github.com/metanorma)
-- **Gem** — [`metanorma/edoxen`](https://github.com/metanorma/edoxen)
-- **Models** — [`metanorma/edoxen-model`](https://github.com/metanorma/edoxen-model)
-- **Site** — [`metanorma/edoxen.github.io`](https://github.com/metanorma/edoxen.github.io)
+- **Gem** — [`edoxen/edoxen`](https://github.com/edoxen/edoxen)
+- **Models** — [`edoxen/edoxen-model`](https://github.com/edoxen/edoxen-model)
+- **Site** — [`edoxen/edoxen.github.io`](https://github.com/edoxen/edoxen.github.io)
 - **License** — 2-Clause BSD
 - **Issues** — on each individual repo
 
@@ -380,7 +380,7 @@ Then read the docs in this order:
    Ruby API, with a small round-trip example.
 
 Or step outside the docs and read the **[LutaML model
-files](https://github.com/metanorma/edoxen-model)** — that's the
+files](https://github.com/edoxen/edoxen-model)** — that's the
 formal definition of every class, every attribute, every enum
 value, in the LutaML/UML notation. The YAML schema and the Ruby
 classes are both generated from those models. The docs are the

@@ -58,7 +58,7 @@ plus legacy identifiers it used to be referenced by.
 
 The prefix is **body-local**, not standardized — there is no ISO
 registry of body prefixes. Bodies publish their own conventions, and
-`metanorma/edoxen-model/references/<body>.adoc` collects them per
+`edoxen/edoxen-model/references/<body>.adoc` collects them per
 body.
 
 ## See also

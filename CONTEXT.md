@@ -106,7 +106,7 @@ to the docs site, not to the underlying model.
   (`--edoxen-cyan-glow-soft`, `--edoxen-cyan-shadow`, etc.) live in
   `custom.css` and reference this token, never raw `rgba()` literals.
 - **Stoichedon** — the logo mark style; 3×2 grid of Greek capitals
-  ΕΔΟΞΕΝ. See `public/edoxen-mark.svg`.
+  ΕΔΟΞΕΝ. See `public/edoxen-logo.svg`.
 
 ## Module-level seams
 
@@ -126,12 +126,16 @@ appears in exactly one place; the rest of the code consumes it.
 
 ## Brand assets
 
-The repo also carries designer-master brand assets in `public/`:
+The repo carries designer-master brand assets in `public/`:
 
-- `edoxen-mark.svg` — designer master of the stoichedon mark
-- `edoxen-logo.svg`, `edoxen-logo.png`, `edoxen-logo.pdf` — designer
-  masters of the logo at multiple formats
+- `edoxen-logo.svg` — designer master of the stoichedon mark (96×96).
+  Used in the navbar (light mode).
+- `edoxen-logo-dark.svg` — light-tinted variant for the navbar in
+  dark mode (`#0c4a6e` → `#bae6fd` swap; same geometry).
+- `edoxen-logo.png`, `edoxen-logo.pdf` — designer masters at raster
+  and print formats.
 
-These are **source files**. The navbar uses the rendered
-`edoxen-logo-full.svg` and `edoxen-logo-full-dark.svg` (built from
-the mark + wordmark with a brand gradient).
+These are **source files**. The navbar renders the mark via `<img>`
+plus a sibling HTML text node (`<span>Edoxen</span>`) in Fraunces
+display serif, so the wordmark inherits theme colours crisply at any
+size.

@@ -7,9 +7,9 @@
   <section class="cta">
     <div class="cta-inner">
       <p class="cta-eyebrow">Get started</p>
-      <h2>Model your first resolution in five minutes.</h2>
+      <h2>Model your first meeting in five minutes.</h2>
       <pre class="cta-cli"><code>gem install edoxen
-edoxen validate resolutions/*.yaml</code></pre>
+edoxen validate meetings/*.yaml resolutions/*.yaml</code></pre>
       <div class="cta-actions">
         <a class="btn btn-primary" href="/docs/installation">Install the gem</a>
         <a class="btn btn-ghost" href="https://github.com/metanorma/edoxen">View on GitHub</a>

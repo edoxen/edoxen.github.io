@@ -6,7 +6,7 @@ import { features } from '../data/home'
   <section class="band">
     <header class="band-head">
       <span class="band-eyebrow">03 · Why Edoxen</span>
-      <h2>Six things it gets right</h2>
+      <h2>What the model covers</h2>
     </header>
 
     <div class="features">

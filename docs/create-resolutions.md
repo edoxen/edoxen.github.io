@@ -59,7 +59,7 @@ resolution = Edoxen::Resolution.new(
 ## Serializing
 
 ```ruby
-set = Edoxen::ResolutionSet.new(
+set = Edoxen::ResolutionCollection.new(
   metadata: metadata,
   resolutions: [resolution],
 )

@@ -33,7 +33,7 @@ withDefaults(defineProps<{ caption?: boolean }>(), { caption: true })
       <rect width="260" height="110" rx="12" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-width="2"/>
       <text x="20" y="34" font-family="var(--edoxen-font-mono)" font-size="11" fill="var(--vp-c-brand-1)" letter-spacing="1">02</text>
       <text x="20" y="58" font-family="var(--edoxen-font-display)" font-size="17" font-weight="500" fill="var(--vp-c-text-1)">Decode</text>
-      <text x="20" y="80" font-family="var(--edoxen-font-mono)" font-size="11" fill="var(--vp-c-text-2)">ResolutionSet.from_yaml</text>
+      <text x="20" y="80" font-family="var(--edoxen-font-mono)" font-size="11" fill="var(--vp-c-text-2)">ResolutionCollection.from_yaml</text>
       <text x="20" y="96" font-family="var(--edoxen-font-body)" font-size="10" fill="var(--vp-c-text-3)" font-style="italic">→ typed object tree (lutaml-model)</text>
     </g>
 

@@ -1,6 +1,8 @@
 <script setup lang="ts">
-// Static anatomy cards — content is stable, lives inline rather than
-// in data/home.ts. If the model evolves (new top-level class), edit here.
+// Three primary entity concepts the homepage anchors on.
+// Order: outermost file root (MeetingCollection, the new container
+// for meeting-level data), then Resolution (the YAML specimen's
+// subject), then Localization (the multilingual plumbing).
 </script>
 
 <template>
@@ -9,33 +11,37 @@
       <span class="band-eyebrow">01 · The model</span>
       <h2>Three layers, no surprises</h2>
       <p class="band-lede">
-        Every Edoxen file is built from the same three layers.
-        Admin fields live on the parent; per-language content lives
-        on the children; verbs and dates are enum-restricted.
+        Admin fields live on the parent; per-language content lives on
+        the children; verbs and dates are enum-restricted. The same
+        shape applies whether you model a
+        <code>MeetingCollection</code> or a
+        <code>ResolutionCollection</code>.
       </p>
     </header>
 
     <div class="anatomy">
       <article class="anatomy-card">
         <div class="anatomy-num">1</div>
-        <h3>ResolutionSet</h3>
-        <p class="anatomy-mono">metadata + resolutions[]</p>
+        <h3>MeetingCollection</h3>
+        <p class="anatomy-mono">metadata + meetings[]</p>
         <p class="anatomy-body">
-          The container. Carries the meeting metadata (title, dates,
-          venue, city, country) and an array of <code>Resolution</code>
-          children. One file per meeting.
+          The meeting-grain container. Each <code>Meeting</code>
+          carries its own dates, venue, chair, agenda items, and the
+          identifiers of the resolutions it adopted. See
+          <a href="/docs/meeting-collection">Meeting Collection</a>.
         </p>
       </article>
 
       <article class="anatomy-card">
         <div class="anatomy-num">2</div>
         <h3>Resolution</h3>
-        <p class="anatomy-mono">identifier · doi · urn · dates · localizations[]</p>
+        <p class="anatomy-mono">identifier · meeting · dates · localizations[]</p>
         <p class="anatomy-body">
-          The decision itself. Admin fields (id, DOI, URN, dates) are
-          declared <em>once</em> — they don't change between languages.
-          Holds a <code>localizations[]</code> array of monolingual
-          renderings.
+          One decision. Admin fields (<code>identifier</code>, <code>doi</code>,
+          <code>urn</code>, <code>meeting</code>, <code>dates</code>) are
+          declared <em>once</em> — they don't change between
+          languages. Holds a <code>localizations[]</code> array of
+          monolingual renderings.
         </p>
       </article>
 

@@ -26,9 +26,10 @@ edoxen validate resolutions/*.yaml
 
 ## Key invariants enforced
 
-- A `ResolutionSet` must have a non-empty `resolutions` array.
-- Every `Resolution` must have an `identifier` and at least one
-  `localizations[]` entry.
+- A `ResolutionCollection` must have a non-empty `resolutions` array.
+- Every `Resolution` must have an `identifier` (one or more
+  [`StructuredIdentifier`](/docs/structured-identifier) entries) and
+  at least one `localizations[]` entry.
 - Every `Localization` must have a `language_code` matching
   `^[a-z]{3}$` (ISO 639-3).
 - `Action.type`, `Consideration.type`, `Approval.type`,

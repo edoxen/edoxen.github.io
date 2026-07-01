@@ -10,16 +10,73 @@ These terms come from the Edoxen information model itself — the site
 documents them, it does not own them. Canonical definitions live in
 [`metanorma/edoxen-model`](https://github.com/metanorma/edoxen-model).
 
-- **Resolution** — a single formal decision (the atomic unit). Has an
-  `identifier`, `doi`, `urn`, and per-language content.
-- **ResolutionSet** — a collection of `Resolution`s for one meeting.
-  One YAML file per meeting.
+### Two parallel top-level containers
+
+The model has two file roots, used depending on what you want to
+capture:
+
+- **MeetingCollection** — meeting-grain. Holds meetings with agendas,
+  schedules, chairs, deadlines, and the resolutions each meeting
+  adopted. Use when agenda items, schedules, and chair-person
+  assignments are part of the story.
+- **ResolutionCollection** — resolution-grain. Holds the resolutions
+  themselves with their admin fields and per-language renderings.
+  Use for a flat file of decisions without meeting-level detail.
+
+Both containers share the same shape in miniature: `metadata` plus an
+array of children, where each child carries admin fields once and
+`localizations[]` for per-language content.
+
+### Resolution-grain entities
+
+- **Resolution** — a single formal decision (the atomic unit). Has a
+  `StructuredIdentifier` (one or more), `doi`, `urn`, `meeting`
+  (a `MeetingIdentifier` back-reference), `dates`, and per-language
+  content.
 - **Localization** — a monolingual rendering of a `Resolution`. Each
   `Resolution` has 1..* localizations (typically `eng` + `fra`).
 - **Action / Consideration / Approval** — leaf content nodes inside a
   `Localization`.
+- **ResolutionMetadata** — collection-level header (title, dates,
+  venue, source_urls).
 - **SourceUrl** — a per-language PDF/HTML reference attached to
-  `Metadata`.
+  `ResolutionMetadata`.
+- **StructuredIdentifier** — `{prefix, number}` composite. Replaces
+  bare string identifiers across the model so queries can filter by
+  body (CIML, OIML, ISO/TC 154, …).
+
+### Meeting-grain entities
+
+- **Meeting** — one sitting: when, where, who chaired, what was on
+  the agenda, what came out.
+- **MeetingLocalization** — per-language rendering of a `Meeting`
+  (title, general area, practical info).
+- **MeetingCollectionMetadata** — collection-level header (title,
+  source).
+- **MeetingRelation** — `source → destination` link between meetings
+  (`precedes`, `supersedes`, `parallel_to`, `child_of`, …).
+- **Agenda** — the ordered list of items the meeting worked through.
+- **AgendaItem** — one entry; enum-typed (`numbered`, `header`,
+  `opening`, `closing`), with `outcome` and optional `resolution_ref`.
+- **AgendaItemOutcome** — `adopted`, `amended`, `deferred`,
+  `deferred_to_subcommittee`, `noted`, `rejected`, `withdrawn`.
+- **AgendaStatus** — `draft`, `final`, `amended`, `cancelled`,
+  `superseded`.
+- **ScheduleItem** — a time-of-day entry on a sitting day (date, time,
+  event, room). Distinct from `AgendaItem`: agenda is *what*, schedule
+  is *when*.
+- **Deadline** — submission / response deadlines tied to a meeting.
+- **HostRef / Person / Location** — supporting types for meeting
+  host, chair, secretary, venue.
+- **MeetingIdentifier** — a reference from a `Resolution` back to its
+  originating `Meeting`.
+
+### The multilingual rule
+
+> **Anything translatable lives below a `Localization` or
+> `MeetingLocalization`.** Anything administrative and
+> language-agnostic lives above it. This separation is what makes the
+> multilingual model work.
 
 ## Site-level presentation terms
 
@@ -33,9 +90,9 @@ to the docs site, not to the underlying model.
 - **Specimen** — a real YAML example shown on the home page inside the
   `<YamlSpecimen>` card. Not a synthetic snippet — it's a fragment of
   a real `ciml-39-decisions.yaml`.
-- **Anatomy** — the three-card strip (`ResolutionSet` → `Resolution` →
-  `Localization`) shown on the home page. Distinct from full
-  architecture diagrams.
+- **Anatomy** — the three-card strip on the home page. Currently
+  MeetingCollection / Resolution / Localization — chosen so the cards
+  cover both top-level containers and the multilingual leaf.
 - **Feature grid** — the six "why Edoxen" cards on the home page.
 - **CTA band** — the gradient-backed call-to-action section at the
   bottom of the home page.
@@ -64,5 +121,17 @@ appears in exactly one place; the rest of the code consumes it.
   highlighted HTML. Used by `YamlSpecimen`; available to any future
   page that wants to render YAML with the same highlighting.
 - **`PipelineDiagram`** (Vue component) — the canonical Parse → Decode
-  → Validate diagram. Accepts a `variant` prop for context-specific
-  labels (`'home' | 'arch' | 'sync'`).
+  → Validate diagram. Accepts a `caption` prop for context-specific
+  labels.
+
+## Brand assets
+
+The repo also carries designer-master brand assets in `public/`:
+
+- `edoxen-mark.svg` — designer master of the stoichedon mark
+- `edoxen-logo.svg`, `edoxen-logo.png`, `edoxen-logo.pdf` — designer
+  masters of the logo at multiple formats
+
+These are **source files**. The navbar uses the rendered
+`edoxen-logo-full.svg` and `edoxen-logo-full-dark.svg` (built from
+the mark + wordmark with a brand gradient).

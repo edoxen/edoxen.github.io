@@ -102,7 +102,7 @@ survives all three.
 
 - **Stage 1** confirms the file is well-formed YAML — no tabs-as-indent,
   no duplicated keys.
-- **Stage 2** walks the hash into `ResolutionSet` /
+- **Stage 2** walks the hash into `ResolutionCollection` /
   `Resolution` / `Localization` via [lutaml-model](/docs/schema)'s
   declared attributes. Anything lutaml can't bind raises an
   `UnknownAttribute` or a `KeyError`.

@@ -4,7 +4,7 @@
 require 'edoxen'
 
 yaml_content = File.read('resolutions/ciml-39-decisions.yaml')
-set = Edoxen::ResolutionSet.from_yaml(yaml_content)
+set = Edoxen::ResolutionCollection.from_yaml(yaml_content)
 
 # Access metadata
 puts set.metadata.title
@@ -27,7 +27,7 @@ end
 
 ```ruby
 json_content = File.read('resolutions.json')
-set = Edoxen::ResolutionSet.from_json(json_content)
+set = Edoxen::ResolutionCollection.from_json(json_content)
 ```
 
 ## Building programmatically
@@ -60,7 +60,7 @@ resolution = Edoxen::Resolution.new(
   localizations: [eng_loc],
 )
 
-set = Edoxen::ResolutionSet.new(metadata: metadata, resolutions: [resolution])
+set = Edoxen::ResolutionCollection.new(metadata: metadata, resolutions: [resolution])
 
 # Serialize
 File.write('out.yaml', set.to_yaml)

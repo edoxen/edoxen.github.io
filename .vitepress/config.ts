@@ -65,9 +65,12 @@ export default defineConfig({
         {
           text: 'Data model',
           items: [
-            { text: 'Resolution Set', link: '/docs/resolution-set' },
+            { text: 'Meeting Collection', link: '/docs/meeting-collection' },
+            { text: 'Agenda', link: '/docs/agenda' },
+            { text: 'Structured Identifier', link: '/docs/structured-identifier' },
+            { text: 'Resolution Collection', link: '/docs/resolution-set' },
             { text: 'Resolution', link: '/docs/resolution' },
-            { text: 'Metadata', link: '/docs/metadata' },
+            { text: 'Resolution Metadata', link: '/docs/metadata' },
             { text: 'Dates', link: '/docs/dates' },
             { text: 'Actions', link: '/docs/actions' },
             { text: 'Considerations', link: '/docs/considerations' },

@@ -4,19 +4,125 @@ title: Architecture
 
 # Architecture
 
-The Edoxen information model now has **two parallel top-level
-containers** — one for meetings, one for resolutions — both sharing
-the same multilingual plumbing. This page walks the model first,
-then the pipeline, then the multilingual plumbing.
+The Edoxen information model has **two parallel top-level containers**
+— one for meetings, one for resolutions — both sharing the same
+multilingual plumbing. This page walks the model first, then the
+pipeline, then the multilingual plumbing.
+
+## Which file root?
+
+Your first decision: which grain do you need?
+
+<div class="root-choice">
+  <a class="root-card" href="/docs/meeting-collection">
+    <div class="root-tag">file root · meeting-grain</div>
+    <h3>MeetingCollection</h3>
+    <p class="root-lede">
+      Use when you need <strong>meeting-level detail</strong> —
+      agendas, minutes, attendance, votes, schedule, chairs, deadlines.
+    </p>
+    <ul>
+      <li>One <code>Meeting</code> per sitting</li>
+      <li>Nested <code>Agenda</code>, <code>Minutes</code>, <code>Attendance</code>, <code>VoteRecord</code></li>
+      <li><code>resolution_refs[]</code> link out to the resolutions adopted</li>
+    </ul>
+  </a>
+  <a class="root-card" href="/docs/resolution-set">
+    <div class="root-tag">file root · resolution-grain</div>
+    <h3>ResolutionCollection</h3>
+    <p class="root-lede">
+      Use when you have a <strong>flat batch of decisions</strong> and
+      the meeting-level metadata is out of scope or published
+      elsewhere.
+    </p>
+    <ul>
+      <li>One <code>Resolution</code> per decision</li>
+      <li>Nested <code>Localization[]</code> (per-language)</li>
+      <li><code>meeting: MeetingIdentifier</code> back-references the originating meeting</li>
+    </ul>
+  </a>
+</div>
+
+<style scoped>
+.root-choice {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+  margin: 1.75rem 0;
+}
+.root-card {
+  display: block;
+  padding: 1.5rem 1.5rem 1.25rem;
+  background: var(--vp-c-bg-alt);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.root-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--vp-c-brand-1);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.25s ease;
+}
+.root-card:hover {
+  border-color: var(--vp-c-brand-1);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -10px var(--edoxen-cyan-glow-card);
+}
+.root-card:hover::before { transform: scaleY(1); }
+.root-tag {
+  display: inline-block;
+  font-family: var(--edoxen-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--vp-c-brand-1);
+  margin-bottom: 0.5rem;
+}
+.root-card h3 {
+  font-family: var(--edoxen-font-display);
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem;
+  color: var(--vp-c-text-1);
+}
+.root-lede {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+  margin: 0 0 0.85rem;
+}
+.root-card ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.88rem;
+  color: var(--vp-c-text-2);
+  line-height: 1.55;
+}
+.root-card ul code {
+  font-family: var(--edoxen-font-mono);
+  font-size: 0.85em;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+</style>
+
+The two views capture the same events from opposite directions: a
+`Meeting` points to its Resolutions via `resolution_refs[]`; a
+`Resolution` points back to its Meeting via `meeting:
+MeetingIdentifier`. You can use one, the other, or both — they're
+not mutually exclusive.
 
 ## Layer 1 — The information model
-
-There are two file roots, depending on what you want to model:
-
-| Root | Models | See |
-|---|---|---|
-| `MeetingCollection` | meetings with agendas, schedules, chairs, deadlines | [Meeting Collection](/docs/meeting-collection) |
-| `ResolutionCollection` | resolutions adopted across meetings | [Resolution Collection](/docs/resolution-set) |
 
 Both collections share the same shape in miniature: an outer container
 with `metadata` plus an array of children, where each child carries

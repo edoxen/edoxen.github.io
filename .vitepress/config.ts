@@ -69,13 +69,17 @@ export default defineConfig({
           ],
         },
         {
-          text: 'Data model',
+          text: 'Meetings',
           items: [
             { text: 'Meeting Collection', link: '/docs/meeting-collection' },
             { text: 'Agenda', link: '/docs/agenda' },
             { text: 'Minutes', link: '/docs/minutes' },
             { text: 'Attendance & Votes', link: '/docs/attendance' },
-            { text: 'Structured Identifier', link: '/docs/structured-identifier' },
+          ],
+        },
+        {
+          text: 'Resolutions',
+          items: [
             { text: 'Resolution Collection', link: '/docs/resolution-set' },
             { text: 'Resolution', link: '/docs/resolution' },
             { text: 'Resolution Metadata', link: '/docs/metadata' },
@@ -86,12 +90,18 @@ export default defineConfig({
           ],
         },
         {
+          text: 'Building blocks',
+          items: [
+            { text: 'Structured Identifier', link: '/docs/structured-identifier' },
+            { text: 'Source URL', link: '/docs/source-url' },
+            { text: 'Localization', link: '/docs/localization' },
+          ],
+        },
+        {
           text: 'Multilingual support',
           items: [
             { text: 'Overview', link: '/docs/multilingual' },
-            { text: 'Localization', link: '/docs/localization' },
             { text: 'Sync flow (deep-dive)', link: '/docs/localization-sync' },
-            { text: 'Source URL', link: '/docs/source-url' },
           ],
         },
         {

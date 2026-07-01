@@ -25,8 +25,9 @@
         <h3>MeetingCollection</h3>
         <p class="anatomy-mono">metadata + meetings[]</p>
         <p class="anatomy-body">
-          The meeting-grain container. Each <code>Meeting</code>
-          carries its own dates, venue, chair, agenda items, and the
+          The meeting-grain container. Each <code>Meeting</code> owns
+          its <code>Agenda</code>, <code>Minutes</code>,
+          <code>Attendance</code>, <code>VoteRecord[]</code>, and the
           identifiers of the resolutions it adopted. See
           <a href="/docs/meeting-collection">Meeting Collection</a>.
         </p>

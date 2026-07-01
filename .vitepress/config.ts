@@ -73,6 +73,8 @@ export default defineConfig({
           items: [
             { text: 'Meeting Collection', link: '/docs/meeting-collection' },
             { text: 'Agenda', link: '/docs/agenda' },
+            { text: 'Minutes', link: '/docs/minutes' },
+            { text: 'Attendance & Votes', link: '/docs/attendance' },
             { text: 'Structured Identifier', link: '/docs/structured-identifier' },
             { text: 'Resolution Collection', link: '/docs/resolution-set' },
             { text: 'Resolution', link: '/docs/resolution' },

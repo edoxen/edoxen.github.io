@@ -72,16 +72,16 @@ renames that look right but break downstream parsing.
 
 ### AgendaItemOutcome
 
-Captures what the meeting did with this item. The exact enum is
-defined in `edoxen-model`; the canonical values are:
+Captures what the meeting did with this item. The enum is
+**authoritative** — wire values are kept in lockstep with
+`Edoxen::Enums::AGENDA_ITEM_OUTCOME`:
 
-- `adopted` — meeting approved the item as-is
-- `amended` — meeting approved with amendments
+- `discussed` — meeting talked about it; no formal outcome yet
+- `resolved` — meeting reached a decision (resolution adopted or
+  resolution-rejected — check the linked `Resolution` to see which)
 - `deferred` — pushed to a later meeting
-- `deferred_to_subcommittee` — sent to a working group / sub-committee
-- `noted` — discussed, recorded, no formal action
-- `rejected` — meeting did not adopt
-- `withdrawn` — proponent withdrew
+- `adopted` — meeting adopted the proposal as presented
+- `withdrawn` — proponent withdrew the item
 
 ## References
 
@@ -106,13 +106,25 @@ the agenda is what gets done, the schedule is when.
 |---|---|---|
 | `date` | `Date` | Calendar day. |
 | `time` | `String` | Time-of-day (free text — some bodies write "14:30", some "2:30 PM", some "after agenda item 5"). |
-| `event` | `String` | One-line summary. |
-| `description` | `String` | Optional fuller text. |
+| `event` | `String` | One-line summary (default language). |
+| `description` | `String` | Optional fuller text (default language). |
 | `room` | `String` | Room or hall name. |
+| `localizations` | `ScheduleItemLocalization[0..*]` | Per-language event name + description. |
 
 A `Meeting` carries a `schedule[]` array of these — one per slot in
 the running order over the meeting's date range. The agenda tells
-you what; the schedule tells you when.
+you what; the schedule tells you when. Per-language content (event
+name in EN vs FR) lives in `localizations[]`; structural fields
+(date, time, room) are language-agnostic on the parent.
+
+### ScheduleItemLocalization
+
+| Field | Type | Description |
+|---|---|---|
+| `language_code` | `String` (ISO 639-3) | Three-letter code. |
+| `script` | `String` (ISO 15924) | Four-letter code. |
+| `event` | `String` | Localized event name. |
+| `description` | `String` | Localized description. |
 
 ## Deadline
 

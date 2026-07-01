@@ -48,26 +48,50 @@ array of children, where each child carries admin fields once and
 ### Meeting-grain entities
 
 - **Meeting** — one sitting: when, where, who chaired, what was on
-  the agenda, what came out.
+  the agenda, who was there, how they voted, what was said, what
+  came out.
+- **Agenda** — the forward-looking business order drafted before the
+  meeting. Sliced into `AgendaItem`s (enum-typed: `numbered`,
+  `header`, `opening`, `closing`).
+- **Minutes** — the backward-looking narrative record. Sliced into
+  `MinutesSection`s, each carrying a `number` field that joins to
+  `AgendaItem.label`. Distinct from `Agenda` (forward) and
+  `ResolutionCollection` (decisions); this is *what was actually
+  said*.
+- **Attendance** — who was at the meeting (`present`, `absent`,
+  `apologies`, `observer`, `excused`); supports proxy voting via
+  `proxy_for`.
+- **VoteRecord** — how each person voted on each Resolution
+  (`affirmative`, `negative`, `abstain`, `absent`, `not_applicable`).
+  Joins to `Resolution.identifier` via `resolution_ref`.
 - **MeetingLocalization** — per-language rendering of a `Meeting`
   (title, general area, practical info).
 - **MeetingCollectionMetadata** — collection-level header (title,
   source).
-- **MeetingRelation** — `source → destination` link between meetings
-  (`precedes`, `supersedes`, `parallel_to`, `child_of`, …).
-- **Agenda** — the ordered list of items the meeting worked through.
+- **MeetingRelation** — `source → destination` link between meetings.
+  Enum types: `continues_from`, `continues_to`, `joint_with`,
+  `supersedes`, `superseded_by`, `rescheduled_from`, `rescheduled_to`.
 - **AgendaItem** — one entry; enum-typed (`numbered`, `header`,
   `opening`, `closing`), with `outcome` and optional `resolution_ref`.
-- **AgendaItemOutcome** — `adopted`, `amended`, `deferred`,
-  `deferred_to_subcommittee`, `noted`, `rejected`, `withdrawn`.
+- **AgendaItemOutcome** — `discussed`, `resolved`, `deferred`,
+  `adopted`, `withdrawn`.
 - **AgendaStatus** — `draft`, `final`, `amended`, `cancelled`,
   `superseded`.
-- **ScheduleItem** — a time-of-day entry on a sitting day (date, time,
-  event, room). Distinct from `AgendaItem`: agenda is *what*, schedule
-  is *when*.
+- **MeetingStatus** — `upcoming`, `completed`, `cancelled`.
+- **MeetingType** — `plenary`, `working_group`, `task_group`,
+  `ad_hoc`, `joint`, `conference_session`.
+- **ScheduleItem** — a time-of-day entry on a sitting day (date,
+  time, event, room). Distinct from `AgendaItem`: agenda is *what*,
+  schedule is *when*. Schedule items have their own
+  `ScheduleItemLocalization[]` for the event name/description.
 - **Deadline** — submission / response deadlines tied to a meeting.
-- **HostRef / Person / Location** — supporting types for meeting
-  host, chair, secretary, venue.
+- **Person** — identity + role + affiliation + contact. Used for
+  meeting officers (`chair`, `secretary`), attendance records, and
+  vote records.
+- **Location** — venue geography (name, address, lat/lon). A
+  `Meeting` can carry multiple `venues[]` for multi-venue sittings.
+- **HostRef** — typed reference to a hosting organization
+  (`national_body`, `liaison`, `associate`, `organizer`).
 - **MeetingIdentifier** — a reference from a `Resolution` back to its
   originating `Meeting`.
 

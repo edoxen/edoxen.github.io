@@ -123,7 +123,7 @@ This is the meeting-grain view — one file, many meetings, each with
 agenda items and the resolutions they adopted:
 
 <div class="diagram">
-<svg viewBox="0 0 1080 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MeetingCollection tree">
+<svg viewBox="0 0 1080 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MeetingCollection tree">
 <defs>
 <marker id="arch-tree-2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
 <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
@@ -140,7 +140,7 @@ agenda items and the resolutions they adopted:
 <path d="M540,120 L540,180" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.5" marker-end="url(#arch-tree-2)"/>
 
 <g transform="translate(280, 180)">
-<rect width="520" height="180" rx="10" fill="var(--vp-c-bg)" stroke="var(--vp-c-brand-1)" stroke-width="2"/>
+<rect width="520" height="220" rx="10" fill="var(--vp-c-bg)" stroke="var(--vp-c-brand-1)" stroke-width="2"/>
 <text x="20" y="32" font-family="var(--edoxen-font-display)" font-size="20" font-weight="500" fill="var(--vp-c-text-1)">Meeting</text>
 <text x="20" y="56" font-family="var(--edoxen-font-mono)" font-size="11" fill="var(--vp-c-text-2)">identifier : StructuredIdentifier[1..*]</text>
 <text x="20" y="72" font-family="var(--edoxen-font-mono)" font-size="11" fill="var(--vp-c-text-2)">type, status, year, date_range</text>
@@ -148,21 +148,24 @@ agenda items and the resolutions they adopted:
 <text x="20" y="104" font-family="var(--edoxen-font-mono)" font-size="11" fill="var(--vp-c-text-2)">relations : MeetingRelation[]</text>
 <text x="20" y="120" font-family="var(--edoxen-font-mono)" font-size="11" fill="var(--vp-c-text-2)">resolution_refs[] : string</text>
 <text x="20" y="148" font-family="var(--edoxen-font-mono)" font-size="11" font-weight="600" fill="var(--vp-c-brand-1)">agenda : Agenda</text>
-<text x="20" y="164" font-family="var(--edoxen-font-mono)" font-size="11" font-weight="600" fill="var(--vp-c-brand-1)">localizations : MeetingLocalization[]</text>
+<text x="20" y="164" font-family="var(--edoxen-font-mono)" font-size="11" font-weight="600" fill="var(--vp-c-brand-1)">attendance[] : Attendance</text>
+<text x="20" y="180" font-family="var(--edoxen-font-mono)" font-size="11" font-weight="600" fill="var(--vp-c-brand-1)">vote_records[] : VoteRecord</text>
+<text x="20" y="196" font-family="var(--edoxen-font-mono)" font-size="11" font-weight="600" fill="var(--vp-c-brand-1)">minutes[] : Minutes</text>
+<text x="20" y="212" font-family="var(--edoxen-font-mono)" font-size="11" font-weight="600" fill="var(--vp-c-brand-1)">localizations : MeetingLocalization[]</text>
 </g>
 
-<path d="M540,360 L540,390" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.5" marker-end="url(#arch-tree-2)"/>
+<path d="M540,400 L540,430" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.5" marker-end="url(#arch-tree-2)"/>
 
-<g transform="translate(380, 390)">
+<g transform="translate(380, 430)">
 <rect width="320" height="80" rx="10" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-width="2"/>
 <text x="20" y="32" font-family="var(--edoxen-font-display)" font-size="18" font-weight="500" fill="var(--vp-c-text-1)">Agenda</text>
 <text x="20" y="54" font-family="var(--edoxen-font-mono)" font-size="11" fill="var(--vp-c-text-2)">status, source_doc,</text>
 <text x="20" y="70" font-family="var(--edoxen-font-mono)" font-size="11" fill="var(--vp-c-text-2)">items : AgendaItem[0..*]</text>
 </g>
 
-<path d="M540,470 L540,500" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.5" marker-end="url(#arch-tree-2)"/>
+<path d="M540,510 L540,540" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.5" marker-end="url(#arch-tree-2)"/>
 
-<g transform="translate(280, 500)">
+<g transform="translate(280, 540)">
 <rect width="520" height="38" rx="8" fill="var(--vp-c-bg-alt)" stroke="var(--vp-c-divider)" stroke-width="1.5"/>
 <text x="20" y="24" font-family="var(--edoxen-font-display)" font-size="14" font-weight="500" fill="var(--vp-c-text-1)">AgendaItem</text>
 <text x="150" y="24" font-family="var(--edoxen-font-mono)" font-size="10" fill="var(--vp-c-text-3)">label · kind (enum) · title · outcome · resolution_ref</text>
@@ -183,15 +186,23 @@ agenda items and the resolutions they adopted:
   — one or many `Meeting` children, each with their own agendas,
   schedules, chairs, and adopted resolutions.
 - **`Meeting`** is one sitting: when, where, who chaired, what was on
-  the agenda. Admin fields declared once; `MeetingLocalization[]`
-  carries per-language content.
+  the agenda, who was in the room, how they voted, and what was said.
+  Admin fields declared once; `MeetingLocalization[]` carries
+  per-language content.
 - **`Agenda`** is the ordered list of items the meeting worked
   through. Each `AgendaItem` is enum-typed (`numbered`, `header`,
   `opening`, `closing`) and may carry a `resolution_ref` to the
   resolution the meeting adopted on that item.
+- **`Attendance`** + **`VoteRecord`** capture who was in the room
+  and how they voted. See [Attendance & Votes](/docs/attendance).
+- **`Minutes`** is the narrative record of the meeting — the
+  running text of what was said, sliced by agenda item. Each
+  `MinutesSection` carries a `number` field that joins to
+  `AgendaItem.label`. See [Minutes](/docs/minutes).
 - **Across the grain**: a `Resolution.meeting` field carries a
   `MeetingIdentifier` back to the meeting that adopted it. A
   `Meeting.resolution_refs[]` carries the strings the other way.
+  And `VoteRecord.resolution_ref` joins votes to `Resolution.identifier`.
 
 **Localization, the multilingual plumbing:**
 

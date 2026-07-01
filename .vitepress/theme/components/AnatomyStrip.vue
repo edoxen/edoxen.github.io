@@ -11,11 +11,11 @@
       <span class="band-eyebrow">01 · The model</span>
       <h2>Three layers, no surprises</h2>
       <p class="band-lede">
-        Admin fields live on the parent; per-language content lives on
-        the children; verbs and dates are enum-restricted. The same
-        shape applies whether you model a
-        <code>MeetingCollection</code> or a
-        <code>ResolutionCollection</code>.
+        Two file roots — <code>MeetingCollection</code> for the meeting
+        lifecycle (agenda, minutes, attendance, votes), and
+        <code>ResolutionCollection</code> for the decisions. Each
+        child carries admin fields once and <code>localizations[]</code>
+        for per-language content. The same shape, both grains.
       </p>
     </header>
 

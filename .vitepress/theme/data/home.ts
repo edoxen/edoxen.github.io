@@ -16,10 +16,16 @@ export interface Stat {
 
 export const features: Feature[] = [
   {
-    title: 'One model, every body',
-    body: 'A single Resolution shape captures what ISO, IEC, ITU, BIPM, OIML, and ILO have in common. Per-body quirks live in enum extensions, not in per-body schemas.',
-    href: '/docs/introduction',
-    glyph: '□',
+    title: 'Meetings, end to end',
+    body: 'One model covers the full lifecycle: identifier and venue, agenda items, schedule slots, the narrative minutes, attendance rolls, recorded votes, and the resolutions adopted.',
+    href: '/docs/meeting-collection',
+    glyph: '▣',
+  },
+  {
+    title: 'Resolutions, decided',
+    body: 'A Resolution carries its identifier, DOI, URN, dates, and one or more localizations. Considerations, actions, and approvals sit underneath, enum-restricted and per-language.',
+    href: '/docs/resolution',
+    glyph: '§',
   },
   {
     title: 'Multilingual by default',
@@ -40,12 +46,6 @@ export const features: Feature[] = [
     glyph: '↻',
   },
   {
-    title: 'CLI for batch pipelines',
-    body: 'edoxen validate and edoxen normalize across globs. Drop into CI; one command checks every resolution in the repo.',
-    href: '/docs/cli',
-    glyph: '▶',
-  },
-  {
     title: 'Real-world tested',
     body: 'Validated against 1,640 OIML resolutions across 28 meetings in EN + FR — 3,280 Localization entries exercising every code path.',
     href: 'https://github.com/oimlsmart/resolutions-data',
@@ -54,8 +54,8 @@ export const features: Feature[] = [
 ]
 
 export const stats: Stat[] = [
-  { value: '1,640', label: 'OIML resolutions encoded' },
-  { value: '28', label: 'meetings, EN + FR' },
-  { value: '6', label: 'standards bodies modelled' },
-  { value: '0', label: 'hand-rolled serializers' },
+  { value: '1,640', label: 'Resolutions encoded' },
+  { value: '28', label: 'Meetings, EN + FR' },
+  { value: '6', label: 'Standards bodies modelled' },
+  { value: '0', label: 'Hand-rolled serializers' },
 ]

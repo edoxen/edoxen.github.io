@@ -14,14 +14,15 @@ import { stats } from '../data/home'
         </div>
 
         <h1 class="hero-title">
-          Resolutions,<br>
+          Proceedings,<br>
           <em>structured.</em>
         </h1>
 
         <p class="hero-lede">
-          Edoxen is the common substrate for formal resolutions across
-          ISO, IEC, ITU, BIPM, OIML, and ILO — one YAML shape, one
-          schema, one round-trip pipeline, multilingual by default.
+          Edoxen is the common substrate for formal proceedings across
+          ISO, IEC, ITU, BIPM, OIML, and ILO — meetings, agendas,
+          minutes, attendance, votes, and the resolutions adopted, in
+          one YAML shape, multilingual by default.
         </p>
 
         <div class="hero-actions">

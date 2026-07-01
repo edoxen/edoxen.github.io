@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'Edoxen',
-  description: 'Structured resolution and decision information models',
+  description: 'Structured proceedings — meetings, agendas, minutes, and resolutions for ISO, IEC, ITU, BIPM, OIML, and ILO',
   lang: 'en-US',
   lastUpdated: true,
 
@@ -34,7 +34,8 @@ export default defineConfig({
 
     nav: [
       { text: 'Introduction', link: '/docs/introduction' },
-      { text: 'Architecture', link: '/docs/architecture' },
+      { text: 'Meetings', link: '/docs/meeting-collection' },
+      { text: 'Resolutions', link: '/docs/resolution-set' },
       { text: 'Schema', link: '/docs/schema' },
       { text: 'Multilingual', link: '/docs/multilingual' },
       { text: 'Blog', link: '/blog/' },

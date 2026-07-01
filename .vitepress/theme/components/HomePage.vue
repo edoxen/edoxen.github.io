@@ -277,8 +277,32 @@ edoxen validate resolutions/*.yaml</code></pre>
 
 @media (max-width: 980px) {
   .hero-grid {
-    grid-template-columns: 1fr;
+    /* minmax(0, 1fr) — NOT plain 1fr — so the column can shrink below
+       the <pre>'s intrinsic width. Plain 1fr expands to min-content,
+       which on a 375px viewport forces the column past the edge and
+       creates a page-level horizontal scrollbar. */
+    grid-template-columns: minmax(0, 1fr);
     gap: 2.5rem;
+  }
+}
+
+/* Reclaim horizontal space on small screens — the specimen card needs
+   every pixel it can get. */
+@media (max-width: 768px) {
+  .hero {
+    padding: 3rem 1rem 2.25rem;
+  }
+  .hero-title {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+  }
+  .hero-lede {
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero {
+    padding: 2.5rem 0.85rem 2rem;
   }
 }
 
@@ -364,7 +388,14 @@ edoxen validate resolutions/*.yaml</code></pre>
 
 @media (max-width: 540px) {
   .stats {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* auto-fit + minmax(280-290px, 1fr) can overflow on ≤320px viewports
+     (e.g., iPhone SE). Force single-column with min(0) so tracks can
+     shrink below their min-content. */
+  .anatomy,
+  .features {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

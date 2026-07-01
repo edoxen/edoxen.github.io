@@ -34,8 +34,15 @@ export default defineConfig({
 
     nav: [
       { text: 'Introduction', link: '/docs/introduction' },
-      { text: 'Meetings', link: '/docs/meeting-collection' },
-      { text: 'Resolutions', link: '/docs/resolution-set' },
+      {
+        text: 'Proceedings',
+        items: [
+          { text: 'Architecture', link: '/docs/architecture' },
+          { text: 'Meetings', link: '/docs/meeting-collection' },
+          { text: 'Resolutions', link: '/docs/resolution-set' },
+          { text: 'Building blocks', link: '/docs/structured-identifier' },
+        ],
+      },
       { text: 'Schema', link: '/docs/schema' },
       { text: 'Multilingual', link: '/docs/multilingual' },
       { text: 'Blog', link: '/blog/' },
@@ -43,14 +50,14 @@ export default defineConfig({
       {
         text: 'Repos',
         items: [
-          { text: 'Ruby gem', link: 'https://github.com/metanorma/edoxen' },
-          { text: 'LutaML models', link: 'https://github.com/metanorma/edoxen-model' },
+          { text: 'Ruby gem', link: 'https://github.com/edoxen/edoxen' },
+          { text: 'LutaML models', link: 'https://github.com/edoxen/edoxen-model' },
         ],
       },
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/metanorma/edoxen' },
+      { icon: 'github', link: 'https://github.com/edoxen/edoxen' },
     ],
 
     footer: {
@@ -70,32 +77,41 @@ export default defineConfig({
           ],
         },
         {
-          text: 'Meetings',
+          text: 'Proceedings',
+          collapsed: false,
           items: [
-            { text: 'Meeting Collection', link: '/docs/meeting-collection' },
-            { text: 'Agenda', link: '/docs/agenda' },
-            { text: 'Minutes', link: '/docs/minutes' },
-            { text: 'Attendance & Votes', link: '/docs/attendance' },
-          ],
-        },
-        {
-          text: 'Resolutions',
-          items: [
-            { text: 'Resolution Collection', link: '/docs/resolution-set' },
-            { text: 'Resolution', link: '/docs/resolution' },
-            { text: 'Resolution Metadata', link: '/docs/metadata' },
-            { text: 'Dates', link: '/docs/dates' },
-            { text: 'Actions', link: '/docs/actions' },
-            { text: 'Considerations', link: '/docs/considerations' },
-            { text: 'Approvals', link: '/docs/approvals' },
-          ],
-        },
-        {
-          text: 'Building blocks',
-          items: [
-            { text: 'Structured Identifier', link: '/docs/structured-identifier' },
-            { text: 'Source URL', link: '/docs/source-url' },
-            { text: 'Localization', link: '/docs/localization' },
+            {
+              text: 'Meetings',
+              collapsed: false,
+              items: [
+                { text: 'Meeting Collection', link: '/docs/meeting-collection' },
+                { text: 'Agenda', link: '/docs/agenda' },
+                { text: 'Minutes', link: '/docs/minutes' },
+                { text: 'Attendance & Votes', link: '/docs/attendance' },
+              ],
+            },
+            {
+              text: 'Resolutions',
+              collapsed: false,
+              items: [
+                { text: 'Resolution Collection', link: '/docs/resolution-set' },
+                { text: 'Resolution', link: '/docs/resolution' },
+                { text: 'Resolution Metadata', link: '/docs/metadata' },
+                { text: 'Dates', link: '/docs/dates' },
+                { text: 'Actions', link: '/docs/actions' },
+                { text: 'Considerations', link: '/docs/considerations' },
+                { text: 'Approvals', link: '/docs/approvals' },
+              ],
+            },
+            {
+              text: 'Building blocks',
+              collapsed: false,
+              items: [
+                { text: 'Structured Identifier', link: '/docs/structured-identifier' },
+                { text: 'Source URL', link: '/docs/source-url' },
+                { text: 'Localization', link: '/docs/localization' },
+              ],
+            },
           ],
         },
         {
@@ -110,7 +126,7 @@ export default defineConfig({
           items: [
             { text: 'Schema', link: '/docs/schema' },
             { text: 'CLI', link: '/docs/cli' },
-            { text: 'LutaML models', link: 'https://github.com/metanorma/edoxen-model' },
+            { text: 'LutaML models', link: 'https://github.com/edoxen/edoxen-model' },
           ],
         },
         {

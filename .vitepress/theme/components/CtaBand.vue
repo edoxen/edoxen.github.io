@@ -12,7 +12,7 @@
 edoxen validate meetings/*.yaml resolutions/*.yaml</code></pre>
       <div class="cta-actions">
         <a class="btn btn-primary" href="/docs/installation">Install the gem</a>
-        <a class="btn btn-ghost" href="https://github.com/metanorma/edoxen">View on GitHub</a>
+        <a class="btn btn-ghost" href="https://github.com/edoxen/edoxen">View on GitHub</a>
       </div>
     </div>
   </section>

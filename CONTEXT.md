@@ -6,9 +6,14 @@ about behaviour. Future architecture reviews anchor to this file.
 
 ## The model being documented
 
+Edoxen is an information model for **formal proceedings** — the
+umbrella term standards bodies use for the published record of a
+meeting. The model covers meetings, agendas, minutes, attendance
+rolls, votes, and the resolutions adopted, in any ISO 639-3 language.
+
 These terms come from the Edoxen information model itself — the site
 documents them, it does not own them. Canonical definitions live in
-[`metanorma/edoxen-model`](https://github.com/metanorma/edoxen-model).
+[`edoxen/edoxen-model`](https://github.com/edoxen/edoxen-model).
 
 ### Two parallel top-level containers
 

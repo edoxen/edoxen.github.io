@@ -176,4 +176,4 @@ meeting makes the chain visible in tools without parsing dates.
 - [Resolution Collection](/docs/resolution-set) — the parallel container for resolutions
 - [Structured Identifier](/docs/structured-identifier) — the {prefix, number} type
 - [Multilingual support](/docs/multilingual) — the `localizations[]` pattern in detail
-- [`metanorma/edoxen-model`](https://github.com/metanorma/edoxen-model) — the LutaML/UML source of truth
+- [`edoxen/edoxen-model`](https://github.com/edoxen/edoxen-model) — the LutaML/UML source of truth

@@ -23,11 +23,11 @@ convention; Edoxen is the common substrate across all of them.
 
 The 1.0 release ships:
 
-- **`metanorma/edoxen-model`** — the LutaML/UML information-model
+- **`edoxen/edoxen-model`** — the LutaML/UML information-model
   definition, with one class per real-world concept
   (`ResolutionSet`, `Resolution`, `Localization`, `Action`,
   `Consideration`, `Approval`, `SourceUrl`, …).
-- **`metanorma/edoxen`** — the Ruby gem and JSON Schema, plus a CLI:
+- **`edoxen/edoxen`** — the Ruby gem and JSON Schema, plus a CLI:
   `edoxen validate <glob>` and `edoxen normalize <glob>`.
 - **This site** — the user-facing documentation, including the data
   model reference and a deep-dive on

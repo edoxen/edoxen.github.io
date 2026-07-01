@@ -4,10 +4,13 @@ title: Architecture
 
 # Architecture
 
-The Edoxen information model has **two parallel top-level containers**
-— one for meetings, one for resolutions — both sharing the same
-multilingual plumbing. This page walks the model first, then the
-pipeline, then the multilingual plumbing.
+Edoxen is an information model for **formal proceedings** — the
+umbrella term standards bodies use for the published record of a
+meeting (agenda, minutes, attendance rolls, votes, and the
+resolutions adopted). The model has **two parallel top-level
+containers** — one for meetings, one for resolutions — both sharing
+the same multilingual plumbing. This page walks the model first,
+then the pipeline, then the multilingual plumbing.
 
 ## Which file root?
 
@@ -327,7 +330,7 @@ That separation is what makes the multilingual model work — and what
 makes EN↔FR drift visible on `git diff`.
 
 The full LutaML/UML definitions live in
-[`metanorma/edoxen-model`](https://github.com/metanorma/edoxen-model).
+[`edoxen/edoxen-model`](https://github.com/edoxen/edoxen-model).
 The Ruby classes are generated from those definitions.
 
 ## Layer 2 — The round-trip pipeline
@@ -447,7 +450,7 @@ edoxen (gem)
 
 The schema and the Ruby classes are both derived from the same
 LutaML/UML source in
-[`metanorma/edoxen-model`](https://github.com/metanorma/edoxen-model).
+[`edoxen/edoxen-model`](https://github.com/edoxen/edoxen-model).
 The docs you are reading are the introduction; the model files are
 the ground truth.
 
@@ -464,5 +467,5 @@ the ground truth.
   `{prefix, number}` identifier type.
 - [Localization sync](/docs/localization-sync) — the EN+FR deep-dive.
 - [CLI](/docs/cli) — `validate` and `normalize` from the command line.
-- [`metanorma/edoxen-model`](https://github.com/metanorma/edoxen-model) —
+- [`edoxen/edoxen-model`](https://github.com/edoxen/edoxen-model) —
   the LutaML/UML source of truth.

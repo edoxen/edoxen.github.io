@@ -97,34 +97,7 @@ Neither translation drift, nor schema typos, nor model mis-attribution
 survives all three.
 
 <div class="diagram">
-<svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Validation pipeline">
-<defs>
-<marker id="vp-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-<path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
-</marker>
-</defs>
-
-<rect x="20" y="50" width="160" height="80" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.5"/>
-<text x="40" y="74" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600" fill="var(--vp-c-text-1)">1. Parse</text>
-<text x="40" y="94" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="11" fill="var(--vp-c-text-2)">Psych.safe_load</text>
-<text x="40" y="108" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="11" fill="var(--vp-c-text-2)">→ Ruby Hash</text>
-<text x="20" y="148" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="500" fill="var(--vp-c-text-3)">*.yaml on disk</text>
-
-<rect x="240" y="50" width="160" height="80" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.5"/>
-<text x="260" y="74" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600" fill="var(--vp-c-text-1)">2. Decode</text>
-<text x="260" y="94" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="11" fill="var(--vp-c-text-2)">ResolutionSet</text>
-<text x="260" y="108" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="11" fill="var(--vp-c-text-2)">.from_yaml(hash)</text>
-<text x="240" y="148" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="500" fill="var(--vp-c-text-3)">lutaml-model</text>
-
-<rect x="460" y="50" width="240" height="80" rx="6" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.5"/>
-<text x="480" y="74" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600" fill="var(--vp-c-text-1)">3. Validate</text>
-<text x="480" y="94" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="11" fill="var(--vp-c-text-2)">JSONSchemer.schema(</text>
-<text x="480" y="108" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="11" fill="var(--vp-c-text-2)">schema/edoxen.yaml)</text>
-<text x="460" y="148" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="500" fill="var(--vp-c-text-3)">SchemaPass  |  SchemaError[]</text>
-
-<path d="M180,90 L240,90" stroke="var(--vp-c-text-3)" stroke-width="2" fill="none" marker-end="url(#vp-arrow)"/>
-<path d="M400,90 L460,90" stroke="var(--vp-c-text-3)" stroke-width="2" fill="none" marker-end="url(#vp-arrow)"/>
-</svg>
+<PipelineDiagram :caption="false" />
 </div>
 
 - **Stage 1** confirms the file is well-formed YAML — no tabs-as-indent,
@@ -201,18 +174,3 @@ edoxen validate resolutions/*.yaml
   remembers where it came from.
 - [`docs/schema`](/docs/schema) — the JSON Schema, including the
   per-language regex invariants.
-
-<style scoped>
-.diagram {
-  margin: 1.5rem 0;
-  padding: 1rem;
-  background: var(--vp-c-bg-soft);
-  border-radius: 12px;
-  border: 1px solid var(--vp-c-divider);
-}
-.diagram svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-</style>

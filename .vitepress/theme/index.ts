@@ -3,6 +3,7 @@ import './custom.css'
 import HomePage from './components/HomePage.vue'
 import BlogIndex from './components/BlogIndex.vue'
 import BlogByline from './components/BlogByline.vue'
+import PipelineDiagram from './components/PipelineDiagram.vue'
 
 export default {
   extends: DefaultTheme,
@@ -10,5 +11,7 @@ export default {
     app.component('HomePage', HomePage)
     app.component('BlogIndex', BlogIndex)
     app.component('BlogByline', BlogByline)
+    // Globally registered so Markdown files can use <PipelineDiagram />.
+    app.component('PipelineDiagram', PipelineDiagram)
   },
 }

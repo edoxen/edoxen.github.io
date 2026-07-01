@@ -1,34 +1,9 @@
 <script setup lang="ts">
 import { data as posts } from "../../posts.data";
 import { ref } from "vue";
+import { formatDate, formatLastUpdated, formatAuthors } from "../composables/usePostFormat";
 
 const hoveredPost = ref<string | null>(null);
-
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-function formatLastUpdated(timestamp: number | undefined): string {
-  if (!timestamp) return "";
-  const date = new Date(timestamp);
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-function formatAuthors(authors: string[]): string {
-  if (!authors || authors.length === 0) return "";
-  if (authors.length === 1) return authors[0];
-  if (authors.length === 2) return `${authors[0]} & ${authors[1]}`;
-  return authors.slice(0, -1).join(", ") + " & " + authors[authors.length - 1];
-}
 </script>
 
 <template>
@@ -98,7 +73,7 @@ function formatAuthors(authors: string[]): string {
   transform: translateY(-2px);
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.05),
-    0 10px 15px -3px rgba(14, 116, 144, 0.08);
+    0 10px 15px -3px var(--edoxen-cyan-glow-faint);
 }
 
 .card-link {

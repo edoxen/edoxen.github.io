@@ -1,123 +1,9 @@
 <script setup lang="ts">
-// Tiny single-pass YAML tokenizer.
-// Earlier iterations used chained regex replacements and ended up
-// double-wrapping the class-attribute strings inside their own spans.
-// This version walks the string left-to-right and never re-processes
-// its own output.
-
-type TokenType = 'k' | 's' | 'n' | 'c' | 'p' | 't' | 'ws'
-type Token = [TokenType, string]
-
-function tokenize(yaml: string): Token[] {
-  const tokens: Token[] = []
-  const n = yaml.length
-  let i = 0
-
-  while (i < n) {
-    const rest = yaml.slice(i)
-
-    // Whitespace (spaces and tabs)
-    const ws = rest.match(/^[ \t]+/)
-    if (ws) {
-      tokens.push(['ws', ws[0]])
-      i += ws[0].length
-      continue
-    }
-
-    // Newline
-    if (rest[0] === '\n') {
-      tokens.push(['ws', '\n'])
-      i++
-      continue
-    }
-
-    // Comment
-    const comment = rest.match(/^#[^\n]*/)
-    if (comment) {
-      tokens.push(['c', comment[0]])
-      i += comment[0].length
-      continue
-    }
-
-    // Key — identifier followed by ':' then whitespace or EOL
-    const keyMatch = rest.match(/^([A-Za-z_][A-Za-z0-9_]*):(?=[\s]|$)/)
-    if (keyMatch) {
-      tokens.push(['k', keyMatch[1]])
-      tokens.push(['p', ':'])
-      i += keyMatch[1].length + 1
-      continue
-    }
-
-    // String — double-quoted
-    const strD = rest.match(/^"(?:[^"\\]|\\.)*"/)
-    if (strD) {
-      tokens.push(['s', strD[0]])
-      i += strD[0].length
-      continue
-    }
-
-    // String — single-quoted
-    const strS = rest.match(/^'(?:[^'\\]|\\.)*'/)
-    if (strS) {
-      tokens.push(['s', strS[0]])
-      i += strS[0].length
-      continue
-    }
-
-    // Number
-    const num = rest.match(/^-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/)
-    if (num) {
-      tokens.push(['n', num[0]])
-      i += num[0].length
-      continue
-    }
-
-    // Block-scalar markers
-    if (rest[0] === '|' || rest[0] === '>') {
-      tokens.push(['p', rest[0]])
-      i++
-      continue
-    }
-
-    // Punctuation
-    if (rest[0] && '{}[],:-'.includes(rest[0])) {
-      tokens.push(['p', rest[0]])
-      i++
-      continue
-    }
-
-    // Plain scalar run — maximal sequence of chars that aren't
-    // special. This catches unquoted values like 'Berlin, Germany'
-    // or 'CIML/2004/1' as a single text token (so numbers inside
-    // them aren't单独 highlighted).
-    const scalar = rest.match(/^[^{}\[\],:\s#"'|>][^{}\[\],:\s#"'|>]*/)
-    if (scalar) {
-      tokens.push(['t', scalar[0]])
-      i += scalar[0].length
-      continue
-    }
-
-    // Fallback
-    tokens.push(['t', rest[0]])
-    i++
-  }
-
-  return tokens
-}
-
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-}
-
-function render(tokens: Token[]): string {
-  return tokens
-    .map(([type, value]) => {
-      const esc = escapeHtml(value)
-      if (type === 'ws' || type === 't' || type === 'p') return esc
-      return `<span class="y-${type}">${esc}</span>`
-    })
-    .join('')
-}
+// The specimen is a thin adapter: it owns the YAML string and the
+// presentation; tokenization lives in lib/yaml-tokenizer.ts so it
+// can be reused by any future YAML-heavy page (parse-yaml docs,
+// blog posts, etc.).
+import { highlight } from '../lib/yaml-tokenizer'
 
 const specimenYaml = `metadata:
   title: 39th CIML Meeting — Decisions
@@ -151,7 +37,7 @@ resolutions:
               Le Comité a approuvé le procès-verbal de sa 38e réunion
               sans modification.`
 
-const highlighted = render(tokenize(specimenYaml))
+const highlighted = highlight(specimenYaml)
 </script>
 
 <template>
@@ -191,7 +77,7 @@ const highlighted = render(tokenize(specimenYaml))
   overflow: hidden;
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.6) inset,
-    0 30px 60px -20px rgba(14, 116, 144, 0.18),
+    0 30px 60px -20px var(--edoxen-cyan-glow-soft),
     0 12px 24px -12px rgba(0, 0, 0, 0.08);
   font-family: var(--edoxen-font-mono);
   /* position:relative so the ::after fade can anchor to the card. */
@@ -201,7 +87,7 @@ const highlighted = render(tokenize(specimenYaml))
 .dark .specimen {
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 30px 60px -20px rgba(103, 232, 249, 0.18),
+    0 30px 60px -20px var(--edoxen-cyan-300-glow),
     0 12px 24px -12px rgba(0, 0, 0, 0.4);
 }
 

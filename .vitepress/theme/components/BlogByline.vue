@@ -1,36 +1,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useData } from "vitepress";
+import { formatDate, formatLastUpdated, formatAuthors } from "../composables/usePostFormat";
 
 const { frontmatter, page } = useData();
 
-const formattedDate = computed(() => {
-  if (!frontmatter.value.date) return "";
-  const date = new Date(frontmatter.value.date);
-  return date.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-});
-
-const formattedLastUpdated = computed(() => {
-  if (!page.value.lastUpdated) return "";
-  const date = new Date(page.value.lastUpdated);
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-});
-
-const authors = computed(() => {
-  const a = frontmatter.value.authors;
-  if (!a || !Array.isArray(a)) return "";
-  if (a.length === 1) return a[0];
-  if (a.length === 2) return `${a[0]} & ${a[1]}`;
-  return a.slice(0, -1).join(", ") + " & " + a[a.length - 1];
-});
+const formattedDate = computed(() => formatDate(frontmatter.value.date));
+const formattedLastUpdated = computed(() => formatLastUpdated(page.value.lastUpdated));
+const authors = computed(() => formatAuthors(frontmatter.value.authors));
 </script>
 
 <template>

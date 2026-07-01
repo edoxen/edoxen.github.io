@@ -21,6 +21,20 @@
   --edoxen-cyan: #0e7490;
   --edoxen-cyan-deep: #035a8f;
   --edoxen-cyan-ink: #013a5e;
+
+  /* Derived alpha variants — semantic names, never raw rgba() in components.
+     Naming convention: <role>-<intensity>. Re-tinting the brand means
+     editing these definitions, not grepping for rgba() literals. */
+  --edoxen-cyan-glow-faint:   rgba(14, 116, 144, 0.08);
+  --edoxen-cyan-glow-soft:    rgba(14, 116, 144, 0.18);
+  --edoxen-cyan-glow-card:    rgba(14, 116, 144, 0.25);
+  --edoxen-cyan-glow-medium:  rgba(14, 116, 144, 0.35);
+  --edoxen-cyan-shadow:       rgba(14, 116, 144, 0.45);
+  --edoxen-cyan-glow-strong:  rgba(14, 116, 144, 0.55);
+  --edoxen-cyan-glow-deep:    rgba(14, 116, 144, 0.65);
+  --edoxen-cyan-rim:          rgba(103, 232, 249, 0.10);
+  --edoxen-cyan-rim-bright:   rgba(103, 232, 249, 0.18);
+  --edoxen-cyan-300-glow:     rgba(103, 232, 249, 0.18);
 }
 
 /* Map onto VitePress tokens so the rest of the theme inherits the look. */
@@ -191,12 +205,12 @@ h1, h2, h3, h4, h5, h6,
   --edoxen-btn-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.22),
     inset 0 -1px 0 rgba(0, 0, 0, 0.16),
-    0 4px 12px -2px rgba(14, 116, 144, 0.35),
+    0 4px 12px -2px var(--edoxen-cyan-glow-medium),
     0 2px 4px -1px rgba(0, 0, 0, 0.08);
   --edoxen-btn-shadow-hover:
     inset 0 1px 0 rgba(255, 255, 255, 0.28),
     inset 0 -1px 0 rgba(0, 0, 0, 0.22),
-    0 8px 20px -4px rgba(14, 116, 144, 0.45),
+    0 8px 20px -4px var(--edoxen-cyan-shadow),
     0 4px 8px -2px rgba(0, 0, 0, 0.1);
 }
 
@@ -212,13 +226,13 @@ h1, h2, h3, h4, h5, h6,
   --edoxen-btn-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
     inset 0 -1px 0 rgba(0, 0, 0, 0.3),
-    0 4px 16px -2px rgba(14, 116, 144, 0.55),
-    0 0 0 1px rgba(103, 232, 249, 0.1);
+    0 4px 16px -2px var(--edoxen-cyan-glow-strong),
+    0 0 0 1px var(--edoxen-cyan-rim);
   --edoxen-btn-shadow-hover:
     inset 0 1px 0 rgba(255, 255, 255, 0.22),
     inset 0 -1px 0 rgba(0, 0, 0, 0.36),
-    0 10px 24px -4px rgba(14, 116, 144, 0.65),
-    0 0 0 1px rgba(103, 232, 249, 0.18);
+    0 10px 24px -4px var(--edoxen-cyan-glow-deep),
+    0 0 0 1px var(--edoxen-cyan-rim-bright);
 }
 
 .vp-button {
@@ -372,6 +386,104 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* ---------- Misc ------------------------------------------------------- */
+
+/* Band layout primitives — shared by HomePage section components
+   (AnatomyStrip, FeatureGrid). Promoted to global so each section
+   owns its own scoped styles but inherits the band frame from one
+   place. */
+.band {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.band-alt {
+  background: var(--vp-c-bg-soft);
+  max-width: none;
+  padding: 4rem 0;
+}
+
+.band-alt > * {
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.band-head {
+  margin-bottom: 2.5rem;
+  max-width: 60ch;
+}
+
+.band-eyebrow {
+  display: inline-block;
+  font-family: var(--edoxen-font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--vp-c-brand-1);
+  margin-bottom: 0.6rem;
+  font-weight: 500;
+}
+
+.band-head h2 {
+  font-family: var(--edoxen-font-display);
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 0.85rem;
+  color: var(--vp-c-text-1);
+}
+
+.band-lede {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--vp-c-text-2);
+  margin: 0;
+}
+
+.band-cta {
+  margin: 2rem 0 0;
+  font-family: var(--edoxen-font-body);
+  font-size: 0.95rem;
+}
+
+.band-cta a {
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.band-cta a:hover {
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Diagram wrapper — used by every inline-SVG diagram in docs/*.md.
+   Promoted to a global class so the styling contract lives in one
+   place; previously each Markdown file shipped its own <style scoped>
+   block with slightly drifted values. */
+.diagram {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: var(--vp-c-bg-soft);
+  border-radius: 14px;
+  border: 1px solid var(--vp-c-divider);
+}
+.diagram svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  color: var(--vp-c-text-2);
+}
 
 ::selection {
   background: var(--vp-c-brand-1);

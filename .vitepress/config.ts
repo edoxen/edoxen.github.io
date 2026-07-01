@@ -21,10 +21,10 @@ export default defineConfig({
 
   themeConfig: {
     logo: {
-      light: '/edoxen-logo-full.svg',
-      dark: '/edoxen-logo-full-dark.svg',
+      light: '/edoxen-logo.svg',
+      dark: '/edoxen-logo-dark.svg',
     },
-    siteTitle: false,
+    siteTitle: 'Edoxen',
 
     nav: [
       { text: 'Introduction', link: '/docs/introduction' },

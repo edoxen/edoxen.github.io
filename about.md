@@ -46,13 +46,37 @@ spelling out the project name *Edoxen* in Greek capitals:
 <div class="logo-showcase">
   <div class="logo-card light-card">
     <div class="logo-card-header">Light mode</div>
-    <img src="/edoxen-logo-full.svg" alt="Edoxen wordmark (light)" class="logo-display logo-display-wide" />
+    <img src="/edoxen-logo.svg" alt="Edoxen mark (light)" class="logo-display" />
+    <div class="logo-wordmark">Edoxen</div>
   </div>
   <div class="logo-card dark-card">
     <div class="logo-card-header">Dark mode</div>
-    <img src="/edoxen-logo-full-dark.svg" alt="Edoxen wordmark (dark)" class="logo-display logo-display-wide" />
+    <img src="/edoxen-logo-dark.svg" alt="Edoxen mark (dark)" class="logo-display" />
+    <div class="logo-wordmark">Edoxen</div>
   </div>
 </div>
+
+<style scoped>
+.logo-wordmark {
+  font-family: var(--edoxen-font-display);
+  font-size: 1.6rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin-top: 0.6rem;
+}
+.light-card .logo-wordmark {
+  background: linear-gradient(120deg, var(--edoxen-cyan), var(--edoxen-cyan-deep));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.dark-card .logo-wordmark {
+  background: linear-gradient(120deg, #67e8f9, #38bdf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+</style>
 
 Three design choices come straight out of the etymology:
 
@@ -132,7 +156,7 @@ The stoichedon mark is also published as a square glyph
 for use in social cards, OG embeds, and favicons:
 
 <div class="mark-row">
-  <img src="/edoxen-mark.svg" alt="Edoxen mark" class="mark-display" />
+  <img src="/edoxen-logo.svg" alt="Edoxen mark" class="mark-display" />
 </div>
 
 <style scoped>
@@ -167,9 +191,12 @@ of the cyanotypes used by 19th-century epigraphers to publish the
 
 The contrast stays WCAG AA against either background — the only
 case where a project brand ever sees an inversion is the navbar
-logo, which is shipped in two files (`edoxen-logo-full.svg` and
-`edoxen-logo-full-dark.svg`) so the mark on light and the mark on
-dark are each tuned for their backdrop.
+logo, which is shipped in two files (`edoxen-logo.svg` for the
+light mark, `edoxen-logo-dark.svg` for the dark mark) so the mark
+on light and the mark on dark are each tuned for their backdrop.
+The wordmark itself is rendered as HTML text in the navbar, in the
+Fraunces display serif, so it inherits theme colours crisply at any
+size.
 
 ## Origin Story
 

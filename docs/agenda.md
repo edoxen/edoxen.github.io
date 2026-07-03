@@ -140,5 +140,5 @@ Submission or response deadlines that are tied to the meeting (e.g.
 ## See also
 
 - [Meeting Collection](/docs/meeting-collection) — the parent entity
-- [Resolution Collection](/docs/resolution-set) — the parallel container; a `Meeting` references Resolutions via `resolution_refs[]`
+- [Resolution Collection](/docs/decision-collection) — the parallel container; a `Meeting` references Resolutions via `resolution_refs[]`
 - [`edoxen/edoxen-model`](https://github.com/edoxen/edoxen-model) — canonical LutaML/UML definitions

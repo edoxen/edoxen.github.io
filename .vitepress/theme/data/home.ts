@@ -24,7 +24,7 @@ export const features: Feature[] = [
   {
     title: 'Resolutions, decided',
     body: 'A Resolution carries its identifier, DOI, URN, dates, and one or more localizations. Considerations, actions, and approvals sit underneath, enum-restricted and per-language.',
-    href: '/docs/resolution',
+    href: '/docs/decision',
     glyph: '§',
   },
   {

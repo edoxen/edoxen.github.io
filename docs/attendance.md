@@ -138,5 +138,5 @@ meeting.vote_records
 
 - [Meeting Collection](/docs/meeting-collection) — the parent entity
 - [Minutes](/docs/minutes) — narrative record of the same meeting
-- [Resolution Collection](/docs/resolution-set) — what was voted on
+- [Resolution Collection](/docs/decision-collection) — what was voted on
 - [Structured Identifier](/docs/structured-identifier) — the join-key type

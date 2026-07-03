@@ -5,7 +5,7 @@ title: Meeting Collection
 # Meeting Collection
 
 A **MeetingCollection** is the top-level container for meetings — the
-parallel of [ResolutionCollection](/docs/resolution-set) for
+parallel of [ResolutionCollection](/docs/decision-collection) for
 meeting-level data. It corresponds to one publication batch or one
 event horizon, e.g. all OIML CIML meetings for a financial period,
 or all ISO/TC 154 plenary sessions across a quadrennium.
@@ -173,7 +173,7 @@ meeting makes the chain visible in tools without parsing dates.
 - [Agenda](/docs/agenda) — agenda items, schedule slots, deadlines
 - [Minutes](/docs/minutes) — the narrative record of a meeting
 - [Attendance & Votes](/docs/attendance) — who was there and how they voted
-- [Resolution Collection](/docs/resolution-set) — the parallel container for resolutions
+- [Resolution Collection](/docs/decision-collection) — the parallel container for resolutions
 - [Structured Identifier](/docs/structured-identifier) — the {prefix, number} type
 - [Multilingual support](/docs/multilingual) — the `localizations[]` pattern in detail
 - [`edoxen/edoxen-model`](https://github.com/edoxen/edoxen-model) — the LutaML/UML source of truth

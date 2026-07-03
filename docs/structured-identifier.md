@@ -64,5 +64,5 @@ body.
 ## See also
 
 - [Meeting Collection](/docs/meeting-collection)
-- [Resolution Collection](/docs/resolution-set)
+- [Resolution Collection](/docs/decision-collection)
 - [Localization](/docs/localization) — how identifiers interact with `localizations[]`

@@ -1,69 +1,120 @@
 # Introduction
 
-Edoxen is a Ruby gem + JSON Schema for representing formal resolutions
-in a structured, machine-readable, multilingual format.
+Edoxen is a Ruby gem + JSON Schema for representing **any meeting** —
+its agenda, motions, votings, decisions, attendance, minutes, and
+recurrence — in a structured, machine-readable, multilingual format.
 
 ## What problem does it solve?
 
-Different organizations publish resolutions and decisions in different
-formats. Some use PDFs, some use Word documents, some use custom XML.
-Even within a single organization, the format can drift over the years.
+Different meeting-publishing domains have invented their own formats:
+PDFs of parliamentary Hansard, Word documents of ISO resolutions, XML
+for IETF meetings, custom databases for board portals. Even within one
+domain, formats drift across years and vendors.
 
 **Edoxen** provides:
 
-1. A **common information model** that captures the universal elements
-   of any formal resolution — its identifier, its date, who approved
-   it, what was considered, what was decided.
-2. A **YAML wire format** that is human-readable, easy to diff, and
+1. A **generic core information model** that captures the universal
+   elements of *any* meeting — its identifier, venues, officers,
+   agenda, the procedural record (motions, votings), and the formal
+   outcomes (decisions).
+2. A **profile mechanism** (ISO 8601-2 §15) so adopters can extend the
+   core for their domain — parliamentary (LegCo, Congress), standards
+   (ISO, OIML), technical (IETF, W3C), corporate governance — without
+   forking the core.
+3. A **YAML wire format** that is human-readable, easy to diff, and
    easy to edit.
-3. A **JSON Schema** that locks the format so consumers can validate
+4. A **JSON Schema** that locks the format so consumers can validate
    what they receive.
-4. A **Ruby library** for parsing, building, and serializing
-   resolution data programmatically.
+5. A **Ruby library** for parsing, building, and serializing meeting
+   data programmatically.
+
+## Who is it for?
+
+- **Standards bodies** (ISO, IEC, ITU, BIPM, OIML, ILO) publishing
+  formal decisions.
+- **Parliamentary bodies** (UK Hansard, HK LegCo, US Congress) modeling
+  bills, motions, divisions, and votes.
+- **Technical communities** (IETF, W3C, Apache) tracking WG meetings and
+  draft approvals.
+- **Academic conferences** (Crossref-registered) with peer-reviewed
+  proceedings.
+- **Corporate boards** with quarterly governance cycles.
+- **Anyone** who needs a structured record of who met, what they
+  discussed, how they voted, and what they decided.
 
 ## Quick example
 
 ```yaml
-metadata:
-  title: Resolutions of the 17th OIML Conference, Paris, France
-  dates:
-    - start: '2025-10-14'
-      end: '2025-10-15'
-      kind: meeting
-  venue: Paris, France
-  city: PAR
-  country_code: FR
-  source_urls:
-    - ref: https://oiml.org/.../17th-conference-english.pdf
-      format: pdf
-      language_code: eng
+identifier:
+  - prefix: ACME
+    number: "2026-Q1-Board"
+urn: urn:acme:board:meeting:2026-q1
+type: board_meeting
+status: completed
+visibility: confidential
 
-resolutions:
-  - identifier: Conference/2025/01
-    doi: 10.63493/resolutions/conf202501
-    urn: urn:oiml:doc:conf:resolution:17.01
-    dates:
-      - start: '2025-10-14'
-        kind: decision
+date_range:
+  start: 2026-03-15
+  end: 2026-03-15
+
+venues:
+  - kind: physical
+    name: Acme Boardroom
+    unlocode: USNYC
+    country_code: US
+  - kind: virtual
+    name: Video Conference
+    uri: https://teams.microsoft.com/l/meetup-join/acme-board
+    features: [audio, video, screen]
+
+officers:
+  - role: chair
+    person: { name: Ms. Eleanor Vance }
+  - role: secretary
+    person: { name: Mr. James Okafor }
+
+motions:
+  - identifier: motion-dividend-2026-q1
+    text: |
+      I move that the Board declare a quarterly dividend of $0.45
+      per share.
+    status: carried
+    resulting_decision: urn:acme:board:decision:2026-q1-dividend
+
+votings:
+  - on_motion: urn:acme:board:motion:2026-q1-dividend
+    status: decided
+    voting_method: roll_call
+    result: passed
+    counts: { ayes: 4, noes: 2 }
+
+decisions:
+  - identifier:
+      - prefix: ACME
+        number: "2026-Q1-001"
+    kind: order
+    status: decided
+    urn: urn:acme:board:decision:2026-q1-dividend
     localizations:
       - language_code: eng
-        script: Latn
-        title: Approval of the agenda for the 17th International Conference
-        subject: OIML Conference
+        title: Board Order Declaring Q1 2026 Dividend
         actions:
-          - type: approves
-            message: Approves the agenda for the 17th International Conference.
+          - type: orders
+            message: |
+              The Board orders a quarterly dividend of $0.45
+              per share, payable April 15, 2026.
 ```
 
 ## Where to next?
 
-- [Architecture](/docs/architecture) — the three-layer model, the
-  round-trip pipeline, and the EN+FR plumbing, with diagrams.
+- [Architecture](/docs/architecture) — the generic-core-plus-profile
+  design, the procedural state machines, and the multilingual plumbing.
+- [Migration to v2](/docs/migration-v2) — coming from v0.x (Resolution →
+  Decision rename + new entities).
 - [Installation](/docs/installation) — set up the gem in your project.
-- [Schema](/docs/schema) — see the full JSON Schema reference.
-- [Multilingual support](/docs/multilingual) — how to author EN/FR
-  (or any language pair) resolution sets.
-- [Localization sync (deep-dive)](/docs/localization-sync) — how EN+FR
-  alignment is preserved inside a single file.
+- [Meetings](/docs/meeting-collection) — the event-grain container.
+- [Procedural core](/docs/motion) — Motion → Voting → Decision.
+- [Profile mechanism](/docs/extension) — how adopters extend the core.
+- [Schema](/docs/schema) — the full JSON Schema reference.
 - [CLI](/docs/cli) — `edoxen validate` and `edoxen normalize` from
   the command line.

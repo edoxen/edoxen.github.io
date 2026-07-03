@@ -10,19 +10,20 @@ import { stats } from '../data/home'
         <div class="eyebrow">
           <span class="eyebrow-greek">ἔδοξεν</span>
           <span class="eyebrow-rule"></span>
-          <span class="eyebrow-label">Information model · v1.0</span>
+          <span class="eyebrow-label">Information model · v2.0</span>
         </div>
 
         <h1 class="hero-title">
-          Proceedings,<br>
-          <em>structured.</em>
+          Meetings,<br>
+          <em>modelled.</em>
         </h1>
 
         <p class="hero-lede">
-          Edoxen is the common substrate for formal proceedings across
-          ISO, IEC, ITU, BIPM, OIML, and ILO — meetings, agendas,
-          minutes, attendance, votes, and the resolutions adopted, in
-          one YAML shape, multilingual by default.
+          Edoxen is a generic information model for any meeting —
+          standards bodies, parliaments, technical communities, academic
+          conferences, corporate boards. Meeting, agenda, motion,
+          voting, and decision — one YAML shape, multilingual by
+          default, profile-extensible for every domain.
         </p>
 
         <div class="hero-actions">
@@ -46,8 +47,10 @@ import { stats } from '../data/home'
       <div class="hero-specimen">
         <YamlSpecimen />
         <p class="specimen-caption">
-          A single <code>.yaml</code> file. One <code>Resolution</code>,
-          two <code>Localization</code> entries. Schema-valid.
+          A single <code>.yaml</code> file. One <code>Meeting</code>
+          with polymorphic <code>Venue</code>, <code>Officer</code>
+          roles, <code>Motion</code> + <code>Voting</code>, and the
+          carried <code>Decision</code>. Schema-valid.
         </p>
       </div>
     </div>

@@ -5,37 +5,62 @@
 // blog posts, etc.).
 import { highlight } from '../lib/yaml-tokenizer'
 
-const specimenYaml = `metadata:
-  title: 39th CIML Meeting — Decisions
-  dates:
-    - { start: '2004-10-26', end: '2004-10-29', kind: meeting }
-  venue: Berlin, Germany
-  city: BER
-  country_code: DE
+const specimenYaml = `identifier:
+  - prefix: ACME
+    number: "2026-Q1-Board"
+urn: urn:acme:board:meeting:2026-q1
+type: board_meeting
+status: completed
+visibility: confidential
 
-resolutions:
-  - identifier: CIML/2004/1
-    doi: 10.63493/resolutions/ciml200401
-    urn:  urn:oiml:doc:ciml:resolution:2004-1
-    dates:
-      - { start: '2004-10-26', kind: decision }
+date_range:
+  start: 2026-03-15
+  end:   2026-03-15
+
+venues:
+  - kind: physical
+    name: Acme Boardroom
+    unlocode: USNYC
+    country_code: US
+  - kind: virtual
+    name: Video Conference
+    uri: https://teams.microsoft.com/l/meetup-join/acme-board
+    features: [audio, video, screen]
+
+officers:
+  - role: chair
+    person: { name: Ms. Eleanor Vance }
+
+motions:
+  - identifier: motion-dividend-2026-q1
+    text: |
+      I move that the Board declare a quarterly dividend of $0.45
+      per share, payable on April 15, 2026.
+    status: carried
+    resulting_decision: urn:acme:board:decision:2026-q1-dividend
+
+votings:
+  - on_motion: urn:acme:board:motion:2026-q1-dividend
+    status: decided
+    voting_method: roll_call
+    result: passed
+    counts: { ayes: 4, noes: 2 }
+
+decisions:
+  - identifier:
+      - prefix: ACME
+        number: "2026-Q1-001"
+    kind: order
+    status: decided
+    urn: urn:acme:board:decision:2026-q1-dividend
     localizations:
       - language_code: eng
-        script: Latn
-        title: Approval of the minutes of the 38th CIML Meeting
+        title: Board Order Declaring Q1 2026 Dividend
         actions:
-          - type: approves
+          - type: orders
             message: |
-              The Committee approved the minutes of its 38th Meeting
-              without modification.
-      - language_code: fra
-        script: Latn
-        title: Approbation du procès-verbal de la 38e réunion du CIML
-        actions:
-          - type: approves
-            message: |
-              Le Comité a approuvé le procès-verbal de sa 38e réunion
-              sans modification.`
+              The Board orders a quarterly dividend of $0.45
+              per share, payable April 15, 2026.`
 
 const highlighted = highlight(specimenYaml)
 </script>
@@ -45,9 +70,9 @@ const highlighted = highlight(specimenYaml)
     <figcaption class="specimen-head">
       <span class="specimen-tag">SPECIMEN</span>
       <span class="specimen-meta">
-        <code>ciml-39-decisions.yaml</code>
+        <code>acme-board-2026-q1.yaml</code>
         <span class="dot">·</span>
-        <span>EN + FR</span>
+        <span>Meeting</span>
       </span>
       <span class="specimen-valid" title="Schema-validated">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">

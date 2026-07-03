@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Edoxen — structured proceedings for ISO, IEC, ITU, BIPM, OIML, and ILO
+title: Edoxen — a generic meeting, agenda, motion, voting, and decision model
 ---
 
 <HomePage />

@@ -108,5 +108,5 @@ document.
 - [Meeting Collection](/docs/meeting-collection) — the parent entity
 - [Agenda](/docs/agenda) — the forward-looking business order
 - [Attendance](/docs/attendance) — who was at the meeting
-- [Resolution Collection](/docs/resolution-set) — the formal decisions
+- [Resolution Collection](/docs/decision-collection) — the formal decisions
 - [Schema](/docs/schema) — what the JSON Schema enforces

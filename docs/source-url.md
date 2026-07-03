@@ -33,5 +33,5 @@ field.
 
 ## See also
 
-- [Metadata](/docs/metadata)
+- [Metadata](/docs/decision-metadata)
 - [Localization](/docs/localization)

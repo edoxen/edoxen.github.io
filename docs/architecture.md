@@ -30,7 +30,7 @@ Your first decision: which grain do you need?
       <li><code>resolution_refs[]</code> link out to the resolutions adopted</li>
     </ul>
   </a>
-  <a class="root-card" href="/docs/resolution-set">
+  <a class="root-card" href="/docs/decision-collection">
     <div class="root-tag">file root · resolution-grain</div>
     <h3>ResolutionCollection</h3>
     <p class="root-lede">

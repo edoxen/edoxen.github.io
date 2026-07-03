@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'Edoxen',
-  description: 'Structured proceedings — meetings, agendas, minutes, and resolutions for ISO, IEC, ITU, BIPM, OIML, and ILO',
+  description: 'A generic meeting, agenda, motion, voting, and decision model. Profile-based customization for any domain.',
   lang: 'en-US',
   lastUpdated: true,
 
@@ -35,11 +35,14 @@ export default defineConfig({
     nav: [
       { text: 'Introduction', link: '/docs/introduction' },
       {
-        text: 'Proceedings',
+        text: 'Model',
         items: [
           { text: 'Architecture', link: '/docs/architecture' },
           { text: 'Meetings', link: '/docs/meeting-collection' },
-          { text: 'Resolutions', link: '/docs/resolution-set' },
+          { text: 'Decisions', link: '/docs/decision-collection' },
+          { text: 'Procedural (Motion/Voting)', link: '/docs/motion' },
+          { text: 'Topics', link: '/docs/topic' },
+          { text: 'Venues', link: '/docs/venue' },
           { text: 'Building blocks', link: '/docs/structured-identifier' },
         ],
       },
@@ -74,44 +77,66 @@ export default defineConfig({
             { text: 'Architecture', link: '/docs/architecture' },
             { text: 'Origin', link: '/docs/origin' },
             { text: 'Installation', link: '/docs/installation' },
+            { text: 'Migration to v2', link: '/docs/migration-v2' },
           ],
         },
         {
-          text: 'Proceedings',
+          text: 'Meetings',
           collapsed: false,
           items: [
-            {
-              text: 'Meetings',
-              collapsed: false,
-              items: [
-                { text: 'Meeting Collection', link: '/docs/meeting-collection' },
-                { text: 'Agenda', link: '/docs/agenda' },
-                { text: 'Minutes', link: '/docs/minutes' },
-                { text: 'Attendance & Votes', link: '/docs/attendance' },
-              ],
-            },
-            {
-              text: 'Resolutions',
-              collapsed: false,
-              items: [
-                { text: 'Resolution Collection', link: '/docs/resolution-set' },
-                { text: 'Resolution', link: '/docs/resolution' },
-                { text: 'Resolution Metadata', link: '/docs/metadata' },
-                { text: 'Dates', link: '/docs/dates' },
-                { text: 'Actions', link: '/docs/actions' },
-                { text: 'Considerations', link: '/docs/considerations' },
-                { text: 'Approvals', link: '/docs/approvals' },
-              ],
-            },
-            {
-              text: 'Building blocks',
-              collapsed: false,
-              items: [
-                { text: 'Structured Identifier', link: '/docs/structured-identifier' },
-                { text: 'Source URL', link: '/docs/source-url' },
-                { text: 'Localization', link: '/docs/localization' },
-              ],
-            },
+            { text: 'Meeting Collection', link: '/docs/meeting-collection' },
+            { text: 'Meeting Series', link: '/docs/meeting-series' },
+            { text: 'Meeting Component', link: '/docs/meeting-component' },
+            { text: 'Venue', link: '/docs/venue' },
+            { text: 'Officer', link: '/docs/officer' },
+            { text: 'Agenda', link: '/docs/agenda' },
+            { text: 'Minutes', link: '/docs/minutes' },
+            { text: 'Attendance & Votes', link: '/docs/attendance' },
+            { text: 'Recurrence', link: '/docs/recurrence' },
+          ],
+        },
+        {
+          text: 'Procedural',
+          collapsed: false,
+          items: [
+            { text: 'Motion', link: '/docs/motion' },
+            { text: 'Voting', link: '/docs/voting' },
+          ],
+        },
+        {
+          text: 'Decisions',
+          collapsed: false,
+          items: [
+            { text: 'Decision Collection', link: '/docs/decision-collection' },
+            { text: 'Decision', link: '/docs/decision' },
+            { text: 'Decision Metadata', link: '/docs/decision-metadata' },
+            { text: 'Dates', link: '/docs/dates' },
+            { text: 'Actions', link: '/docs/actions' },
+            { text: 'Considerations', link: '/docs/considerations' },
+            { text: 'Approvals', link: '/docs/approvals' },
+          ],
+        },
+        {
+          text: 'Topics',
+          collapsed: false,
+          items: [
+            { text: 'Topic', link: '/docs/topic' },
+          ],
+        },
+        {
+          text: 'Profile mechanism',
+          collapsed: false,
+          items: [
+            { text: 'Meeting Extension', link: '/docs/extension' },
+          ],
+        },
+        {
+          text: 'Building blocks',
+          collapsed: false,
+          items: [
+            { text: 'Structured Identifier', link: '/docs/structured-identifier' },
+            { text: 'Source URL', link: '/docs/source-url' },
+            { text: 'Localization', link: '/docs/localization' },
           ],
         },
         {
@@ -133,7 +158,7 @@ export default defineConfig({
           text: 'Usage',
           items: [
             { text: 'Parsing YAML', link: '/docs/parse-yaml' },
-            { text: 'Creating resolutions', link: '/docs/create-resolutions' },
+            { text: 'Creating decisions', link: '/docs/create-decisions' },
             { text: 'Validation', link: '/docs/validation' },
           ],
         },

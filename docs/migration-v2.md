@@ -144,7 +144,7 @@ meeting.officers << Officer.new(role: "secretary", person: meeting.secretary) if
 
 ## References
 
-- [TODO.refactor/00-MASTER.adoc](https://github.com/edoxen/edoxen-model/blob/main/TODO.refactor/00-MASTER.adoc) — full plan
+- [TODO.refactor/00-MASTER.md](https://github.com/edoxen/edoxen-model/blob/main/TODO.refactor/00-MASTER.md) — full plan
 - [TODO.refactor/PROGRESS.md](https://github.com/edoxen/edoxen-model/blob/main/TODO.refactor/PROGRESS.md) — current status
 - [references/iso8601-2.adoc](https://github.com/edoxen/edoxen-model/blob/main/references/iso8601-2.adoc) — date/recurrence standard
 - [references/profiles/legco.adoc](https://github.com/edoxen/edoxen-model/blob/main/references/profiles/legco.adoc) — profile example

@@ -376,7 +376,7 @@ Then read the docs in this order:
 5. **[CLI](/docs/cli)** — `validate` and `normalize`, batch and
    per-file.
 6. **[Parsing YAML](/docs/parse-yaml)** /
-   **[Creating resolutions](/docs/create-resolutions)** — the
+   **[Creating decisions](/docs/create-decisions)** — the
    Ruby API, with a small round-trip example.
 
 Or step outside the docs and read the **[LutaML model

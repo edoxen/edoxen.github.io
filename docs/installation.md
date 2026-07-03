@@ -47,4 +47,4 @@ Commands:
 
 - Walk through the [Introduction](/docs/introduction).
 - Read the [CLI docs](/docs/cli) to learn `validate` and `normalize`.
-- Browse the [data model](/docs/resolution-set).
+- Browse the [data model](/docs/decision-collection).

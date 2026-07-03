@@ -11,12 +11,16 @@ assembly, reflecting the collective will and judgment of the citizens.
 
 ## Why we picked the name
 
-Modern standards organizations publish thousands of resolutions every
-year. ISO, IEC, ITU, BIPM, OIML, ILO — each has its own document
-convention, its own publication workflow, its own data model.
+Modern meetings publish thousands of records every year. Standards
+bodies (ISO, IEC, ITU, BIPM, OIML, ILO), parliaments (UK Hansard, HK
+LegCo, US Congress), technical communities (IETF, W3C, Apache),
+academic conferences, corporate boards — each has its own document
+convention, its own workflow, its own data model.
 
 Edoxen is the common substrate: the **shared opinion** of how a
-resolution looks, regardless of the body that issued it.
+meeting record looks, regardless of the body that issued it. The
+generic core stays generic; domain-specific concepts live in profile
+extensions.
 
 ## Prior art
 

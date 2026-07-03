@@ -4,13 +4,39 @@ title: Architecture
 
 # Architecture
 
-Edoxen is an information model for **formal proceedings** — the
-umbrella term standards bodies use for the published record of a
-meeting (agenda, minutes, attendance rolls, votes, and the
-resolutions adopted). The model has **two parallel top-level
-containers** — one for meetings, one for resolutions — both sharing
-the same multilingual plumbing. This page walks the model first,
-then the pipeline, then the multilingual plumbing.
+Edoxen is an information model for **any meeting** — the umbrella term
+for the published record of a meeting (agenda, attendance, motions,
+votings, decisions, minutes). The model is **generic by design**:
+its core captures concepts shared across standards bodies,
+parliaments, technical communities, academic conferences, and corporate
+boards. Domain-specific concepts (Bill, Witness, Petition, Quorum Bell)
+live in **profile extensions** via the `MeetingExtension` slot on every
+core entity (ISO 8601-2 §15).
+
+The model has **two parallel top-level containers** — one for meetings,
+one for decisions — both sharing the same multilingual plumbing. This
+page walks the model first, then the pipeline, then the multilingual
+plumbing.
+
+## The five concerns
+
+A meeting has five concerns, each modelled as a distinct first-class
+entity rather than a column on a flat table:
+
+1. **Meetings** — the event itself: identifier, venues (polymorphic),
+   officers (role-discriminated), agenda, components (flat sub-events),
+   attendance, minutes.
+2. **Motions + Votings** — the procedural record: who moved what, how
+   the question was put, how members voted, what the chair declared.
+3. **Decisions** — the formal outcomes (resolution, order, ruling,
+   determination, recommendation, statement, finding, opinion).
+4. **Topics** — the subjects of discussion: documents, assets,
+   references, with cross-meeting threading via `resumption_of`.
+5. **Series** — the recurring parent (annual plenaries, monthly board
+   meetings, IETF meeting series) with a `Recurrence` rule.
+
+Every core entity also carries an `extensions: MeetingExtension[0..*]`
+slot for adopter-specific profiles.
 
 ## Which file root?
 
@@ -22,26 +48,29 @@ Your first decision: which grain do you need?
     <h3>MeetingCollection</h3>
     <p class="root-lede">
       Use when you need <strong>meeting-level detail</strong> —
-      agendas, minutes, attendance, votes, schedule, chairs, deadlines.
+      venues, officers, agenda, components, attendance, minutes,
+      motions, votings, and the inline decisions.
     </p>
     <ul>
       <li>One <code>Meeting</code> per sitting</li>
-      <li>Nested <code>Agenda</code>, <code>Minutes</code>, <code>Attendance</code>, <code>VoteRecord</code></li>
-      <li><code>resolution_refs[]</code> link out to the resolutions adopted</li>
+      <li>Nested <code>Agenda</code>, <code>Minutes</code>, <code>Attendance</code>,
+        <code>Motion[]</code>, <code>Voting[]</code>, <code>Decision[]</code></li>
+      <li>Polymorphic <code>Venue[]</code> (physical with UN/LOCODE + IATA, virtual with URI)</li>
+      <li><code>officers[]</code> with role enum (chair, secretary, treasurer, ...)</li>
     </ul>
   </a>
   <a class="root-card" href="/docs/decision-collection">
-    <div class="root-tag">file root · resolution-grain</div>
-    <h3>ResolutionCollection</h3>
+    <div class="root-tag">file root · decision-grain</div>
+    <h3>DecisionCollection</h3>
     <p class="root-lede">
       Use when you have a <strong>flat batch of decisions</strong> and
-      the meeting-level metadata is out of scope or published
-      elsewhere.
+      the meeting-level detail is out of scope or published elsewhere.
     </p>
     <ul>
-      <li>One <code>Resolution</code> per decision</li>
+      <li>One <code>Decision</code> per outcome</li>
       <li>Nested <code>Localization[]</code> (per-language)</li>
       <li><code>meeting: MeetingIdentifier</code> back-references the originating meeting</li>
+      <li><code>brought_by_motions[]</code> URN-links to the procedural record</li>
     </ul>
   </a>
 </div>

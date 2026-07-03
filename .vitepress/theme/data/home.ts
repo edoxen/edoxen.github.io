@@ -16,16 +16,28 @@ export interface Stat {
 
 export const features: Feature[] = [
   {
-    title: 'Meetings, end to end',
-    body: 'One model covers the full lifecycle: identifier and venue, agenda items, schedule slots, the narrative minutes, attendance rolls, recorded votes, and the resolutions adopted.',
-    href: '/docs/meeting-collection',
+    title: 'Any meeting, one model',
+    body: 'Standards bodies, parliaments, technical communities, academic conferences, corporate boards — all share the same Meeting, Agenda, Motion, Voting, and Decision types. Domain specifics live in profile extensions.',
+    href: '/docs/architecture',
     glyph: '▣',
   },
   {
-    title: 'Resolutions, decided',
-    body: 'A Resolution carries its identifier, DOI, URN, dates, and one or more localizations. Considerations, actions, and approvals sit underneath, enum-restricted and per-language.',
-    href: '/docs/decision',
+    title: 'Procedural core: Motion → Voting → Decision',
+    body: 'A Motion is introduced, seconded, debated, put to a vote. The Voting state machine captures method (voice, division, roll_call) and counts. A carried Motion results in a Decision. State machines are first-class, not afterthoughts.',
+    href: '/docs/motion',
     glyph: '§',
+  },
+  {
+    title: 'Polymorphic Venue',
+    body: 'Physical venues carry UN/LOCODE + IATA + address + geo-coordinates. Virtual venues carry URI + iCalendar features + access details. Hybrid meetings have both. Validated against the canonical unlocodes + iata gems.',
+    href: '/docs/venue',
+    glyph: '◉',
+  },
+  {
+    title: 'Profile-extensible (ISO 8601-2 §15)',
+    body: 'Every core entity carries an extensions[] slot. Adopters register a profile namespace (legco, us-congress, ietf, oiml) and define their own extension kinds. The generic core stays generic.',
+    href: '/docs/extension',
+    glyph: '⊕',
   },
   {
     title: 'Multilingual by default',
@@ -35,27 +47,15 @@ export const features: Feature[] = [
   },
   {
     title: 'Schema-validated wire format',
-    body: 'A JSON Schema (Draft 7) locks the YAML. edoxen validate catches typos, regex mismatches, and enum drift before they ship.',
+    body: 'A JSON Schema (Draft 7) locks the YAML. edoxen validate catches typos, regex mismatches, and enum drift before they ship. Schema ↔ Ruby sync specs fail CI on any drift.',
     href: '/docs/schema',
     glyph: '✓',
-  },
-  {
-    title: 'No hand-rolled serialization',
-    body: 'Built on lutaml-model. Round-trip YAML → Ruby → YAML is a property of the framework, not of bespoke to_yaml code that drifts.',
-    href: 'https://github.com/lutaml/lutaml-model',
-    glyph: '↻',
-  },
-  {
-    title: 'Real-world tested',
-    body: 'Validated against 1,640 OIML resolutions across 28 meetings in EN + FR — 3,280 Localization entries exercising every code path.',
-    href: 'https://github.com/oimlsmart/resolutions-data',
-    glyph: 'στα',
   },
 ]
 
 export const stats: Stat[] = [
-  { value: '1,640', label: 'Resolutions encoded' },
-  { value: '28', label: 'Meetings, EN + FR' },
-  { value: '6', label: 'Standards bodies modelled' },
+  { value: '30+', label: 'Core entity types' },
+  { value: '6', label: 'Meeting domains covered' },
+  { value: '∞', label: 'Profile extensions' },
   { value: '0', label: 'Hand-rolled serializers' },
 ]

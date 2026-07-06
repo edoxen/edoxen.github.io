@@ -135,6 +135,9 @@ export default defineConfig({
           collapsed: false,
           items: [
             { text: 'Structured Identifier', link: '/docs/structured-identifier' },
+            { text: 'EntityRef', link: '/docs/entity-ref' },
+            { text: 'Contact', link: '/docs/contact' },
+            { text: 'Body Vocabulary', link: '/docs/body-vocabulary' },
             { text: 'Source URL', link: '/docs/source-url' },
             { text: 'Localization', link: '/docs/localization' },
           ],

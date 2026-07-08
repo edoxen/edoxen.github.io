@@ -42,12 +42,13 @@ export default defineConfig({
           { text: 'Decisions', link: '/docs/decision-collection' },
           { text: 'Procedural (Motion/Voting)', link: '/docs/motion' },
           { text: 'Topics', link: '/docs/topic' },
+          { text: 'Identity & Contact', link: '/docs/contact' },
           { text: 'Venues', link: '/docs/venue' },
+          { text: 'Localization', link: '/docs/localization' },
           { text: 'Building blocks', link: '/docs/structured-identifier' },
         ],
       },
       { text: 'Schema', link: '/docs/schema' },
-      { text: 'Multilingual', link: '/docs/multilingual' },
       { text: 'Blog', link: '/blog/' },
       { text: 'About', link: '/about' },
       {
@@ -55,6 +56,7 @@ export default defineConfig({
         items: [
           { text: 'Ruby gem', link: 'https://github.com/edoxen/edoxen' },
           { text: 'LutaML models', link: 'https://github.com/edoxen/edoxen-model' },
+          { text: 'JS packages', link: 'https://github.com/edoxen/edoxen-js' },
         ],
       },
     ],
@@ -88,11 +90,20 @@ export default defineConfig({
             { text: 'Meeting Series', link: '/docs/meeting-series' },
             { text: 'Meeting Component', link: '/docs/meeting-component' },
             { text: 'Venue', link: '/docs/venue' },
-            { text: 'Officer', link: '/docs/officer' },
+            { text: 'Venue Collection', link: '/docs/venue-collection' },
             { text: 'Agenda', link: '/docs/agenda' },
             { text: 'Minutes', link: '/docs/minutes' },
             { text: 'Attendance & Votes', link: '/docs/attendance' },
             { text: 'Recurrence', link: '/docs/recurrence' },
+          ],
+        },
+        {
+          text: 'Identity & Contact',
+          collapsed: false,
+          items: [
+            { text: 'Contact', link: '/docs/contact' },
+            { text: 'Contact Collection', link: '/docs/contact-collection' },
+            { text: 'Officer', link: '/docs/officer' },
           ],
         },
         {
@@ -136,17 +147,16 @@ export default defineConfig({
           items: [
             { text: 'Structured Identifier', link: '/docs/structured-identifier' },
             { text: 'EntityRef', link: '/docs/entity-ref' },
-            { text: 'Contact', link: '/docs/contact' },
             { text: 'Body Vocabulary', link: '/docs/body-vocabulary' },
             { text: 'Source URL', link: '/docs/source-url' },
-            { text: 'Localization', link: '/docs/localization' },
           ],
         },
         {
-          text: 'Multilingual support',
+          text: 'Localization',
+          collapsed: false,
           items: [
-            { text: 'Overview', link: '/docs/multilingual' },
-            { text: 'Sync flow (deep-dive)', link: '/docs/localization-sync' },
+            { text: 'Overview (v3.0 per-field)', link: '/docs/localization' },
+            { text: 'Sync flow (legacy deep-dive)', link: '/docs/localization-sync' },
           ],
         },
         {

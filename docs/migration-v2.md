@@ -1,6 +1,6 @@
-# Migration to v2.0
+# Migration to 1.0
 
-Edoxen v2.0 is a breaking release that broadens the model from a
+Edoxen 1.0 is a breaking release that broadens the model from a
 standards-body-specific Resolution model to a **generic meeting/decision
 model** with profile extensions for domain-specific concepts.
 
@@ -9,7 +9,7 @@ Full TODO roadmap: [edoxen-model/TODO.refactor/](https://github.com/edoxen/edoxe
 
 ## TL;DR
 
-| v0.x | v2.0 |
+| legacy | 1.0 |
 |------|------|
 | `Resolution` class | `Decision` class (with `kind: resolution`) |
 | `ResolutionType` enum | `DecisionKind` enum (9 values) |
@@ -24,7 +24,7 @@ Full TODO roadmap: [edoxen-model/TODO.refactor/](https://github.com/edoxen/edoxe
 | (none) | `Recurrence` (ISO 8601-2 §13 structured) |
 | (none) | `Venue` polymorphic via `PhysicalVenue` / `VirtualVenue` subclasses |
 
-## Why v2.0
+## Why 1.0
 
 The original model was designed for standards bodies (ISO, ITU, OIML, ILO,
 BIPM). The 2026 broadening extends coverage to:
@@ -96,7 +96,7 @@ UN/LOCODE and IATA codes are validated by the
 
 ## Procedural core: Decision, Motion, Voting
 
-v0.x had only `Resolution`. v2.0 adds `Motion` and `Voting` as distinct
+legacy had only `Resolution`. 1.0 adds `Motion` and `Voting` as distinct
 core entities:
 
 - **Motion** — a procedural act ("I move that..."). State machine:
@@ -120,7 +120,7 @@ Three samples in
 
 ## Migration script (TODO)
 
-A `scripts/migrate_v1_to_v2.rb` will be provided before v2.0.0 final.
+A `scripts/migrate_v1_to_v2.rb` will be provided before 1.0.0 final.
 The transformation rules:
 
 ```ruby

@@ -5,7 +5,7 @@ happens. The `kind` field discriminates between **physical** and
 **virtual**; all fields from both subtypes live on the one `Venue` class
 as optional siblings.
 
-This replaces v0.x `Location` (physical-only) and `Meeting.virtual:
+This replaces legacy `Location` (physical-only) and `Meeting.virtual:
 Boolean` (insufficient — Zoom needs URL + passcode + dial-in numbers).
 
 ## Fields (common)

@@ -8,7 +8,7 @@ This is the ISO 8601-2 §15 profile mechanism. Adopters register a
 profile namespace (e.g. `legco`, `us-congress`, `ietf`, `oiml`) and
 define `kind` values within it.
 
-## Anatomy (v2.1+)
+## Anatomy (1.0+)
 
 ```ruby
 # Profile-scoped extension carrying a list of typed key/value pairs.
@@ -28,10 +28,10 @@ strings back into Int/Float/Bool/Date:
 class ExtensionAttribute
   attribute :key, :string
 
-  # String variant — wire name `value` (v2.0 back-compat).
+  # String variant — wire name `value` (1.0 back-compat).
   attribute :value, :string
 
-  # Typed variants (v2.1).
+  # Typed variants (1.0).
   attribute :integer_value, :integer
   attribute :float_value, :float
   attribute :boolean_value, :boolean
@@ -49,13 +49,13 @@ class ExtensionAttribute
     when "boolean"  then boolean_value
     when "date"     then date_value
     when "datetime" then date_time_value
-    else value  # default to string (v2.0 back-compat)
+    else value  # default to string (1.0 back-compat)
     end
   end
 end
 ```
 
-The v2.1 tighten (per the post-launch audit,
+The 1.0 tighten (per the post-launch audit,
 [TODO 47](https://github.com/edoxen/edoxen-model/blob/main/TODO.refactor/47-tighten-meeting-extension.md))
 made three changes:
 
@@ -109,7 +109,7 @@ attr.integer_value   # => 7
 attr.typed_value     # => 7
 ```
 
-## v2.0 back-compat
+## 1.0 back-compat
 
 The bare `value: String` wire shape still parses — the gem routes it
 into the string variant, with `type` defaulting to `"string"`. Old

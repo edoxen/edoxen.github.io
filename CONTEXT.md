@@ -6,106 +6,124 @@ about behaviour. Future architecture reviews anchor to this file.
 
 ## The model being documented
 
-Edoxen is an information model for **formal proceedings** — the
-umbrella term standards bodies use for the published record of a
-meeting. The model covers meetings, agendas, minutes, attendance
-rolls, votes, and the resolutions adopted, in any ISO 639-3 language.
+Edoxen is a generic information model for **formal proceedings** — the
+published record of any deliberative body: meetings, agendas, minutes,
+attendance rolls, votes, motions, and the decisions they adopt, in any
+language and script per ISO 24229.
 
 These terms come from the Edoxen information model itself — the site
 documents them, it does not own them. Canonical definitions live in
 [`edoxen/edoxen-model`](https://github.com/edoxen/edoxen-model).
 
-### Two parallel top-level containers
+### Top-level containers
 
-The model has two file roots, used depending on what you want to
-capture:
+The model has four top-level container roots, used depending on what
+you want to capture:
 
 - **MeetingCollection** — meeting-grain. Holds meetings with agendas,
-  schedules, chairs, deadlines, and the resolutions each meeting
-  adopted. Use when agenda items, schedules, and chair-person
-  assignments are part of the story.
-- **ResolutionCollection** — resolution-grain. Holds the resolutions
+  components, officers, deadlines, and the decisions each meeting
+  adopted.
+- **DecisionCollection** — decision-grain. Holds the decisions
   themselves with their admin fields and per-language renderings.
-  Use for a flat file of decisions without meeting-level detail.
+- **ContactCollection** (v3.0) — registry of Contacts indexed by scoped
+  URN. Referenced from Meetings, Components, HostRefs via `ref:`.
+- **VenueCollection** (v3.0) — registry of Venues indexed by scoped URN.
 
-Both containers share the same shape in miniature: `metadata` plus an
-array of children, where each child carries admin fields once and
-`localizations[]` for per-language content.
+### Decision-grain entities
 
-### Resolution-grain entities
-
-- **Resolution** — a single formal decision (the atomic unit). Has a
+- **Decision** — a single formal outcome (the atomic unit). Has a
   `StructuredIdentifier` (one or more), `doi`, `urn`, `meeting`
-  (a `MeetingIdentifier` back-reference), `dates`, and per-language
-  content.
-- **Localization** — a monolingual rendering of a `Resolution`. Each
-  `Resolution` has 1..* localizations (typically `eng` + `fra`).
+  (a `MeetingIdentifier` back-reference), `dates`, and per-field
+  localized content (`title`, `subject`, `message`, `considering`).
 - **Action / Consideration / Approval** — leaf content nodes inside a
-  `Localization`.
-- **ResolutionMetadata** — collection-level header (title, dates,
-  venue, source_urls).
-- **SourceUrl** — a per-language PDF/HTML reference attached to
-  `ResolutionMetadata`.
+  Decision. Each carries its own per-field localized `message`.
+- **DecisionMetadata** — collection-level header (title, dates, venue,
+  source_urls).
+- **SourceUrl** — a per-spelling PDF/HTML reference attached to
+  DecisionMetadata. Uses ISO 24229 `spelling` codes.
 - **StructuredIdentifier** — `{prefix, number}` composite. Replaces
   bare string identifiers across the model so queries can filter by
   body (CIML, OIML, ISO/TC 154, …).
+- **EntityRef** — typed cross-reference between entities
+  (`{urn, identifier, local_ref, kind, role, note}`). Used wherever
+  inline data could be replaced by a URN reference.
 
 ### Meeting-grain entities
 
-- **Meeting** — one sitting: when, where, who chaired, what was on
-  the agenda, who was there, how they voted, what was said, what
-  came out.
-- **Agenda** — the forward-looking business order drafted before the
-  meeting. Sliced into `AgendaItem`s (enum-typed: `numbered`,
-  `header`, `opening`, `closing`).
-- **Minutes** — the backward-looking narrative record. Sliced into
-  `MinutesSection`s, each carrying a `number` field that joins to
-  `AgendaItem.label`. Distinct from `Agenda` (forward) and
-  `ResolutionCollection` (decisions); this is *what was actually
-  said*.
+- **Meeting** — one sitting: when, where, who chaired, what was on the
+  agenda, who was there, how they voted, what was said, what came out.
+- **Agenda** — the forward-looking business order. Sliced into
+  `AgendaItem`s (enum-typed: `numbered`, `header`, `opening`,
+  `closing`).
+- **MeetingComponent** — flat sub-event of a Meeting (replaces v0.x
+  `ScheduleItem`). Kinds include both substantive (track, session,
+  debate, breakout, keynote) and procedural (opening, closing, break,
+  reception, registration). Carries its own `officers[]` (role-
+  discriminated, mirrors Meeting.officers).
+- **Minutes** — backward-looking narrative record. Sliced into
+  `MinutesSection`s.
 - **Attendance** — who was at the meeting (`present`, `absent`,
   `apologies`, `observer`, `excused`); supports proxy voting via
   `proxy_for`.
-- **VoteRecord** — how each person voted on each Resolution
-  (`affirmative`, `negative`, `abstain`, `absent`, `not_applicable`).
-  Joins to `Resolution.identifier` via `resolution_ref`.
-- **MeetingLocalization** — per-language rendering of a `Meeting`
-  (title, general area, practical info).
-- **MeetingCollectionMetadata** — collection-level header (title,
-  source).
+- **VoteRecord** — how each person voted on each Decision.
 - **MeetingRelation** — `source → destination` link between meetings.
-  Enum types: `continues_from`, `continues_to`, `joint_with`,
-  `supersedes`, `superseded_by`, `rescheduled_from`, `rescheduled_to`.
-- **AgendaItem** — one entry; enum-typed (`numbered`, `header`,
-  `opening`, `closing`), with `outcome` and optional `resolution_ref`.
-- **AgendaItemOutcome** — `discussed`, `resolved`, `deferred`,
-  `adopted`, `withdrawn`.
-- **AgendaStatus** — `draft`, `final`, `amended`, `cancelled`,
-  `superseded`.
-- **MeetingStatus** — `upcoming`, `completed`, `cancelled`.
-- **MeetingType** — `plenary`, `working_group`, `task_group`,
-  `ad_hoc`, `joint`, `conference_session`.
-- **ScheduleItem** — a time-of-day entry on a sitting day (date,
-  time, event, room). Distinct from `AgendaItem`: agenda is *what*,
-  schedule is *when*. Schedule items have their own
-  `ScheduleItemLocalization[]` for the event name/description.
 - **Deadline** — submission / response deadlines tied to a meeting.
-- **Person** — identity + role + affiliation + contact. Used for
-  meeting officers (`chair`, `secretary`), attendance records, and
-  vote records.
-- **Location** — venue geography (name, address, lat/lon). A
-  `Meeting` can carry multiple `venues[]` for multi-venue sittings.
+- **MeetingSeries** — parent of recurring Meeting instances.
+
+### Identity & contact (VCARD-style, v2.2+)
+
+- **Contact** — VCARD-like abstract contact. Generalises Person for
+  cases where the contact may be a person, an organisation, a
+  department, or a role. Carries `urn` (registry identity) and `ref`
+  (when used as a URN reference).
+- **Person** — inherits from Contact. An individual human; no extra
+  fields beyond Contact.
+- **Name** — structured personal/organisational name (VCARD N + FN):
+  `formatted`, `family`, `given`, `additional`, `prefix`, `suffix`.
+- **ContactMethod** — polymorphic communication channel (phone,
+  mobile, fax, email, url, mail, pager, message, other).
+- **ContactIdentifier** — polymorphic external identifier (ORCID,
+  ISNI, Wikidata QID, ROR, Ringgold, GitHub handle, other).
+- **Officer** — role-binding (NOT an entity): binds a Contact to a
+  Meeting or MeetingComponent with a structural role (chair,
+  secretary, treasurer, etc.). Carries optional term.
 - **HostRef** — typed reference to a hosting organization
   (`national_body`, `liaison`, `associate`, `organizer`).
-- **MeetingIdentifier** — a reference from a `Resolution` back to its
-  originating `Meeting`.
 
-### The multilingual rule
+### Venues
 
-> **Anything translatable lives below a `Localization` or
-> `MeetingLocalization`.** Anything administrative and
-> language-agnostic lives above it. This separation is what makes the
-> multilingual model work.
+- **Venue** — polymorphic by `kind` discriminator (physical or
+  virtual); all physical-specific and virtual-specific fields live on
+  one class as optional siblings. Validators enforce that fields
+  match `kind`. Carries `urn` and `ref` for registry pattern.
+
+### Localization (per-field, ISO 24229)
+
+> **Every translatable field is `Localized<String/Name>[0..*]` —
+> one entry per ISO 24229 spelling/conversion system code.**
+
+- **LocalizedString** — `{ spelling, value: String, extensions }`.
+- **LocalizedName** — `{ spelling, value: Name, extensions }`.
+- **`spelling`** is an ISO 24229 code: either a *spelling system*
+  (`{lang}-{script}[-{country}][-{extension}]`, e.g. `zho-Hans`,
+  `ind-Latn-pre1972`) or a *conversion system*
+  (`{authority}:{source-spelling}:{target-spelling}:{identifying}`,
+  e.g. `acadsin:zho-Hani:Latn:2002`).
+- Always verbose — single-language data uses the same
+  `[{ spelling, value }]` shape as multi-language data. No scalar
+  shorthand.
+
+### URN registry pattern
+
+URN format: `urn:edoxen:{entity}:{scope}:{local-id}`.
+
+- `entity`: `contact`, `venue`, `meeting`, `decision`, etc.
+- `scope`: the dataset/registry name (e.g. `isotc154`, `oiml`).
+- `local-id`: local identifier within that scope.
+
+Any entity-typed field accepts either **inline data** (full object) or
+**a URN reference** (`{ ref: urn:edoxen:contact:... }`). Both patterns
+are valid; the discriminator is presence of `ref`.
 
 ## Site-level presentation terms
 
@@ -117,12 +135,9 @@ to the docs site, not to the underlying model.
   and `localization-sync.md`. The `<PipelineDiagram>` Vue component is
   the canonical rendering.
 - **Specimen** — a real YAML example shown on the home page inside the
-  `<YamlSpecimen>` card. Not a synthetic snippet — it's a fragment of
-  a real `ciml-39-decisions.yaml`.
-- **Anatomy** — the three-card strip on the home page. Currently
-  MeetingCollection / Resolution / Localization — chosen so the cards
-  cover both top-level containers and the multilingual leaf.
-- **Feature grid** — the six "why Edoxen" cards on the home page.
+  `<YamlSpecimen>` card.
+- **Anatomy** — the three-card strip on the home page.
+- **Feature grid** — the "why Edoxen" cards on the home page.
 - **CTA band** — the gradient-backed call-to-action section at the
   bottom of the home page.
 - **Byline** — the author/date strip shown at the top of each blog
@@ -131,8 +146,7 @@ to the docs site, not to the underlying model.
 ## Brand vocabulary
 
 - **Brand cyan** — the primary brand color (`#0e7490` in light mode,
-  `#67e8f9` in dark mode). All derived alpha variants
-  (`--edoxen-cyan-glow-soft`, `--edoxen-cyan-shadow`, etc.) live in
+  `#67e8f9` in dark mode). All derived alpha variants live in
   `custom.css` and reference this token, never raw `rgba()` literals.
 - **Stoichedon** — the logo mark style; 3×2 grid of Greek capitals
   ΕΔΟΞΕΝ. See `public/edoxen-logo.svg`.
@@ -145,26 +159,20 @@ appears in exactly one place; the rest of the code consumes it.
 - **`usePostFormat`** (composable) — pure functions for turning a
   blog-post frontmatter into display strings (`formatDate`,
   `formatAuthors`, `formatLastUpdated`). Shared by `BlogIndex` and
-  `BlogByline`. Tests target this module directly, not the components.
+  `BlogByline`.
 - **`tokenize` / `render`** (in `lib/yaml-tokenizer.ts`) — YAML →
-  highlighted HTML. Used by `YamlSpecimen`; available to any future
-  page that wants to render YAML with the same highlighting.
+  highlighted HTML. Used by `YamlSpecimen`.
 - **`PipelineDiagram`** (Vue component) — the canonical Parse → Decode
-  → Validate diagram. Accepts a `caption` prop for context-specific
-  labels.
+  → Validate diagram. Accepts a `caption` prop.
 
 ## Brand assets
 
 The repo carries designer-master brand assets in `public/`:
 
 - `edoxen-logo.svg` — designer master of the stoichedon mark (96×96).
-  Used in the navbar (light mode).
-- `edoxen-logo-dark.svg` — light-tinted variant for the navbar in
-  dark mode (`#0c4a6e` → `#bae6fd` swap; same geometry).
+- `edoxen-logo-dark.svg` — light-tinted variant for dark mode.
 - `edoxen-logo.png`, `edoxen-logo.pdf` — designer masters at raster
   and print formats.
 
 These are **source files**. The navbar renders the mark via `<img>`
-plus a sibling HTML text node (`<span>Edoxen</span>`) in Fraunces
-display serif, so the wordmark inherits theme colours crisply at any
-size.
+plus a sibling HTML text node in Fraunces display serif.

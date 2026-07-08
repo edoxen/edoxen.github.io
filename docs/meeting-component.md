@@ -1,4 +1,8 @@
-# Meeting Component
+---
+title: Meeting Component
+---
+
+# MeetingComponent
 
 A **MeetingComponent** is a flat sub-event of a
 [Meeting](/docs/meeting-collection): a track, a session, a debate, a
@@ -18,26 +22,37 @@ hard to query and render.
 | Procedural | `opening`, `closing`, `break`, `reception`, `registration`, `networking` |
 | Open | `other` |
 
-## Fields
+## Fields (v3.0)
 
 | Field | Type | Description |
 |---|---|---|
-| `identifier` | string | Local identifier. |
-| `urn` | string | URN. |
-| `kind` | enum | See table above. |
-| `title` | string | Component title. |
-| `description` | string | Longer description. |
-| `starts_at` | datetime | Start time. |
-| `ends_at` | datetime | End time. |
-| `venue_refs` | string[] | URNs of [Venues](/docs/venue) used by this component. |
-| `chair` | `Person` | Component-level chair (distinct from meeting-level chair). |
-| `agenda_ref` | string | URN of an [Agenda](/docs/agenda) entry this component covers. |
-| `minutes_ref` | string | URN of a [Minutes](/docs/minutes) section. |
-| `attendance_refs` | string[] | URNs of [Attendance](/docs/attendance) entries scoped to this component. |
-| `localizations` | `ComponentLocalization[]` | Per-language content. |
+| `identifier` | `String` | Local identifier. |
+| `urn` | `String` | URN. |
+| `kind` | `enum` | See table above. |
+| `body_type` | `String` | Free-form body-specific label (e.g. "Working Group Session"). |
+| `title` | `LocalizedString[0..*]` | Localized component title. |
+| `description` | `LocalizedString[0..*]` | Localized description. |
+| `starts_at` | `DateTime` | Start time. |
+| `ends_at` | `DateTime` | End time. |
+| `time_label` | `LocalizedString[0..*]` | Free-form time display (e.g. `"9:00–10:30"`). |
+| `venue_refs` | `String[0..*]` | URNs of [Venues](/docs/venue) used by this component. |
+| `officers` | `Officer[0..*]` | Role-discriminated people leading this component (chair, co-chair, moderator, etc.). Mirrors `Meeting.officers`. |
+| `agenda_ref` | `String` | URN of an [Agenda](/docs/agenda) entry this component covers. |
+| `minutes_ref` | `String` | URN of a [Minutes](/docs/minutes) section. |
+| `attendance_refs` | `String[0..*]` | URNs of [Attendance](/docs/attendance) entries scoped to this component. |
+| `extensions` | `MeetingExtension[0..*]` | Profile-specific extensions. |
 
 `#duration_seconds` returns the seconds between `starts_at` and
 `ends_at` (nil when either is missing).
+
+## Officer (role-discriminated)
+
+`officers[]` is a list of role-discriminated people. Each entry binds
+a [Contact](/docs/contact) (inline or `{ ref: urn:... }`) to a role
+(`chair`, `vice_chair`, `secretary`, etc.) — see
+[Officer](/docs/officer). Use multiple Officer entries for co-chairs,
+moderators, panelists, etc. A derived `MeetingComponent#chair`
+accessor returns the first `Officer` with `role=chair`.
 
 ## Example
 
@@ -45,21 +60,31 @@ hard to query and render.
 components:
   - identifier: plenary-opening
     kind: opening
-    title: Plenary opening
+    title:
+      - spelling: eng
+        value: Plenary opening
     starts_at: 2026-03-15T09:00:00-05:00
     ends_at: 2026-03-15T10:30:00-05:00
     venue_refs:
-      - urn:acme:board:venue:main-room
-    chair:
-      name: Ms. Eleanor Vance
-    agenda_ref: urn:acme:board:agenda:item-1
+      - urn:edoxen:venue:isotc154:plenary-hall
+    officers:
+      - role: chair
+        person:
+          ref: urn:edoxen:contact:isotc154:jianfang-zhang
+    agenda_ref: urn:edoxen:agenda:isotc154:item-1
   - identifier: committee-of-the-whole
     kind: committee_of_the_whole
-    title: Committee of the Whole — Budget Review
+    title:
+      - spelling: eng
+        value: Committee of the Whole — Budget Review
     starts_at: 2026-03-15T14:00:00-05:00
     ends_at: 2026-03-15T17:00:00-05:00
-    chair:
-      name: Dr. Marcus Hale
+    officers:
+      - role: chair
+        person:
+          name:
+            - spelling: eng
+              value: { formatted: Dr. Marcus Hale }
 ```
 
 ## See also
@@ -68,3 +93,5 @@ components:
 - [Agenda](/docs/agenda)
 - [Minutes](/docs/minutes)
 - [Venue](/docs/venue)
+- [Officer](/docs/officer)
+- [Localization](/docs/localization)

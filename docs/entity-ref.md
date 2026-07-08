@@ -5,7 +5,7 @@ title: EntityRef
 # EntityRef
 
 An **EntityRef** is a typed cross-reference between entities. It replaces
-the bare `String` cross-references used in v2.0 for URN/identifier joins
+the bare `String` cross-references used in 1.0 for URN/identifier joins
 (e.g., `Motion.resultingDecision`, `Decision.aboutTopics`, etc.).
 
 Single identity: exactly one of `urn`, `identifier`, or `local_ref`
@@ -44,17 +44,17 @@ local_ref: agenda-item-4.2
 
 ## Why EntityRef replaces bare String
 
-In v2.0, cross-entity references used bare `String` fields:
+In 1.0, cross-entity references used bare `String` fields:
 
 ```yaml
-# v2.0 — String-typed (no type safety, no URN validation, no metadata)
+# 1.0 — String-typed (no type safety, no URN validation, no metadata)
 resulting_decision: urn:oiml:doc:ciml:decision:2025-4
 ```
 
 With EntityRef:
 
 ```yaml
-# v2.2+ — typed (URN format validated, identity scheme explicit, metadata carried)
+# 1.0+ — typed (URN format validated, identity scheme explicit, metadata carried)
 resulting_decision_ref:
   urn: urn:oiml:doc:ciml:decision:2025-4
   kind: resulting
@@ -64,9 +64,9 @@ resulting_decision_ref:
 ## Migration path
 
 EntityRef fields are being introduced alongside the existing String
-fields (non-breaking). The String fields will be removed in v3.0.
+fields (non-breaking). The String fields will be removed in 1.0.
 
-| v2.0 String field | v2.2+ EntityRef field |
+| 1.0 String field | 1.0+ EntityRef field |
 |---|---|
 | `Motion.resultingDecision: String` | `Motion.resultingDecisionRef: EntityRef` |
 | `Decision.broughtByMotions: String[]` | `Decision.broughtByMotionRefs: EntityRef[]` (planned) |

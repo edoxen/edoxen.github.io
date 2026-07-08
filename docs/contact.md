@@ -15,7 +15,7 @@ by entries in `contactMethods[]` and `identifiers[]` (inherited from
 Contact). This is an OCP refactor — new communication channels and
 identifier schemes are added via enums without model changes.
 
-In **v3.0**, every translatable field on Contact (`name`, `title`,
+In **1.0**, every translatable field on Contact (`name`, `title`,
 `affiliation`, `address`) is `Localized<String/Name>[0..*]` — each
 entry carries its own ISO 24229 `spelling` code. The same Contact can
 carry their name in their native script (`zho-Hans`) and a romanized

@@ -11,7 +11,7 @@ treasurer, parliamentarian, etc. The list of officers is open —
 adopters may add new role values via the `OfficerRole` enum's `other`
 discriminator.
 
-This replaces v0.x `Meeting.chair` and `Meeting.secretary` direct
+This replaces legacy `Meeting.chair` and `Meeting.secretary` direct
 shortcuts. One list, role discriminates.
 
 ## Fields
@@ -42,7 +42,7 @@ component = meeting.components.first
 component.chair                     # => #<Edoxen::Person name=[...]>
 ```
 
-## Example (v3.0)
+## Example (1.0)
 
 ```yaml
 officers:

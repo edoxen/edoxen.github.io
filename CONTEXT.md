@@ -25,9 +25,9 @@ you want to capture:
   adopted.
 - **DecisionCollection** — decision-grain. Holds the decisions
   themselves with their admin fields and per-language renderings.
-- **ContactCollection** (v3.0) — registry of Contacts indexed by scoped
+- **ContactCollection** (1.0) — registry of Contacts indexed by scoped
   URN. Referenced from Meetings, Components, HostRefs via `ref:`.
-- **VenueCollection** (v3.0) — registry of Venues indexed by scoped URN.
+- **VenueCollection** (1.0) — registry of Venues indexed by scoped URN.
 
 ### Decision-grain entities
 
@@ -55,7 +55,7 @@ you want to capture:
 - **Agenda** — the forward-looking business order. Sliced into
   `AgendaItem`s (enum-typed: `numbered`, `header`, `opening`,
   `closing`).
-- **MeetingComponent** — flat sub-event of a Meeting (replaces v0.x
+- **MeetingComponent** — flat sub-event of a Meeting (replaces legacy
   `ScheduleItem`). Kinds include both substantive (track, session,
   debate, breakout, keynote) and procedural (opening, closing, break,
   reception, registration). Carries its own `officers[]` (role-
@@ -70,7 +70,7 @@ you want to capture:
 - **Deadline** — submission / response deadlines tied to a meeting.
 - **MeetingSeries** — parent of recurring Meeting instances.
 
-### Identity & contact (VCARD-style, v2.2+)
+### Identity & contact (VCARD-style, 1.0+)
 
 - **Contact** — VCARD-like abstract contact. Generalises Person for
   cases where the contact may be a person, an organisation, a

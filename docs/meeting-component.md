@@ -8,7 +8,7 @@ A **MeetingComponent** is a flat sub-event of a
 [Meeting](/docs/meeting-collection): a track, a session, a debate, a
 breakout, a keynote, an opening, a closing, a break, a reception, etc.
 
-Replaces v0.x `ScheduleItem`. Components are **flat by design** (no
+Replaces legacy `ScheduleItem`. Components are **flat by design** (no
 nesting) per the 2026-07 architectural decision — nested tracks become
 hard to query and render.
 
@@ -22,7 +22,7 @@ hard to query and render.
 | Procedural | `opening`, `closing`, `break`, `reception`, `registration`, `networking` |
 | Open | `other` |
 
-## Fields (v3.0)
+## Fields (1.0)
 
 | Field | Type | Description |
 |---|---|---|

@@ -155,7 +155,7 @@ export default defineConfig({
           text: 'Localization',
           collapsed: false,
           items: [
-            { text: 'Overview (v3.0 per-field)', link: '/docs/localization' },
+            { text: 'Overview (1.0 per-field)', link: '/docs/localization' },
             { text: 'Sync flow (legacy deep-dive)', link: '/docs/localization-sync' },
           ],
         },

@@ -25,7 +25,7 @@ metadata:
   dates:
     - { date: 2025-10-14, type: meeting }
   source_urls:
-    - { ref: 'https://oiml.org/…/english.pdf', format: pdf, language_code: eng }
+    - { ref: 'https://www.oiml.org/en/structure/ciml/pdf/56-ciml-decisions-english.pdf', format: pdf, spelling: eng }
 decisions:
   - identifier:
       - { prefix: OIML, number: '2025/1' }

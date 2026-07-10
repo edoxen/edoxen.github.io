@@ -1,9 +1,11 @@
 import { defineConfig } from 'vitest/config'
+import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
+  plugins: [vue()],
   test: {
     globals: true,
-    environment: 'node',
+    environment: 'happy-dom',
     include: ['__tests__/**/*.spec.ts'],
     coverage: {
       provider: 'v8',
@@ -12,11 +14,6 @@ export default defineConfig({
         'src/composables/**',
         'src/data/**',
       ],
-    },
-  },
-  resolve: {
-    alias: {
-      '~': new URL('./', import.meta.url).pathname,
     },
   },
 })

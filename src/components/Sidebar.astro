@@ -1,0 +1,81 @@
+---
+import { sidebar } from '../data/site'
+import type { SidebarItem } from '../data/site'
+
+const currentPath = Astro.url.pathname
+
+function isActive(link?: string): boolean {
+  if (!link) return false
+  if (link === '/') return currentPath === '/'
+  return currentPath === link || currentPath === link + '/'
+}
+---
+
+<aside class="sidebar">
+  {sidebar.map((group: SidebarItem) => (
+    <div class="sidebar-group">
+      <span class="sidebar-group-title">{group.text}</span>
+      {group.items && (
+        <ul>
+          {group.items.map((item: SidebarItem) => (
+            <li>
+              <a href={item.link} class={isActive(item.link) ? 'active' : ''}>{item.text}</a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  ))}
+</aside>
+
+<style>
+  .sidebar {
+    width: 272px;
+    flex-shrink: 0;
+    padding: 2rem 1rem 2rem 1.5rem;
+    overflow-y: auto;
+    position: sticky;
+    top: 64px;
+    max-height: calc(100vh - 64px);
+  }
+  .sidebar-group { margin-bottom: 1.5rem; }
+  .sidebar-group-title {
+    font-family: var(--edoxen-font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--vp-c-text-3, #6b7280);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  .sidebar-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .sidebar-group li { margin: 0; }
+  .sidebar-group a {
+    display: block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--vp-c-text-2, #4a5468);
+    font-size: 0.88rem;
+    line-height: 1.4;
+    transition: color 0.15s, background 0.15s;
+  }
+  .sidebar-group a:hover {
+    color: var(--vp-c-brand-1, #0e7490);
+    background: var(--vp-c-brand-soft, rgba(14,116,144,0.08));
+  }
+  .sidebar-group a.active {
+    color: var(--vp-c-brand-1, #0e7490);
+    font-weight: 600;
+    background: var(--vp-c-brand-soft, rgba(14,116,144,0.12));
+  }
+  @media (max-width: 1024px) {
+    .sidebar {
+      display: none;
+    }
+  }
+</style>

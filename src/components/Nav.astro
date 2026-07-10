@@ -1,0 +1,148 @@
+---
+import { nav, siteConfig } from '../data/site'
+import type { NavItem } from '../data/site'
+
+const currentPath = Astro.url.pathname
+
+function isActive(link: string): boolean {
+  if (link === '/') return currentPath === '/'
+  return currentPath.startsWith(link)
+}
+---
+
+<header class="nav">
+  <div class="nav-container">
+    <a href="/" class="nav-title" aria-label={siteConfig.title}>
+      <img src={siteConfig.logoLight} alt="" width="32" height="32" class="nav-logo light-logo" />
+      <img src={siteConfig.logoDark} alt="" width="32" height="32" class="nav-logo dark-logo" />
+      <span>{siteConfig.title}</span>
+    </a>
+    <nav class="nav-menu">
+      {nav.map((item: NavItem) => (
+        item.items ? (
+          <div class="nav-dropdown">
+            <button class="nav-dropdown-trigger">{item.text}</button>
+            <div class="nav-dropdown-menu">
+              {item.items.map((sub: NavItem) => (
+                <a href={sub.link} class={sub.link && isActive(sub.link) ? 'active' : ''}>{sub.text}</a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <a href={item.link} class={item.link && isActive(item.link) ? 'active' : ''}>{item.text}</a>
+        )
+      ))}
+    </nav>
+    <div class="nav-actions">
+      <a href={siteConfig.githubUrl} aria-label="GitHub" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.4.5 0 5.9 0 12.5c0 5.3 3.4 9.8 8.2 11.4.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2 1-.3 2-.4 3-.4s2 .1 3 .4c2.3-1.6 3.3-1.2 3.3-1.2.7 1.7.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.8-1.6 8.2-6.1 8.2-11.4C24 5.9 18.6.5 12 .5z"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--vp-c-bg, #faf7f0);
+    border-bottom: 1px solid var(--vp-c-divider, #d8cfbe);
+    backdrop-filter: blur(12px);
+  }
+  :global(.dark) .nav { background: rgba(12, 17, 24, 0.85); }
+  .nav-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .nav-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--vp-c-text-1, #1a1f2e);
+    font-family: var(--edoxen-font-display, 'Fraunces', Georgia, serif);
+    font-size: 1.2rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .nav-logo { flex-shrink: 0; }
+  .dark-logo { display: none; }
+  :global(.dark) .light-logo { display: none; }
+  :global(.dark) .dark-logo { display: inline-block; }
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex: 1;
+    justify-content: center;
+  }
+  .nav-menu a {
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--vp-c-text-2, #4a5468);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s, background 0.2s;
+    white-space: nowrap;
+  }
+  .nav-menu a:hover {
+    color: var(--vp-c-brand-1, #0e7490);
+    background: var(--vp-c-brand-soft, rgba(14,116,144,0.12));
+  }
+  .nav-menu a.active {
+    color: var(--vp-c-brand-1, #0e7490);
+  }
+  .nav-dropdown {
+    position: relative;
+  }
+  .nav-dropdown-trigger {
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--vp-c-text-2, #4a5468);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .nav-dropdown-trigger:hover { color: var(--vp-c-brand-1); }
+  .nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--vp-c-bg, #fff);
+    border: 1px solid var(--vp-c-divider, #d8cfbe);
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    min-width: 200px;
+  }
+  .nav-dropdown:hover .nav-dropdown-menu { display: flex; flex-direction: column; gap: 0.25rem; }
+  .nav-dropdown-menu a {
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+  }
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .nav-actions a {
+    color: var(--vp-c-text-2, #4a5468);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  .nav-actions a:hover { color: var(--vp-c-brand-1); }
+  @media (max-width: 768px) {
+    .nav-menu { display: none; }
+  }
+</style>

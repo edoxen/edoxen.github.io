@@ -1,0 +1,35 @@
+---
+import { features } from '../data/home'
+---
+<section class="band">
+  <header class="band-head">
+    <span class="band-eyebrow">03 · Why Edoxen</span>
+    <h2>What the model covers</h2>
+  </header>
+  <div class="features">
+    {features.map(f => (
+      <a href={f.href} class="feature">
+        <div class="feature-glyph">{f.glyph}</div>
+        <h3>{f.title}</h3>
+        <p>{f.body}</p>
+        <span class="feature-arrow">→</span>
+      </a>
+    ))}
+  </div>
+</section>
+<style>
+  .band { max-width: 1180px; margin: 0 auto; padding: 4rem 1.5rem; }
+  .band-head { margin-bottom: 2.5rem; max-width: 60ch; }
+  .band-eyebrow { font-family: var(--edoxen-font-mono); font-size: .78rem; letter-spacing: .1em; color: var(--vp-c-brand-1); }
+  .band-head h2 { font-family: var(--edoxen-font-display); font-size: clamp(1.8rem,3.2vw,2.6rem); font-weight: 400; margin: .6rem 0 0; }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1rem; }
+  .feature { position: relative; display: block; padding: 1.5rem 1.5rem 1.4rem; background: var(--vp-c-bg-alt); border: 1px solid var(--vp-c-divider); border-radius: 12px; text-decoration: none; color: inherit; transition: all .25s ease; overflow: hidden; }
+  .feature::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--vp-c-brand-1); transform: scaleY(0); transform-origin: top; transition: transform .25s ease; }
+  .feature:hover { border-color: var(--vp-c-brand-1); transform: translateY(-2px); box-shadow: 0 10px 24px -10px var(--edoxen-cyan-glow-soft); }
+  .feature:hover::before { transform: scaleY(1); }
+  .feature-glyph { font-family: var(--edoxen-font-display); font-size: 1.6rem; color: var(--vp-c-brand-1); margin-bottom: .6rem; line-height: 1; }
+  .feature h3 { font-family: var(--edoxen-font-display); font-size: 1.15rem; font-weight: 500; margin: 0 0 .45rem; }
+  .feature p { font-size: .9rem; line-height: 1.55; color: var(--vp-c-text-2); margin: 0; }
+  .feature-arrow { position: absolute; top: 1.5rem; right: 1.4rem; color: var(--vp-c-text-3); font-size: 1.1rem; opacity: 0; transform: translateX(-4px); transition: all .2s ease; }
+  .feature:hover .feature-arrow { opacity: 1; transform: translateX(0); color: var(--vp-c-brand-1); }
+</style>

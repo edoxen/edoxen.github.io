@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getCollection } from 'astro:content'
+import { formatDate, formatAuthors } from '../../composables/usePostFormat'
+
+const posts = (await getCollection('blog'))
+  .filter(entry => !entry.id.endsWith('index'))
+  .sort((a, b) => {
+    const da = new Date(a.data.date || 0).getTime()
+    const db = new Date(b.data.date || 0).getTime()
+    return db - da
+  })
+---
+<BaseLayout title="Blog">
+  <div class="blog-index" style="max-width:720px;margin:0 auto;padding:3rem 1.5rem;">
+    <h1>Blog</h1>
+    <p>Release announcements, design notes, and articles about how Edoxen organizes meetings and decisions across domains.</p>
+    <div class="posts">
+      {posts.map(post => (
+        <article class="blog-card">
+          <a href={`/blog/${post.id.replace(/\.md$/, '')}`} class="card-link">
+            <div class="card-content">
+              <div class="card-header">
+                <time class="post-date" datetime={post.data.date}>{formatDate(post.data.date)}</time>
+              </div>
+              <h2 class="post-title">{post.data.title}</h2>
+              {post.data.description && <p class="post-description">{post.data.description}</p>}
+              {post.data.authors && <p class="post-authors">{formatAuthors(post.data.authors)}</p>}
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+<style>
+  .blog-card { border: 1px solid var(--vp-c-divider); border-radius: 12px; margin-bottom: 1.25rem; transition: all .25s ease; }
+  .blog-card:hover { border-color: var(--vp-c-brand-1); transform: translateY(-2px); box-shadow: 0 10px 24px -10px var(--edoxen-cyan-glow-soft); }
+  .card-link { display: block; padding: 1.5rem; text-decoration: none; color: inherit; }
+  .post-title { font-family: var(--edoxen-font-display); font-size: 1.3rem; margin: .5rem 0; }
+  .post-description { color: var(--vp-c-text-2); font-size: .92rem; margin: .5rem 0; }
+  .post-date { color: var(--vp-c-brand-1); font-size: .82rem; font-family: var(--edoxen-font-mono); }
+  .post-authors { color: var(--vp-c-text-3); font-size: .82rem; margin-top: .5rem; }
+</style>

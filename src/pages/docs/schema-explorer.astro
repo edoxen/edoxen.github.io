@@ -1,0 +1,81 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro'
+import SchemaExplorer from '../../components/SchemaExplorer.astro'
+import meetingSchema from '@edoxen/edoxen/schema/meeting.json'
+import decisionSchema from '@edoxen/edoxen/schema/edoxen.json'
+---
+
+<DocsLayout title="Schema Explorer">
+  <article class="prose schema-page">
+    <h1>Schema Explorer</h1>
+    <p class="lede">
+      Interactive tree of every entity, field, type, enum, and pattern in the
+      Edoxen JSON Schema. Generated at build time from the canonical schemas
+      bundled in <code>@edoxen/edoxen</code>.
+    </p>
+
+    <div class="schema-tabs">
+      <input type="radio" name="schema-tab" id="tab-meeting" checked />
+      <label for="tab-meeting">Meeting Schema</label>
+      <input type="radio" name="schema-tab" id="tab-decision" />
+      <label for="tab-decision">Decision Schema</label>
+
+      <div class="tab-content tab-meeting">
+        <SchemaExplorer schema={meetingSchema} />
+      </div>
+      <div class="tab-content tab-decision">
+        <SchemaExplorer schema={decisionSchema} />
+      </div>
+    </div>
+
+    <h2>Download</h2>
+    <ul>
+      <li><a href="/schemas/meeting.yaml">meeting.yaml</a> — Meeting / MeetingCollection schema (YAML)</li>
+      <li><a href="/schemas/decision-collection.yaml">decision-collection.yaml</a> — Decision Collection schema (YAML)</li>
+    </ul>
+
+    <h2>Usage</h2>
+    <h3>CLI</h3>
+    <pre><code>edoxen validate decisions/*.yaml
+edoxen validate-meetings meetings/*.yaml</code></pre>
+
+    <h3>JavaScript / TypeScript</h3>
+    <pre><code set:html={"import { validateDecisions, validateMeetings } from '@edoxen/edoxen'\n\nconst result = await validateMeetings(parsedYaml)\nif (!result.valid) {\n  result.errors.forEach(e => console.error(`${e.path}: ${e.message}`))\n}"}></code></pre>
+  </article>
+</DocsLayout>
+
+<style>
+  .lede { font-size: 1.05rem; color: var(--vp-c-text-2); line-height: 1.6; margin-bottom: 2rem; }
+  .schema-tabs { margin: 2rem 0; }
+  .schema-tabs input[type="radio"] { display: none; }
+  .schema-tabs label {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    font-family: var(--edoxen-font-mono);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--vp-c-text-3);
+    border: 1px solid var(--vp-c-divider);
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-right: 0.25rem;
+  }
+  .schema-tabs label:hover { color: var(--vp-c-brand-1); background: var(--vp-c-brand-soft); }
+  .schema-tabs input:checked + label {
+    color: var(--vp-c-brand-1);
+    background: var(--vp-c-bg);
+    border-color: var(--vp-c-brand-1);
+    position: relative;
+    z-index: 1;
+  }
+  .tab-content { display: none; border-top: 2px solid var(--vp-c-brand-1); padding-top: 1rem; }
+  #tab-meeting:checked ~ .tab-meeting { display: block; }
+  #tab-decision:checked ~ .tab-decision { display: block; }
+  pre { background: var(--vp-c-bg-soft); border-radius: 8px; padding: 1rem 1.25rem; overflow-x: auto; }
+  code { font-family: var(--edoxen-font-mono); font-size: 0.85rem; }
+  ul { padding-left: 1.5rem; }
+  li { margin: 0.5rem 0; }
+  li a { color: var(--vp-c-brand-1); }
+</style>

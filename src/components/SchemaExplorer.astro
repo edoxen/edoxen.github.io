@@ -1,0 +1,193 @@
+---
+import { parseSchema } from '../lib/schema-parser'
+import type { SchemaEntity } from '../lib/schema-parser'
+
+export interface Props {
+  schema: Record<string, unknown>
+  filter?: string[]
+}
+
+const { schema, filter } = Astro.props
+const entities = parseSchema(schema as any)
+const visible = filter ? entities.filter(e => filter.includes(e.name)) : entities
+
+function typeColor(t: string): string {
+  if (['string'].includes(t)) return 'var(--vp-c-brand-1)'
+  if (['integer', 'number', 'boolean'].includes(t)) return 'var(--vp-c-gold)'
+  if (['object', 'array'].includes(t)) return '#7c3aed'
+  return 'var(--vp-c-text-3)'
+}
+---
+
+<div class="schema-explorer">
+  {visible.map((entity: SchemaEntity) => (
+    <details class="schema-entity" open={visible.length <= 6}>
+      <summary class="schema-entity-header">
+        <span class="schema-entity-name">{entity.name}</span>
+        <span class="schema-entity-count">{entity.fields.length} fields</span>
+      </summary>
+      {entity.description && <p class="schema-entity-desc" set:html={entity.description.replace(/`([^`]+)`/g, '<code>$1</code>')} />}
+      <div class="schema-fields">
+        {entity.fields.map(f => (
+          <div class="schema-field" data-required={f.required}>
+            <div class="field-row">
+              <span class="field-name">{f.name}{f.required ? <em class="field-required">required</em> : ''}</span>
+              <div class="field-types">
+                {f.types.map(t => (
+                  <a href={t === entity.name ? undefined : `#${t}`} class={`field-type ${f.refTarget ? 'is-ref' : ''}`} style={`--type-color: ${typeColor(t)}`}>
+                    {f.isArray ? `[${t}]` : t}
+                  </a>
+                ))}
+              </div>
+            </div>
+            {f.enum && (
+              <div class="field-enum">
+                {f.enum.slice(0, 12).map(v => <span class="enum-pill">{v}</span>)}
+                {f.enum.length > 12 && <span class="enum-more">+{f.enum.length - 12} more</span>}
+              </div>
+            )}
+            {f.pattern && <code class="field-pattern">{f.pattern}</code>}
+            {f.description && <p class="field-desc">{f.description}</p>}
+          </div>
+        ))}
+      </div>
+    </details>
+  ))}
+</div>
+
+<style>
+  .schema-explorer { display: flex; flex-direction: column; gap: 1rem; margin: 2rem 0; }
+  .schema-entity {
+    border: 1px solid var(--vp-c-divider);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--vp-c-bg);
+    transition: border-color 0.2s;
+  }
+  .schema-entity[open] { border-color: var(--vp-c-brand-1); }
+  .schema-entity-header {
+    cursor: pointer;
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+    font-family: var(--edoxen-font-display);
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--vp-c-text-1);
+    background: var(--vp-c-bg-soft);
+    transition: background 0.15s;
+  }
+  .schema-entity-header:hover { background: var(--vp-c-brand-soft); }
+  .schema-entity-header::-webkit-details-marker { display: none; }
+  .schema-entity-name { letter-spacing: -0.01em; }
+  .schema-entity-count {
+    font-family: var(--edoxen-font-mono);
+    font-size: 0.72rem;
+    color: var(--vp-c-text-3);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .schema-entity-desc {
+    padding: 0.5rem 1.25rem;
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--vp-c-text-2);
+    line-height: 1.5;
+    border-bottom: 1px solid var(--vp-c-divider-light);
+  }
+  .schema-entity-desc :global(code) {
+    font-family: var(--edoxen-font-mono);
+    font-size: 0.85em;
+    background: var(--vp-c-brand-soft);
+    color: var(--vp-c-brand-1);
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+  }
+  .schema-fields { padding: 0.5rem 0; }
+  .schema-field {
+    padding: 0.5rem 1.25rem;
+    border-bottom: 1px solid var(--vp-c-divider-lighter);
+    transition: background 0.1s;
+  }
+  .schema-field:last-child { border-bottom: none; }
+  .schema-field:hover { background: var(--vp-c-bg-soft); }
+  .schema-field[data-required="true"] .field-name { font-weight: 600; }
+  .field-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .field-name {
+    font-family: var(--edoxen-font-mono);
+    font-size: 0.85rem;
+    color: var(--vp-c-brand-1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .field-required {
+    font-family: var(--edoxen-font-body);
+    font-size: 0.65rem;
+    font-style: italic;
+    color: #b91c1c;
+    background: rgba(185,28,28,0.08);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  .field-types { display: flex; gap: 0.35rem; }
+  .field-type {
+    font-family: var(--edoxen-font-mono);
+    font-size: 0.72rem;
+    padding: 0.1em 0.45em;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--type-color, var(--vp-c-text-3)) 12%, transparent);
+    color: var(--type-color, var(--vp-c-text-3));
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .field-type.is-ref { text-decoration: underline; text-underline-offset: 2px; text-decoration-style: dashed; }
+  .field-type:hover { background: color-mix(in srgb, var(--type-color, var(--vp-c-text-3)) 20%, transparent); }
+  .field-enum {
+    margin-top: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    align-items: center;
+  }
+  .enum-pill {
+    font-family: var(--edoxen-font-mono);
+    font-size: 0.72rem;
+    padding: 0.12em 0.5em;
+    border-radius: 4px;
+    background: var(--vp-c-bg-alt);
+    border: 1px solid var(--vp-c-divider-light);
+    color: var(--vp-c-text-2);
+  }
+  .enum-more { font-size: 0.72rem; color: var(--vp-c-text-3); padding-left: 0.25rem; }
+  .field-pattern {
+    display: block;
+    margin-top: 0.4rem;
+    font-family: var(--edoxen-font-mono);
+    font-size: 0.75rem;
+    color: var(--vp-c-text-3);
+    background: var(--vp-c-bg-alt);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--vp-c-divider-light);
+  }
+  .field-desc {
+    margin: 0.3rem 0 0;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: var(--vp-c-text-3);
+    font-style: italic;
+  }
+</style>

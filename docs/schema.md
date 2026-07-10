@@ -8,24 +8,42 @@ Edoxen validates YAML data against JSON Schema (Draft 7) definitions.
 There are two schema files — one for **Decision** data (formal
 decisions adopted by meetings) and one for **Meeting** data (the
 meetings themselves, including embedded agendas, minutes,
-attendance, and votes).
+attendance, and votes). Both schemas also accept **ContactCollection**
+and **VenueCollection** as top-level documents (the URN registry
+pattern).
+
+## How localization works in 1.0
+
+Every translatable field is `LocalizedString[0..*]` — an array of
+`{ spelling, value }` pairs. `spelling` is an ISO 24229 code:
+
+```yaml
+title:
+  - { spelling: eng,         value: "56th CIML Meeting" }
+  - { spelling: fra,         value: "56e réunion du CIML" }
+  - { spelling: zho-Hans,    value: "第56届CIML会议" }
+```
+
+This replaces the v2.x pattern of a separate `localizations[]` array.
+Each field carries its own language tags inline.
 
 ## Schema files
 
 ### Decision Collection
 
-Validates `DecisionCollection` YAML files — the resolution-grain data
+Validates `DecisionCollection` YAML files — the decision-grain data
 that captures formal decisions (resolutions, orders, recommendations)
-and their per-language localizations.
+with per-field localization.
 
 ```yaml
-# Root type: DecisionCollection
 metadata:
-  title: Resolutions of the 17th OIML Conference
+  title:
+    - { spelling: eng, value: "Resolutions of the 17th OIML Conference" }
+    - { spelling: fra, value: "Résolutions de la 17e Conférence" }
   dates:
     - { date: 2025-10-14, type: meeting }
   source_urls:
-    - { ref: 'https://www.oiml.org/', format: pdf, spelling: eng }
+    - { ref: 'https://oiml.org/…/en.pdf', format: pdf, spelling: eng }
 decisions:
   - identifier:
       - { prefix: OIML, number: '2025/1' }
@@ -34,45 +52,48 @@ decisions:
     doi: 10.63493/resolutions/conf202501
     dates:
       - { date: 2025-10-14, type: adoption }
-    localizations:
-      - language_code: eng
-        script: Latn
-        title: Approval of the agenda
-        actions:
-          - type: approves
-            message: Approves the agenda for the 17th International Conference.
+    title:
+      - { spelling: eng, value: "Approval of the agenda" }
+      - { spelling: fra, value: "Approbation de l'ordre du jour" }
+    actions:
+      - type: approves
+        message:
+          - { spelling: eng, value: "Approves the agenda." }
+          - { spelling: fra, value: "Approuve l'ordre du jour." }
 ```
 
-**Key invariants enforced:**
+**Key invariants:**
 
 - Every `DecisionCollection` must have a non-empty `decisions[]`.
-- Every `Decision` must have `identifier[]` (1+) and `localizations[]` (1+).
-- `language_code` matches `^[a-z]{3}$` (ISO 639-3).
-- `script` matches `^[A-Z][a-z]{3}$` (ISO 15924).
-- `kind` is one of `resolution | order | ruling | determination | recommendation | statement | finding | opinion | other`.
-- `status` is one of `draft | proposed | under_consideration | decided | negatived | withdrawn | deferred`.
-- `additionalProperties: false` on every object — typos surface as errors.
+- Every `Decision` must have `identifier[]` (1+).
+- `kind` enum: `resolution | order | ruling | determination | recommendation | statement | finding | opinion | other`.
+- `status` enum: `draft | proposed | under_consideration | decided | negatived | withdrawn | deferred`.
+- Per-field localization: `title`, `subject`, `message`, `considering` are each `LocalizedString[0..*]`.
+- `Action.type` and `Consideration.type` are open `String` (permissive — extensible per body).
+- `additionalProperties: false` on every object.
 
-Download the full schema: [decision-collection.yaml](/schemas/decision-collection.yaml)
-([source in model repo](https://github.com/edoxen/edoxen-model/blob/main/schema/decision-collection.yaml)).
+Download: [decision-collection.yaml](/schemas/decision-collection.yaml)
+([source](https://github.com/edoxen/edoxen-model/blob/main/schema/decision-collection.yaml)).
 
 ### Meeting / MeetingCollection
 
-Validates `Meeting` or `MeetingCollection` YAML files — the
-meeting-grain data that captures the full lifecycle: venue, officers,
-agenda, schedule, deadlines, attendance, minutes, decisions, motions,
-votings, and per-language localizations.
+Validates `Meeting` or `MeetingCollection` YAML — the full lifecycle:
+venue, officers, agenda, components, attendance, minutes, decisions,
+motions, votings.
 
 ```yaml
-# Root type: Meeting (single) or MeetingCollection (wrapper)
 identifier:
   - { prefix: CIML, number: '56' }
 urn: urn:oiml:ciml:meeting:ciml-56
 type: plenary
 status: completed
+visibility: public
 date_range:
   start: 2025-10-13
   end: 2025-10-17
+title:
+  - { spelling: eng, value: "56th CIML Meeting" }
+  - { spelling: fra, value: "56e réunion du CIML" }
 venues:
   - kind: physical
     name: Hotel Mercure Paris Montmartre
@@ -81,70 +102,102 @@ venues:
 officers:
   - role: chair
     person:
-      name: Roman Schwartz
+      name: { formatted: "Roman Schwartz" }
 agenda:
   status: final
   items:
-    - { label: '1', kind: opening, title: Opening of the meeting }
-    - { label: '4.2', kind: numbered, title: Budget for 2027-2028 }
-attendance:
-  - person: { name: Dr. Anaya Muller }
-    status: present
+    - { label: '1', kind: opening, title: "Opening of the meeting" }
+    - { label: '4.2', kind: numbered, title: "Budget for 2027-2028" }
 decisions:
   - identifier:
       - { prefix: OIML, number: '2025/4' }
     kind: resolution
     status: decided
-    localizations:
-      - language_code: eng
-        title: Budget adoption
-        actions:
-          - type: decides
-            message: The Committee decides to adopt the budget.
-```
-
-**Key invariants enforced:**
-
-- `type` is one of 17 values (`plenary`, `working_group`, ..., `other`).
-- `status` is one of `upcoming | completed | cancelled`.
-- `venue.kind` is `physical | virtual` (polymorphic dispatch).
-- `officer.role` is one of `chair | vice_chair | secretary | ... | other`.
-- `attendance.status` is one of `present | absent | apologies | observer | excused`.
-- `agenda.status` is one of `draft | final | amended | cancelled | superseded`.
-- `agenda.items[].kind` is one of `numbered | unnumbered | header | opening | closing`.
-- `agenda.items[].outcome` is one of `discussed | resolved | deferred | adopted | withdrawn`.
-- `additionalProperties: false` on every object.
-
-Download the full schema: [meeting.yaml](/schemas/meeting.yaml)
-([source in model repo](https://github.com/edoxen/edoxen-model/blob/main/schema/meeting.yaml)).
-
-### Agenda (embedded in Meeting)
-
-The `Agenda` is not a standalone schema — it is a child of `Meeting`.
-But adopters who work with agenda-only data can validate the `agenda`
-section in isolation by referencing the `Agenda` and `AgendaItem`
-definitions from the meeting schema.
-
-```yaml
-# An Agenda in isolation (extracted from a Meeting)
-status: final
-source_doc: https://oiml.org/.../56-ciml-agenda.pdf
-items:
-  - { label: '1',   kind: opening,  title: Opening of the meeting,  outcome: adopted }
-  - { label: '2',   kind: numbered, title: Approval of the agenda,  outcome: adopted }
-  - { label: '4.2', kind: numbered, title: Budget for 2027-2028,    outcome: resolved }
+    title:
+      - { spelling: eng, value: "Budget adoption" }
+    actions:
+      - type: decides
+        message:
+          - { spelling: eng, value: "The Committee decides to adopt the budget." }
 ```
 
 **Key invariants:**
 
-- `status` enum: `draft | final | amended | cancelled | superseded`.
-- `items[].kind` enum: `numbered | unnumbered | header | opening | closing`.
-- `items[].outcome` enum: `discussed | resolved | deferred | adopted | withdrawn`.
-- `items[].decision_ref` links to the Decision adopted on this item.
+- `type` enum: 17 values (`plenary`, `working_group`, …, `other`).
+- `status` enum: `upcoming | completed | cancelled`.
+- `venue.kind`: `physical | virtual` (polymorphic — physical fields
+  and virtual fields coexist; validators enforce kind-consistency).
+- `officer.role` enum: `chair | vice_chair | secretary | … | other`.
+- `attendance.status` enum: `present | absent | apologies | observer | excused`.
+- `agenda.items[].kind` enum: `numbered | unnumbered | header | opening | closing`.
+- `agenda.items[].outcome` enum: `discussed | resolved | deferred | adopted | withdrawn`.
+- Per-field localization: `title`, `generalArea`, `practicalInfo`, `note` are each `LocalizedString[0..*]`.
+
+Download: [meeting.yaml](/schemas/meeting.yaml)
+([source](https://github.com/edoxen/edoxen-model/blob/main/schema/meeting.yaml)).
+
+### Contact Collection
+
+Validates `ContactCollection` — a registry of Contacts indexed by
+scoped URN.
+
+```yaml
+scope: oiml
+title:
+  - { spelling: eng, value: "OIML Contacts Registry" }
+contacts:
+  - urn: urn:edoxen:contact:oiml:ciml-president
+    name: { formatted: "Roman Schwartz" }
+    kind: person
+    role: chair
+    contact_methods:
+      - { kind: email, value: "r schwartz@ptb.de", primary: true }
+    identifiers:
+      - { kind: orcid, value: "0000-0002-1234-5678" }
+```
+
+### Venue Collection
+
+Validates `VenueCollection` — a registry of Venues indexed by scoped URN.
+
+```yaml
+scope: oiml
+title:
+  - { spelling: eng, value: "OIML Venues Registry" }
+venues:
+  - urn: urn:edoxen:venue:oiml:hotel-mercure-paris
+    kind: physical
+    name: Hotel Mercure Paris Montmartre
+    unlocode: FRPAR
+    country_code: FR
+    address: 3 Rue Caulaincourt, 75018 Paris, France
+```
+
+### URN reference pattern
+
+Any entity-typed field accepts either inline data (full object) or
+a URN reference (`{ ref: urn:edoxen:... }`):
+
+```yaml
+# Inline
+contact:
+  name: { formatted: "Roman Schwartz" }
+
+# URN reference (resolves against a ContactCollection)
+contact:
+  ref: urn:edoxen:contact:oiml:ciml-president
+```
 
 ## Using the schemas
 
-### From Ruby
+### CLI
+
+```sh
+edoxen validate decisions/*.yaml
+edoxen validate-meetings meetings/*.yaml
+```
+
+### Ruby
 
 ```ruby
 require 'json_schemer'
@@ -158,36 +211,15 @@ errors = schemer.validate(data).to_a
 puts errors.empty? ? 'VALID' : errors.map { |e| e['data_pointer'] }
 ```
 
-### From the CLI
-
-```sh
-# Validate decisions
-edoxen validate decisions/*.yaml
-
-# Validate meetings (including embedded agendas)
-edoxen validate-meetings meetings/*.yaml
-```
-
-### From any JSON Schema validator
+### Any JSON Schema validator
 
 The schema files are standard JSON Schema (Draft 7). Use `ajv`,
 `python-jsonschema`, or any compliant validator.
 
-## Schema extension points
-
-To customize Edoxen for your organization, fork the schema and
-either:
-
-- Extend any enum (add a `MeetingType`, `DecisionKind`, etc.).
-- Add custom `metadata.*` fields (and drop `additionalProperties: false`
-  on the metadata object).
-- Use the `MeetingExtension` slot on every entity for profile-specific
-  attributes.
-
 ## See also
 
 - [Architecture](/docs/architecture) — the information model overview
-- [Decision Collection](/docs/decision-collection) — entity reference
-- [Meeting Collection](/docs/meeting-collection) — entity reference
-- [Agenda](/docs/agenda) — entity reference
-- [Migration v1 to v2](/docs/migration-v2) — breaking changes guide
+- [Localization](/docs/localization) — the per-field localization pattern
+- [Contact Collection](/docs/contact-collection) — the URN registry pattern
+- [Venue Collection](/docs/venue-collection) — venue registries
+- [Migration v2 to v3](/docs/migration-v2) — breaking changes guide

@@ -1,0 +1,17 @@
+---
+import PipelineDiagram from './PipelineDiagram.astro'
+---
+<section class="band band-alt">
+  <div style="max-width:1180px;margin:0 auto;padding:0 1.5rem;">
+    <header class="band-head">
+      <span class="band-eyebrow">02 · The pipeline</span>
+      <h2>YAML in, YAML out — no drift</h2>
+      <p class="band-lede">
+        Parse, decode, validate, re-serialize. Every step is a
+        framework call, not hand-rolled code. The wire format is
+        locked at the schema layer.
+      </p>
+    </header>
+    <PipelineDiagram caption={true} />
+  </div>
+</section>

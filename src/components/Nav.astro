@@ -1,13 +1,9 @@
 ---
 import { nav, siteConfig } from '../data/site'
 import type { NavItem } from '../data/site'
+import { isActiveLink } from '../lib/isActiveLink'
 
 const currentPath = Astro.url.pathname
-
-function isActive(link: string): boolean {
-  if (link === '/') return currentPath === '/'
-  return currentPath.startsWith(link)
-}
 ---
 
 <header class="nav">
@@ -24,12 +20,12 @@ function isActive(link: string): boolean {
             <button class="nav-dropdown-trigger">{item.text}</button>
             <div class="nav-dropdown-menu">
               {item.items.map((sub: NavItem) => (
-                <a href={sub.link} class={sub.link && isActive(sub.link) ? 'active' : ''}>{sub.text}</a>
+                <a href={sub.link} class={sub.link && isActiveLink(currentPath, sub.link) ? 'active' : ''}>{sub.text}</a>
               ))}
             </div>
           </div>
         ) : (
-          <a href={item.link} class={item.link && isActive(item.link) ? 'active' : ''}>{item.text}</a>
+          <a href={item.link} class={item.link && isActiveLink(currentPath, item.link) ? 'active' : ''}>{item.text}</a>
         )
       ))}
     </nav>

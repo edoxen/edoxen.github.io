@@ -1,6 +1,27 @@
+@import "tailwindcss";
+
 /* ===========================================================================
    Edoxen — Editorial Inscription theme
+   Tailwind 4 via @tailwindcss/vite. Brand tokens in @theme are available
+   as Tailwind utilities (text-brand, bg-gold, font-display, etc.).
+   Existing --vp-c-* and --edoxen-* variables are kept for backward
+   compatibility with .astro component scoped styles.
    =========================================================================== */
+
+@theme {
+  --color-brand: #0e7490;
+  --color-brand-light: #67e8f9;
+  --color-brand-deep: #035a8f;
+  --color-brand-ink: #013a5e;
+  --color-gold: #b45309;
+  --color-gold-light: #f59e0b;
+  --color-ink: #1a1f2e;
+  --color-parchment: #faf7f0;
+
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+}
 
 /* ---------- Fonts ------------------------------------------------------- */
 

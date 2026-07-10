@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { features, stats } from '../../.vitepress/theme/data/home'
-import type { Feature, Stat } from '../../.vitepress/theme/data/home'
+import { features, stats } from '../../src/data/home'
+import type { Feature, Stat } from '../../src/data/home'
 
 describe('features data', () => {
   it('has at least 4 features', () => {

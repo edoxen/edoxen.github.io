@@ -1,0 +1,48 @@
+---
+import { stats } from '../data/home'
+import YamlSpecimen from './YamlSpecimen.astro'
+---
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-prose">
+      <div class="eyebrow">
+        <span class="eyebrow-greek">ἔδοξεν</span>
+        <span class="eyebrow-rule"></span>
+        <span class="eyebrow-label">Information model · v1.0</span>
+      </div>
+      <h1 class="hero-title">Proceedings,<br><em>structured.</em></h1>
+      <p class="hero-lede">Edoxen is the common substrate for formal proceedings — meetings, agendas, minutes, attendance, votes, and the decisions adopted, in one YAML shape, multilingual by default.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/docs/introduction">Read the introduction →</a>
+        <a class="btn btn-ghost" href="/docs/architecture">See the architecture</a>
+      </div>
+      <dl class="stats">
+        {stats.map(s => <div class="stat"><dt>{s.value}</dt><dd>{s.label}</dd></div>)}
+      </dl>
+    </div>
+    <div class="hero-specimen">
+      <YamlSpecimen />
+      <p class="specimen-caption">A single <code>.yaml</code> file. One <code>Meeting</code>, with embedded <code>Decision</code> and per-field localized content. Schema-valid.</p>
+    </div>
+  </div>
+</section>
+<style>
+  .hero { max-width: 1180px; margin: 0 auto; padding: 4rem 1.5rem 3rem; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.05fr); gap: 3.5rem; align-items: center; }
+  @media (max-width: 980px) { .hero-grid { grid-template-columns: minmax(0,1fr); gap: 2.5rem; } }
+  .eyebrow { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.5rem; }
+  .eyebrow-greek { font-family: var(--edoxen-font-display); font-size: 1rem; font-style: italic; color: var(--vp-c-brand-1); font-weight: 500; }
+  .eyebrow-rule { flex: 0 0 28px; height: 1px; background: var(--vp-c-divider); }
+  .eyebrow-label { font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: var(--vp-c-text-3); font-weight: 500; }
+  .hero-title { font-family: var(--edoxen-font-display); font-size: clamp(3rem,7vw,5.5rem); font-weight: 400; line-height: .95; letter-spacing: -.035em; margin: 0 0 1.5rem; }
+  .hero-title em { font-style: italic; font-weight: 300; background: linear-gradient(120deg, var(--vp-c-brand-1), var(--vp-c-brand-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero-lede { font-size: 1.15rem; line-height: 1.6; color: var(--vp-c-text-2); max-width: 38ch; margin: 0 0 2rem; }
+  .hero-actions { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+  .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin: 0; padding-top: 1.5rem; border-top: 1px solid var(--vp-c-divider); }
+  @media (max-width: 540px) { .stats { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+  .stat dt { font-family: var(--edoxen-font-display); font-size: 1.7rem; font-weight: 500; color: var(--vp-c-brand-1); letter-spacing: -.02em; line-height: 1; }
+  .stat dd { margin: .3rem 0 0; font-size: .75rem; color: var(--vp-c-text-3); line-height: 1.35; }
+  .specimen-caption { margin: .85rem 0 0; font-size: .82rem; color: var(--vp-c-text-3); text-align: right; }
+  .specimen-caption code { font-family: var(--edoxen-font-mono); color: var(--vp-c-brand-1); }
+  @media (max-width: 980px) { .specimen-caption { text-align: left; } }
+</style>

@@ -1,12 +1,12 @@
 {
   "name": "edoxen.github.io",
   "version": "1.0.0",
-  "description": "Edoxen — structured resolution and decision information models",
+  "description": "Edoxen — structured proceedings: meetings, agendas, minutes, and decisions",
   "type": "module",
   "scripts": {
-    "dev": "vitepress dev",
-    "build": "vitepress build",
-    "preview": "vitepress preview",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
@@ -16,8 +16,12 @@
     "@vue/test-utils": "^2.4.11",
     "happy-dom": "^20.10.6",
     "typescript": "^5.7.3",
-    "vitepress": "^1.6.4",
     "vitest": "^4.1.10",
     "vue": "^3.5.13"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^7.0.2",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.0.7"
   }
 }

@@ -1,0 +1,27 @@
+---
+import { siteConfig } from '../data/site'
+---
+<footer class="footer">
+  <div class="footer-container">
+    <p class="footer-message" set:html={siteConfig.footerMessage} />
+    <p class="footer-copyright">{siteConfig.footerCopyright}</p>
+  </div>
+</footer>
+<style>
+  .footer {
+    border-top: 1px solid var(--vp-c-divider, #d8cfbe);
+    padding: 2rem 1.5rem;
+  }
+  .footer-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-message { font-size: 0.85rem; color: var(--vp-c-text-2); margin: 0; }
+  .footer-message :global(a) { color: var(--vp-c-brand-1); }
+  .footer-copyright { font-size: 0.85rem; color: var(--vp-c-text-3); margin: 0; }
+</style>

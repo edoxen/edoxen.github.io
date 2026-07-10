@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import HeroSection from '../components/HeroSection.astro'
+import AnatomyStrip from '../components/AnatomyStrip.astro'
+import PipelineDiagram from '../components/PipelineDiagram.astro'
+import FeatureGrid from '../components/FeatureGrid.astro'
+import CtaBand from '../components/CtaBand.astro'
+---
+<BaseLayout>
+  <div class="home">
+    <HeroSection />
+    <AnatomyStrip />
+    <section class="band band-alt">
+      <header class="band-head" style="max-width:1180px;margin:0 auto;padding:0 1.5rem;">
+        <span class="band-eyebrow">02 · The pipeline</span>
+        <h2>YAML in, YAML out — no drift</h2>
+        <p class="band-lede">Parse, decode, validate, re-serialize. Every step is a framework call, not hand-rolled code. The wire format is locked at the schema layer.</p>
+      </header>
+      <div style="max-width:1180px;margin:1.5rem auto 0;padding:0 1.5rem;">
+        <PipelineDiagram caption={true} />
+      </div>
+    </section>
+    <FeatureGrid />
+    <CtaBand />
+  </div>
+</BaseLayout>
+<style>
+  .home { font-family: var(--edoxen-font-body); color: var(--vp-c-text-1); }
+  .band-alt { background: var(--vp-c-bg-soft); max-width: none; padding: 4rem 0; }
+  .band-eyebrow { font-family: var(--edoxen-font-mono); font-size: .78rem; letter-spacing: .1em; color: var(--vp-c-brand-1); display: inline-block; margin-bottom: .6rem; }
+  .band-head h2 { font-family: var(--edoxen-font-display); font-size: clamp(1.8rem,3.2vw,2.6rem); font-weight: 400; margin: 0 0 .85rem; }
+  .band-lede { font-size: 1.05rem; line-height: 1.65; color: var(--vp-c-text-2); margin: 0; }
+</style>

@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getCollection, render } from 'astro:content'
+import { formatDate, formatAuthors } from '../../composables/usePostFormat'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog')
+  return posts
+    .filter(entry => !entry.id.endsWith('index'))
+    .map(entry => ({
+      params: { slug: entry.id.replace(/\.md$/, '') },
+      props: { entry },
+    }))
+}
+
+const { entry } = Astro.props
+const { Content } = await render(entry)
+const fm = entry.data
+---
+<BaseLayout title={fm.title} description={fm.description}>
+  <article class="blog-post">
+    <div class="byline">
+      {fm.date && <time class="post-date" datetime={fm.date}>{formatDate(fm.date)}</time>}
+      {fm.authors && <span class="post-authors">{formatAuthors(fm.authors)}</span>}
+    </div>
+    <Content />
+  </article>
+</BaseLayout>
+
+<style>
+  .blog-post { max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem; }
+  .byline { display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem; color: var(--vp-c-text-3); font-size: .9rem; }
+  .post-date { color: var(--vp-c-brand-1); }
+  .post-authors { font-weight: 500; }
+</style>

@@ -1,0 +1,73 @@
+---
+import { highlight } from '../lib/yaml-tokenizer'
+
+const specimenYaml = `identifier:
+  - prefix: ACME
+    number: "2026-Q1-Board"
+urn: urn:acme:board:meeting:2026-q1
+type: board_meeting
+status: completed
+visibility: confidential
+date_range:
+  start: 2026-03-15
+  end: 2026-03-15
+venues:
+  - kind: physical
+    name: Acme Corporation Boardroom
+    unlocode: USNYC
+officers:
+  - role: chair
+    person:
+      name: { formatted: "Jane Smith" }
+decisions:
+  - identifier:
+      - { prefix: ACME, number: "2026-Q1-001" }
+    kind: order
+    status: decided
+    title:
+      - { spelling: eng, value: "Board Order Declaring Q1 Dividend" }
+    actions:
+      - type: orders
+        message:
+          - { spelling: eng, value: "The Board orders a quarterly dividend of $0.45 per share." }`
+
+const highlighted = highlight(specimenYaml)
+---
+<figure class="specimen">
+  <figcaption class="specimen-head">
+    <span class="specimen-tag">SPECIMEN</span>
+    <span class="specimen-meta">
+      <code>acme-board-2026-q1.yaml</code>
+      <span class="dot">·</span>
+      <span>EN</span>
+    </span>
+    <span class="specimen-valid">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      valid
+    </span>
+  </figcaption>
+  <pre class="specimen-code"><code set:html={highlighted}></code></pre>
+  <div class="specimen-footer">
+    <a href="/docs/schema" class="specimen-link">
+      Read the schema
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</figure>
+<style>
+  .specimen { margin: 0; background: var(--vp-c-bg-alt); border: 1px solid var(--vp-c-divider); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px -20px var(--edoxen-cyan-glow-soft); font-family: var(--edoxen-font-mono); }
+  .specimen-head { display: flex; align-items: center; gap: .75rem; padding: .65rem 1rem; background: var(--vp-c-bg-soft); border-bottom: 1px solid var(--vp-c-divider); font-family: var(--edoxen-font-body); font-size: .78rem; color: var(--vp-c-text-3); }
+  .specimen-tag { font-family: var(--edoxen-font-display); font-size: .7rem; font-weight: 700; letter-spacing: .15em; color: var(--vp-c-brand-1); background: var(--vp-c-brand-soft); padding: .15rem .5rem; border-radius: 4px; }
+  .specimen-meta { display: flex; align-items: center; gap: .4rem; flex: 1; }
+  .specimen-meta code { font-family: var(--edoxen-font-mono); color: var(--vp-c-text-2); }
+  .specimen-valid { display: inline-flex; align-items: center; gap: .3rem; color: #16a34a; font-weight: 600; }
+  .specimen-code { margin: 0; padding: 1.1rem 1.25rem; overflow-x: auto; font-family: var(--edoxen-font-mono); font-size: .78rem; line-height: 1.65; color: var(--vp-c-text-1); }
+  .specimen-code code { font-family: inherit; white-space: pre; }
+  .specimen-code :global(.y-k) { color: var(--vp-c-brand-1); font-weight: 600; }
+  .specimen-code :global(.y-s) { color: var(--vp-c-gold); }
+  .specimen-code :global(.y-n) { color: #7c3aed; }
+  .specimen-code :global(.y-c) { color: var(--vp-c-text-3); font-style: italic; }
+  .specimen-footer { padding: .5rem 1rem .75rem; display: flex; justify-content: flex-end; border-top: 1px solid var(--vp-c-divider-light); background: var(--vp-c-bg-soft); }
+  .specimen-link { display: inline-flex; align-items: center; gap: .35rem; font-family: var(--edoxen-font-body); font-size: .82rem; font-weight: 500; color: var(--vp-c-brand-1); text-decoration: none; padding: .35rem .7rem; border-radius: 6px; }
+  .specimen-link:hover { background: var(--vp-c-brand-soft); }
+</style>

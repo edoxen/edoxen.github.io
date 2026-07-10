@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { tokenize, escapeHtml, render, highlight } from '../../.vitepress/theme/lib/yaml-tokenizer'
+import { tokenize, escapeHtml, render, highlight } from '../../src/lib/yaml-tokenizer'
 
 describe('tokenize', () => {
   it('tokenizes a simple key-value pair', () => {

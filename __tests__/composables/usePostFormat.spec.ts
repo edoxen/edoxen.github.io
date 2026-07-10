@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { formatDate, formatLastUpdated, formatAuthors } from '../../.vitepress/theme/composables/usePostFormat'
-import type { Post } from '../../.vitepress/theme/composables/usePostFormat'
+import { formatDate, formatLastUpdated, formatAuthors } from '../../src/composables/usePostFormat'
+import type { Post } from '../../src/composables/usePostFormat'
 
 describe('formatDate', () => {
   it('formats a standard ISO date string', () => {

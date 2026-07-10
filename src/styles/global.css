@@ -523,3 +523,67 @@ h1, h2, h3, h4, h5, h6,
 ::-webkit-scrollbar-thumb:hover {
   background: var(--vp-c-text-3);
 }
+
+/* ---------- Band / Section utility classes ------------------------------ */
+/* Shared across AnatomyStrip, FeatureGrid, PipelineSection, CtaBand.
+   Each component uses these + adds its own scoped styles. */
+
+.band {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.band-alt {
+  background: var(--vp-c-bg-soft);
+  max-width: none;
+  padding: 4rem 0;
+}
+
+.band-head {
+  margin-bottom: 2.5rem;
+  max-width: 60ch;
+}
+
+.band-eyebrow {
+  display: inline-block;
+  font-family: var(--edoxen-font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--vp-c-brand-1);
+  margin-bottom: 0.6rem;
+  font-weight: 500;
+}
+
+.band-head h2 {
+  font-family: var(--edoxen-font-display);
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 0.85rem;
+  color: var(--vp-c-text-1);
+}
+
+.band-lede {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--vp-c-text-2);
+  margin: 0;
+}
+
+.band-cta {
+  margin: 2rem 0 0;
+  font-family: var(--edoxen-font-body);
+  font-size: 0.95rem;
+}
+
+.band-cta a {
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.band-cta a:hover {
+  text-decoration: underline;
+}

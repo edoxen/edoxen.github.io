@@ -1,25 +1,20 @@
 ---
 import { sidebar } from '../data/site'
-import type { SidebarItem } from '../data/site'
+import type { NavItem } from '../data/site'
+import { isActiveLink } from '../lib/isActiveLink'
 
 const currentPath = Astro.url.pathname
-
-function isActive(link?: string): boolean {
-  if (!link) return false
-  if (link === '/') return currentPath === '/'
-  return currentPath === link || currentPath === link + '/'
-}
 ---
 
 <aside class="sidebar">
-  {sidebar.map((group: SidebarItem) => (
+  {sidebar.map((group: NavItem) => (
     <div class="sidebar-group">
       <span class="sidebar-group-title">{group.text}</span>
       {group.items && (
         <ul>
-          {group.items.map((item: SidebarItem) => (
+          {group.items.map((item: NavItem) => (
             <li>
-              <a href={item.link} class={isActive(item.link) ? 'active' : ''}>{item.text}</a>
+              <a href={item.link} class={isActiveLink(currentPath, item.link) ? 'active' : ''}>{item.text}</a>
             </li>
           ))}
         </ul>

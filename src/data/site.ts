@@ -2,12 +2,6 @@ export interface NavItem {
   text: string
   link?: string
   items?: NavItem[]
-}
-
-export interface SidebarItem {
-  text: string
-  link?: string
-  items?: SidebarItem[]
   collapsed?: boolean
 }
 

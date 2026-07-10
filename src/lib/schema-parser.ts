@@ -33,12 +33,13 @@ interface JsonSchema {
   additionalProperties?: unknown
 }
 
-function resolveRef(ref: string): string {
+export function resolveRef(ref: string | undefined): string {
+  if (!ref) return ''
   const match = ref?.match(/#\/\$defs\/(.+)/)
   return match ? match[1] : ''
 }
 
-function extractTypes(prop: JsonSchema): { types: string[]; isArray: boolean; refTarget?: string } {
+export function extractTypes(prop: JsonSchema): { types: string[]; isArray: boolean; refTarget?: string } {
   if (prop.$ref) {
     return { types: ['object'], isArray: false, refTarget: resolveRef(prop.$ref) }
   }
@@ -64,12 +65,20 @@ function extractTypes(prop: JsonSchema): { types: string[]; isArray: boolean; re
   return { types, isArray }
 }
 
-export function parseSchema(schema: JsonSchema): SchemaEntity[] {
+const DEFAULT_EXCLUDE_SUFFIXES = ['Type', 'Kind', 'Status', 'Degree']
+
+export interface ParseSchemaOptions {
+  excludeSuffixes?: string[]
+}
+
+export function parseSchema(schema: JsonSchema, options: ParseSchemaOptions = {}): SchemaEntity[] {
   const defs = schema.$defs
   if (!defs) return []
 
+  const exclude = options.excludeSuffixes ?? DEFAULT_EXCLUDE_SUFFIXES
+
   return Object.entries(defs)
-    .filter(([name]) => !name.endsWith('Type') && !name.endsWith('Kind') && !name.endsWith('Status') && !name.endsWith('Degree'))
+    .filter(([name]) => !exclude.some(suffix => name.endsWith(suffix)))
     .filter(([, def]) => {
       const d = def as JsonSchema
       return d.type === 'object' && d.properties

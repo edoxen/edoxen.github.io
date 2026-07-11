@@ -14,7 +14,7 @@ const visible = filter ? entities.filter(e => filter.includes(e.name)) : entitie
 function typeColor(t: string): string {
   if (['string'].includes(t)) return 'var(--vp-c-brand-1)'
   if (['integer', 'number', 'boolean'].includes(t)) return 'var(--vp-c-gold)'
-  if (['object', 'array'].includes(t)) return '#7c3aed'
+  if (['object', 'array'].includes(t)) return 'var(--edoxen-violet)'
   return 'var(--vp-c-text-3)'
 }
 ---
@@ -133,8 +133,8 @@ function typeColor(t: string): string {
     font-family: var(--edoxen-font-body);
     font-size: 0.65rem;
     font-style: italic;
-    color: #b91c1c;
-    background: rgba(185,28,28,0.08);
+    color: var(--edoxen-danger);
+    background: var(--edoxen-danger-soft);
     padding: 0.1em 0.4em;
     border-radius: 3px;
     text-transform: uppercase;

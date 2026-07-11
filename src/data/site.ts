@@ -34,7 +34,7 @@ export const nav: NavItem[] = [
   },
 ]
 
-export const sidebar: SidebarItem[] = [
+export const sidebar: NavItem[] = [
   {
     text: 'Getting started',
     items: [

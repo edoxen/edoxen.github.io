@@ -42,8 +42,8 @@ const currentPath = Astro.url.pathname
     position: sticky;
     top: 0;
     z-index: 100;
-    background: var(--vp-c-bg, #faf7f0);
-    border-bottom: 1px solid var(--vp-c-divider, #d8cfbe);
+    background: var(--vp-c-bg);
+    border-bottom: 1px solid var(--vp-c-divider);
     backdrop-filter: blur(12px);
   }
   :global(.dark) .nav { background: rgba(12, 17, 24, 0.85); }
@@ -61,8 +61,8 @@ const currentPath = Astro.url.pathname
     align-items: center;
     gap: 0.5rem;
     text-decoration: none;
-    color: var(--vp-c-text-1, #1a1f2e);
-    font-family: var(--edoxen-font-display, 'Fraunces', Georgia, serif);
+    color: var(--vp-c-text-1);
+    font-family: var(--edoxen-font-display);
     font-size: 1.2rem;
     font-weight: 500;
     white-space: nowrap;
@@ -82,18 +82,18 @@ const currentPath = Astro.url.pathname
     padding: 0.4rem 0.75rem;
     border-radius: 6px;
     text-decoration: none;
-    color: var(--vp-c-text-2, #4a5468);
+    color: var(--vp-c-text-2);
     font-size: 0.9rem;
     font-weight: 500;
     transition: color 0.2s, background 0.2s;
     white-space: nowrap;
   }
   .nav-menu a:hover {
-    color: var(--vp-c-brand-1, #0e7490);
-    background: var(--vp-c-brand-soft, rgba(14,116,144,0.12));
+    color: var(--vp-c-brand-1);
+    background: var(--vp-c-brand-soft);
   }
   .nav-menu a.active {
-    color: var(--vp-c-brand-1, #0e7490);
+    color: var(--vp-c-brand-1);
   }
   .nav-dropdown {
     position: relative;
@@ -104,7 +104,7 @@ const currentPath = Astro.url.pathname
     border: none;
     background: none;
     cursor: pointer;
-    color: var(--vp-c-text-2, #4a5468);
+    color: var(--vp-c-text-2);
     font-size: 0.9rem;
     font-weight: 500;
   }
@@ -114,8 +114,8 @@ const currentPath = Astro.url.pathname
     position: absolute;
     top: 100%;
     left: 0;
-    background: var(--vp-c-bg, #fff);
-    border: 1px solid var(--vp-c-divider, #d8cfbe);
+    background: var(--vp-c-bg);
+    border: 1px solid var(--vp-c-divider);
     border-radius: 8px;
     padding: 0.5rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -132,7 +132,7 @@ const currentPath = Astro.url.pathname
     gap: 0.75rem;
   }
   .nav-actions a {
-    color: var(--vp-c-text-2, #4a5468);
+    color: var(--vp-c-text-2);
     text-decoration: none;
     display: flex;
     align-items: center;

@@ -120,7 +120,7 @@ Three samples in
 
 ## Migration script (TODO)
 
-A `scripts/migrate_v1_to_v2.rb` will be provided before 1.0.0 final.
+A `scripts/migrate_to_v1.rb` will be provided before 1.0.0 final.
 The transformation rules:
 
 ```ruby

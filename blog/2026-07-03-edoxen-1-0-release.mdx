@@ -1,30 +1,31 @@
 ---
-title: Edoxen v2.0 — a generic meeting, motion, voting, and decision model
+title: Edoxen 1.0 — a generic meeting, motion, voting, and decision model
 date: 2026-07-03
-description: "The v2.0 release broadens Edoxen from a standards-body Resolution model to a generic meeting/decision model with profile extensions for every domain."
+description: "The 1.0 release broadens Edoxen from a standards-body Resolution model to a generic meeting/decision model with profile extensions for every domain."
 ---
 
-# Edoxen v2.0
+# Edoxen 1.0
 
-Edoxen v2.0 is here, and it's a complete rethink of what the model is
+Edoxen 1.0 is here, and it's a complete rethink of what the model is
 *for*.
 
-v1.0 was a **standards-body Resolution model**. It modelled the OIML,
-ISO/TC 154, and ISO/TC 184/SC 4 publication conventions beautifully —
-1,640 resolutions across 28 meetings encoded, every code path
-exercised. But every time we looked at a new domain — HK LegCo's
-parliamentary sittings, an IETF WG meeting, a corporate board portal —
-we hit the same wall: the model assumed one specific shape of
-"proceedings."
+The original model was a **standards-body Resolution model**. It
+modelled the OIML, ISO/TC 154, and ISO/TC 184/SC 4 publication
+conventions beautifully — 1,640 resolutions across 28 meetings encoded,
+every code path exercised. But every time we looked at a new domain —
+HK LegCo's parliamentary sittings, an IETF WG meeting, a corporate
+board portal — we hit the same wall: the model assumed one specific
+shape of "proceedings."
 
-v2.0 changes that. **The core is now generic. Domains extend via
+1.0 changes that. **The core is now generic. Domains extend via
 profiles.**
 
 ## What's new
 
 ### The procedural core: Motion → Voting → Decision
 
-v1.0 had only `Resolution`. v2.0 adds two new first-class entities:
+The original model had only `Resolution`. 1.0 adds two new first-class
+entities:
 
 - **Motion** — a procedural act with a state machine:
   `introduced → seconded → debating → question_put → voting →
@@ -40,11 +41,11 @@ standalone document. The `brought_by_motions[]` field links back.
 
 ### Polymorphic Venue
 
-v1.0 had `Meeting.virtual: Boolean` — insufficient. Zoom needs URL +
-passcode + dial-in numbers + waiting-room flag. Cisco WebEx needs
-something different. A Microsoft Teams link is different again.
+The original model had `Meeting.virtual: Boolean` — insufficient. Zoom
+needs URL + passcode + dial-in numbers + waiting-room flag. Cisco WebEx
+needs something different. A Microsoft Teams link is different again.
 
-v2.0 has **one polymorphic `Venue` base type** with two subtypes:
+1.0 has **one polymorphic `Venue` base type** with two subtypes:
 
 - **PhysicalVenue** — UN/LOCODE + IATA + address + geo-coordinates.
 - **VirtualVenue** — URI + iCalendar features (audio/video/chat/phone/
@@ -85,7 +86,7 @@ without re-implementing the RFC 5545 grammar.
 
 ### Five new domains
 
-v2.0 explicitly covers:
+1.0 explicitly covers:
 
 - **Standards bodies** (ISO, IEC, ITU, BIPM, OIML, ILO)
 - **Parliamentary bodies** (UK Hansard, HK LegCo, US Congress)
@@ -99,9 +100,9 @@ The HK LegCo profile ships as the first reference profile in
 
 ## Migration
 
-v2.0 is a **breaking release**. The migration is mechanical:
+1.0 is a **breaking release**. The migration is mechanical:
 
-| v0.x | v2.0 |
+| legacy | 1.0 |
 |------|------|
 | `Resolution` | `Decision` with `kind: resolution` |
 | `ResolutionCollection` | `DecisionCollection` |
@@ -110,7 +111,7 @@ v2.0 is a **breaking release**. The migration is mechanical:
 | `Meeting.schedule[]` | `Meeting.components: MeetingComponent[]` |
 | `Resolution` alone | `Decision` + `Motion` + `Voting` |
 
-See the [full migration guide](/docs/migration-v2) for details.
+See the [full migration guide](/docs/migration) for details.
 
 ## Try it
 
@@ -128,7 +129,7 @@ Or read the [introduction](/docs/introduction), walk the
 
 ## What's next
 
-The model and gem are v2.0-stable. Phase D — migrating the three
+The model and gem are 1.0-stable. Phase D — migrating the three
 downstream reference corpora (OIML, ISO/TC 154, ISO/TC 184/SC 4) — is
 the next quarter's work, with each repo its own sub-project.
 

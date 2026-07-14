@@ -109,7 +109,7 @@ decisions:
 
 - [Architecture](/docs/architecture) — the generic-core-plus-profile
   design, the procedural state machines, and the multilingual plumbing.
-- [Migration to v2](/docs/migration-v2) — coming from legacy (Resolution →
+- [Migration to 1.0](/docs/migration) — coming from legacy (Resolution →
   Decision rename + new entities).
 - [Installation](/docs/installation) — set up the gem in your project.
 - [Meetings](/docs/meeting-collection) — the event-grain container.

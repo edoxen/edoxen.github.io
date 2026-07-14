@@ -24,7 +24,7 @@ title:
   - { spelling: zho-Hans,    value: "第56届CIML会议" }
 ```
 
-This replaces the v2.x pattern of a separate `localizations[]` array.
+This replaces the pre-1.0 pattern of a separate `localizations[]` array.
 Each field carries its own language tags inline.
 
 ## Schema files
@@ -222,4 +222,4 @@ The schema files are standard JSON Schema (Draft 7). Use `ajv`,
 - [Localization](/docs/localization) — the per-field localization pattern
 - [Contact Collection](/docs/contact-collection) — the URN registry pattern
 - [Venue Collection](/docs/venue-collection) — venue registries
-- [Migration v2 to v3](/docs/migration-v2) — breaking changes guide
+- [Migration guide](/docs/migration) — breaking changes guide

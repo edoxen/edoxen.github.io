@@ -9,7 +9,7 @@ entry per ISO 24229 spelling/conversion system code. There is no
 separate `Localization[]` collection; each field carries its own
 language tags directly.
 
-This is the 1.0 design (the v2.x `Localization` object pattern was
+This is the 1.0 design (the pre-1.0 `Localization` object pattern was
 removed). Per-field localization:
 
 - **Composes with romanization/transliteration** — the same Contact

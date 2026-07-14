@@ -42,7 +42,7 @@ export const sidebar: NavItem[] = [
       { text: 'Architecture', link: '/docs/architecture' },
       { text: 'Origin', link: '/docs/origin' },
       { text: 'Installation', link: '/docs/installation' },
-      { text: 'Migration to v2', link: '/docs/migration-v2' },
+      { text: 'Migration to 1.0', link: '/docs/migration' },
     ],
   },
   {

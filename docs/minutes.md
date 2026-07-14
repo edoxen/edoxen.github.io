@@ -69,11 +69,13 @@ One slice of the narrative, typically tied to an agenda item by its
 | Field | Type | Description |
 |---|---|---|
 | `number` | `String` | Agenda-item label this section corresponds to (`"4.2"`, `"10.a"`). |
-| `title` | `String` | Section heading as printed. |
-| `narrative` | `String` | The body — **Markdown** (the format the GLM-OCR pipeline emits). |
+| `title` | `LocalizedString[0..*]` | Section heading (per-field localized, ISO 24229). |
+| `narrative` | `LocalizedString[0..*]` | The body — **Markdown** (the format the GLM-OCR pipeline emits). Per-field localized. |
 | `page_start` | `Integer` | First page in `source_doc` covered by this section. |
 | `page_end` | `Integer` | Last page. |
 | `references` | `Reference[0..*]` | Supporting documents (prior resolutions, background papers). |
+| `statements` | `Statement[0..*]` | Per-meeting remarks made in this section (BS 0:2006 §7.6). See [BS 0 Minutes](/docs/bs0-minutes). |
+| `topic_ref` | `String` | URN back-link to the `Topic` this section discusses (e.g. `urn:edoxen:topic:bsi:tc1-patent-clause`). |
 
 ## The agenda-item join
 
@@ -108,5 +110,6 @@ document.
 - [Meeting Collection](/docs/meeting-collection) — the parent entity
 - [Agenda](/docs/agenda) — the forward-looking business order
 - [Attendance](/docs/attendance) — who was at the meeting
+- [BS 0:2006 Minutes](/docs/bs0-minutes) — per-section statements + declarations
 - [Resolution Collection](/docs/decision-collection) — the formal decisions
 - [Schema](/docs/schema) — what the JSON Schema enforces

@@ -25,15 +25,21 @@ entity rather than a column on a flat table:
 
 1. **Meetings** — the event itself: identifier, venues (polymorphic),
    officers (role-discriminated), agenda, components (flat sub-events),
-   attendance, minutes.
+   attendance, minutes, declarations (BS 0:2006 §7.6).
 2. **Motions + Votings** — the procedural record: who moved what, how
    the question was put, how members voted, what the chair declared.
 3. **Decisions** — the formal outcomes (resolution, order, ruling,
    determination, recommendation, statement, finding, opinion).
 4. **Topics** — the subjects of discussion: documents, assets,
-   references, with cross-meeting threading via `resumption_of`.
+   references, standing statements + declarations, with cross-meeting
+   threading via `resumption_of`.
 5. **Series** — the recurring parent (annual plenaries, monthly board
    meetings, IETF meeting series) with a `Recurrence` rule.
+
+The model also carries BS 0:2006 §7.6 **statements** and
+**declarations** as first-class core entities — attached to meetings,
+topics, and minutes sections. See [BS 0:2006 Minutes](/docs/bs0-minutes)
+for the full treatment.
 
 Every core entity also carries an `extensions: MeetingExtension[0..*]`
 slot for adopter-specific profiles.

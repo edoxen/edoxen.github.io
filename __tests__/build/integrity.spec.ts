@@ -33,12 +33,12 @@ describe('build output — pages', () => {
   const expectedPages = [
     '', 'about', 'blog',
     'blog/2026-06-30-edoxen-1-0-release',
-    'blog/2026-07-03-edoxen-2-0-release',
+    'blog/2026-07-03-edoxen-1-0-release',
     'docs/introduction', 'docs/architecture', 'docs/schema',
     'docs/meeting-collection', 'docs/decision-collection',
     'docs/motion', 'docs/voting', 'docs/contact', 'docs/venue',
     'docs/agenda', 'docs/minutes', 'docs/attendance',
-    'docs/migration-v2', 'docs/origin', 'docs/installation',
+    'docs/migration', 'docs/origin', 'docs/installation',
     'docs/cli', 'docs/validation', 'docs/parse-yaml',
   ]
 

@@ -34,6 +34,8 @@ OData schema) lets consumers walk a topic's history across meetings.
 | `references` | `Reference[]` | External pointers. |
 | `motions` | string[] | URNs of Motions. |
 | `decisions` | string[] | URNs of Decisions. |
+| `statements` | `Statement[0..*]` | Standing remarks that travel with the topic across meetings (BS 0:2006 §7.6). See [BS 0 Minutes](/docs/bs0-minutes). |
+| `declarations` | `Declaration[0..*]` | Standing declarations (CoI / IPR) that travel with the topic (BS 0:2006 §7.6). |
 
 ## TopicDocument
 
@@ -85,4 +87,5 @@ topics:
 
 - [Motion](/docs/motion) — procedural acts raised on this topic.
 - [Decision](/docs/decision) — outcomes on this topic.
+- [BS 0:2006 Minutes](/docs/bs0-minutes) — standing statements + declarations on topics.
 - [Agenda](/docs/agenda) — topics appear as `agenda.items[].topics[]`.

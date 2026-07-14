@@ -34,10 +34,12 @@ describe('build output — pages', () => {
     '', 'about', 'blog',
     'blog/2026-06-30-edoxen-1-0-release',
     'blog/2026-07-03-edoxen-1-0-release',
+    'blog/2026-07-14-bs0-meeting-minutes',
     'docs/introduction', 'docs/architecture', 'docs/schema',
     'docs/meeting-collection', 'docs/decision-collection',
     'docs/motion', 'docs/voting', 'docs/contact', 'docs/venue',
-    'docs/agenda', 'docs/minutes', 'docs/attendance',
+    'docs/agenda', 'docs/minutes', 'docs/bs0-minutes', 'docs/attendance',
+    'docs/statement', 'docs/declaration', 'docs/date-time-range',
     'docs/migration', 'docs/origin', 'docs/installation',
     'docs/cli', 'docs/validation', 'docs/parse-yaml',
   ]

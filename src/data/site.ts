@@ -56,6 +56,7 @@ export const sidebar: NavItem[] = [
       { text: 'Venue Collection', link: '/docs/venue-collection' },
       { text: 'Agenda', link: '/docs/agenda' },
       { text: 'Minutes', link: '/docs/minutes' },
+      { text: 'BS 0:2006 Minutes', link: '/docs/bs0-minutes' },
       { text: 'Attendance & Votes', link: '/docs/attendance' },
       { text: 'Recurrence', link: '/docs/recurrence' },
       { text: 'DateTimeRange', link: '/docs/date-time-range' },

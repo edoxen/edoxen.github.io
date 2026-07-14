@@ -88,7 +88,8 @@ adopted.
 
 | Field | Type | Description |
 |---|---|---|
-| `date_range` | `DateRange` | The sitting window. Single-day meetings use one bound. |
+| `scheduled_date_range` | `DateRange` | The planned sitting window (day precision). Single-day meetings use one bound. |
+| `occurred_date_range` | `DateTimeRange` | When the meeting *actually* ran (sub-day precision, e.g. 09:00–11:30). BS 0:2006 §7.6. See [BS 0 Minutes](/docs/bs0-minutes). |
 | `venues` | `Location[0..*]` | Physical venues (some meetings span buildings — `Location` has the full address). |
 | `general_area` | `String` | Human-readable locale description ("Berlin, Germany"). |
 | `city` | `String` | IATA three-letter code (`BER`, `PAR`, `TYO`). |
@@ -124,6 +125,7 @@ adopted.
 | `attendance` | `Attendance[0..*]` | Who was at the meeting (see [Attendance & Votes](/docs/attendance)). |
 | `vote_records` | `VoteRecord[0..*]` | How each person voted on each Resolution. |
 | `minutes` | `Minutes[0..*]` | The narrative record of the meeting (see [Minutes](/docs/minutes)). One `Minutes` per language. |
+| `declarations` | `Declaration[0..*]` | Formal declarations (CoI / IPR) made at this meeting (BS 0:2006 §7.6). See [BS 0 Minutes](/docs/bs0-minutes). |
 | `localizations` | `MeetingLocalization[0..*]` | Per-language content (see below). |
 | `relations` | `MeetingRelation[0..*]` | Links to other meetings (follows / supersedes / convenes-from). |
 | `resolution_refs` | `String[0..*]` | Identifiers of the resolutions adopted at this meeting. |
@@ -172,6 +174,7 @@ meeting makes the chain visible in tools without parsing dates.
 
 - [Agenda](/docs/agenda) — agenda items, schedule slots, deadlines
 - [Minutes](/docs/minutes) — the narrative record of a meeting
+- [BS 0:2006 Minutes](/docs/bs0-minutes) — statements, declarations, and occurred times
 - [Attendance & Votes](/docs/attendance) — who was there and how they voted
 - [Resolution Collection](/docs/decision-collection) — the parallel container for resolutions
 - [Structured Identifier](/docs/structured-identifier) — the {prefix, number} type

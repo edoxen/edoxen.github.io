@@ -55,7 +55,7 @@ itself (permissive mode). Strict mode is a v3.x concern.
 | Collection | Field |
 |---|---|
 | `MeetingCollectionMetadata` | `body_vocabulary: BodyVocabularyEntry[0..*]` |
-| `DecisionMetadata` | (planned for v2.3) |
+| `DecisionMetadata` | (planned for a future release) |
 
 ## Canonical type values
 

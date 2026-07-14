@@ -58,6 +58,7 @@ export const sidebar: NavItem[] = [
       { text: 'Minutes', link: '/docs/minutes' },
       { text: 'Attendance & Votes', link: '/docs/attendance' },
       { text: 'Recurrence', link: '/docs/recurrence' },
+      { text: 'DateTimeRange', link: '/docs/date-time-range' },
     ],
   },
   {
@@ -95,6 +96,8 @@ export const sidebar: NavItem[] = [
     collapsed: false,
     items: [
       { text: 'Topic', link: '/docs/topic' },
+      { text: 'Statement (BS 0:2006)', link: '/docs/statement' },
+      { text: 'Declaration (BS 0:2006)', link: '/docs/declaration' },
     ],
   },
   {

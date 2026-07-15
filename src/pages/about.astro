@@ -1,9 +1,267 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import AboutContent from '../../about.md'
+import { siteConfig } from '../data/site'
+
+const tocItems = [
+  { depth: 2, slug: 'the-name--logo', text: 'The Name & Logo' },
+  { depth: 3, slug: 'the-name', text: 'The Name' },
+  { depth: 3, slug: 'the-logo', text: 'The Logo' },
+  { depth: 3, slug: 'mark-only', text: 'Mark only' },
+  { depth: 3, slug: 'the-colors', text: 'The Colors' },
+  { depth: 2, slug: 'origin-story', text: 'Origin Story' },
+  { depth: 2, slug: 'mission-statement', text: 'Mission Statement' },
+  { depth: 2, slug: 'the-ecosystem', text: 'The Ecosystem' },
+  { depth: 2, slug: 'use-cases', text: 'Use Cases' },
+  { depth: 2, slug: 'standards-support', text: 'Standards Support' },
+  { depth: 2, slug: 'open-source', text: 'Open Source' },
+  { depth: 2, slug: 'get-started', text: 'Get Started' },
+]
 ---
-<BaseLayout title="About Edoxen">
-  <div style="max-width:720px;margin:0 auto;padding:3rem 1.5rem;">
-    <AboutContent />
+
+<BaseLayout title="About Edoxen" description="The etymology, logo, and mission behind Edoxen — a generic meeting, motion, voting, and decision model.">
+  <div class="about-hero">
+    <p class="about-hero-greek">ἔδοξεν</p>
+    <h1 class="about-hero-title">About Edoxen</h1>
+    <p class="about-hero-tagline">
+      A generic meeting, motion, voting, and decision model —
+      named after the formula that opens every Athenian decree.
+    </p>
+    <div class="about-hero-meta">
+      <span>An open source project of Ribose</span>
+      <span class="dot">·</span>
+      <span>2-Clause BSD</span>
+      <span class="dot">·</span>
+      <a href={siteConfig.githubUrl}>GitHub</a>
+    </div>
+  </div>
+
+  <div class="about-body">
+    <article class="prose about-content">
+      <AboutContent />
+    </article>
+
+    <aside class="about-toc">
+      <nav>
+        <p class="toc-label">On this page</p>
+        <ul>
+          {tocItems.map(h => (
+            <li class={`toc-${h.depth}`}>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </aside>
   </div>
 </BaseLayout>
+
+<style>
+  .about-hero {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--vp-c-divider);
+  }
+
+  .about-hero-greek {
+    font-family: var(--edoxen-font-display);
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 300;
+    line-height: 1;
+    margin: 0 0 0.5rem;
+    background: linear-gradient(135deg, var(--vp-c-brand-1), var(--vp-c-brand-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+  }
+
+  .about-hero-title {
+    font-family: var(--edoxen-font-display);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 500;
+    margin: 0 0 0.75rem;
+    letter-spacing: -0.02em;
+    color: var(--vp-c-text-1);
+  }
+
+  .about-hero-tagline {
+    font-family: var(--edoxen-font-body);
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: var(--vp-c-text-2);
+    max-width: 560px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .about-hero-meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-size: 0.88rem;
+    color: var(--vp-c-text-3);
+    font-family: var(--edoxen-font-mono);
+  }
+
+  .about-hero-meta a {
+    color: var(--vp-c-brand-1);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .about-hero-meta a:hover {
+    text-decoration: underline;
+  }
+
+  .about-hero-meta .dot {
+    color: var(--vp-c-divider);
+  }
+
+  .about-body {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .about-content {
+    max-width: 780px;
+    min-width: 0;
+  }
+
+  .about-toc {
+    position: sticky;
+    top: 80px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+
+  .about-toc nav {
+    border-left: 2px solid var(--vp-c-divider);
+    padding-left: 1rem;
+  }
+
+  .toc-label {
+    font-family: var(--edoxen-font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vp-c-text-3);
+    margin: 0 0 0.75rem;
+    font-weight: 500;
+  }
+
+  .about-toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .about-toc li a {
+    display: block;
+    font-family: var(--edoxen-font-body);
+    font-size: 0.82rem;
+    line-height: 1.4;
+    color: var(--vp-c-text-2);
+    text-decoration: none;
+    padding: 0.2rem 0;
+    position: relative;
+    transition: color 0.15s;
+  }
+
+  .about-toc li a:hover {
+    color: var(--vp-c-brand-1);
+  }
+
+  .about-toc li a.active {
+    color: var(--vp-c-brand-1);
+    font-weight: 600;
+  }
+
+  .about-toc li a.active::before {
+    content: '';
+    position: absolute;
+    left: calc(-1rem - 2px);
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--vp-c-brand-1);
+    border-radius: 1px;
+  }
+
+  .toc-3 {
+    padding-left: 0.75rem;
+  }
+
+  .toc-3 a {
+    font-size: 0.78rem;
+    color: var(--vp-c-text-3);
+  }
+
+  @media (max-width: 1024px) {
+    .about-body {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .about-toc {
+      display: none;
+    }
+    .about-content {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<script>
+  const tocLinks = document.querySelectorAll<HTMLElement>('.about-toc a[href^="#"]')
+  if (tocLinks.length > 0) {
+    const linkMap = new Map<string, HTMLElement>()
+    tocLinks.forEach(link => {
+      const id = link.getAttribute('href')!.slice(1)
+      const target = document.getElementById(id)
+      if (target) linkMap.set(id, link)
+    })
+
+    const visibleIds = new Set<string>()
+    let currentActive: HTMLElement | null = null
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          const id = entry.target.id
+          if (entry.isIntersecting) {
+            visibleIds.add(id)
+          } else {
+            visibleIds.delete(id)
+          }
+        })
+
+        const ordered = Array.from(linkMap.keys())
+        const firstVisible = ordered.find(id => visibleIds.has(id))
+        const target = firstVisible ? linkMap.get(firstVisible)! : null
+
+        if (target !== currentActive) {
+          if (currentActive) currentActive.classList.remove('active')
+          if (target) target.classList.add('active')
+          currentActive = target
+        }
+      },
+      { rootMargin: '-80px 0px -70% 0px', threshold: 0 }
+    )
+
+    linkMap.forEach((_, id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+  }
+</script>

@@ -186,7 +186,7 @@
   padding-top: 2.4rem;
 }
 
-.prose h2:first-of-child {
+.prose h2:first-child {
   border-top: 0;
   padding-top: 0;
 }

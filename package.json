@@ -20,6 +20,7 @@
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/vue": "^7.0.1",
     "@edoxen/edoxen": "^0.2.0",
+    "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.2",
     "@vue/test-utils": "^2.4.11",
     "ajv": "^8.20.0",

@@ -19,7 +19,7 @@ shortcuts. One list, role discriminates.
 | Field | Type | Description |
 |---|---|---|
 | `role` | `OfficerRole` | `chair`, `vice_chair`, `deputy_chair`, `secretary`, `treasurer`, `parliamentarian`, `presiding_officer`, `sergeant_at_arms`, `other`. |
-| `person` | `Contact` (or `Person`) | The officer. May be inline data or a `{ ref: urn:... }` URN reference. |
+| `person` | `Contact` (or `Person`) | The officer. May be inline data, a document-scoped `{ local_ref: ... }`, or a `{ ref: urn:... }` register reference — see [Entity resolution](/docs/entity-resolution). |
 | `term_start` | `Date` | When their term began. |
 | `term_end` | `Date` | When their term ends. |
 | `extensions` | `MeetingExtension[0..*]` | Profile-specific extensions. |
@@ -75,4 +75,4 @@ officers:
 - [Meeting Collection](/docs/meeting-collection) — officers attach to a Meeting
 - [MeetingComponent](/docs/meeting-component) — officers attach to a component
 - [Contact](/docs/contact) — Officer.person type
-- [ContactCollection](/docs/contact-collection) — registry for URN references
+- [ContactRegister](/docs/contact-register) — registry for URN references

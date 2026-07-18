@@ -8,10 +8,18 @@ data files.
 ```sh
 edoxen help
 # Commands:
-#   edoxen help [COMMAND]               # Describe available commands or one specific
-#   edoxen normalize YAML_FILE_PATTERN  # Normalize YAML files using Edoxen schema
-#   edoxen validate YAML_FILE_PATTERN   # Validate YAML files against Edoxen schema
+#   edoxen help [COMMAND]                       # Describe available commands or one specific
+#   edoxen validate YAML_FILE_PATTERN           # Validate YAML files against Edoxen schema
+#   edoxen normalize YAML_FILE_PATTERN          # Normalize YAML files using Edoxen schema
+#   edoxen validate-meetings YAML_FILE_PATTERN  # Validate Meeting YAML files against the meeting schema
+#   edoxen normalize-meetings YAML_FILE_PATTERN # Normalize Meeting YAML files
 ```
+
+`validate` / `normalize` cover decision-side files
+(`schema/edoxen.yaml` — DecisionCollection plus the register documents:
+ContactRegister, VenueRegister, BodyRegister);
+`validate-meetings` / `normalize-meetings` cover meeting-side files
+(`schema/meeting.yaml` — MeetingCollection, Meeting, MeetingSeries).
 
 ## validate
 

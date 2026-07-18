@@ -48,22 +48,31 @@ contact:
 
 ## Reference vs inline
 
-A Contact field may be either **inline** (full data, as above) or a
-**URN reference** to a Contact stored in a
-[ContactCollection](/docs/contact-collection):
+A Contact field follows the three-tier
+[entity resolution](/docs/entity-resolution) pattern — **inline**
+(full data, as above), a **document-scoped reference** (`local_ref`)
+matching the `urn` of a Contact in the same document's `contacts[]`
+collection (e.g. `Meeting#contacts[]`), or a **register reference**
+(`ref`) to a Contact stored in a
+[ContactRegister](/docs/contact-register):
 
 ```yaml
-chair:
-  ref: urn:edoxen:contact:isotc154:anaya-muller
+# Document-scoped — resolves within this file
+chair: { local_ref: urn:edoxen:contact:isotc154:anaya-muller }
+
+# Global register — resolves against a ContactRegister document
+chair: { ref: urn:edoxen:contact:isotc154:anaya-muller }
 ```
 
-The `ref` field discriminates. When set, other fields are ignored.
+The `ref` / `local_ref` fields discriminate: `reference?` is true when
+either is set, and when set, other fields are ignored.
 
 ## Fields
 
 | Field | Type | Description |
 |---|---|---|
-| `ref` | `String` | URN reference (alternative to inline data). |
+| `ref` | `String` | URN reference into a ContactRegister (alternative to inline data). |
+| `local_ref` | `String` | Document-scoped reference — matches the `urn` of an entry in the document's own `contacts[]`. |
 | `urn` | `String` | This contact's registry URN (`urn:edoxen:contact:{scope}:{id}`). |
 | `name` | `LocalizedName[0..*]` | Localized structured name (see below). |
 | `kind` | `String` | What kind of contact: `person`, `organisation`, `department`, `role`, etc. Free-form. |
@@ -125,6 +134,7 @@ for the full format.
 | Entity | Field | Context |
 |---|---|---|
 | `Meeting` | `contact` | General contact for the meeting. |
+| `Meeting` | `contacts[]` | Document-scoped contacts for `local_ref` resolution. |
 | `Officer` | `person` (type: Contact/Person) | Chair, secretary, etc. |
 | `Attendance` | `person` (type: Contact/Person) | Who attended. |
 | `VoteRecord` | `person` (type: Contact/Person) | Who voted. |
@@ -133,7 +143,8 @@ for the full format.
 
 ## See also
 
-- [ContactCollection](/docs/contact-collection) — scoped URN registry of Contacts
+- [ContactRegister](/docs/contact-register) — scoped URN registry of Contacts
+- [Entity resolution](/docs/entity-resolution) — the inline / `local_ref` / `ref` pattern
 - [Localization](/docs/localization) — how per-field localization works
 - [Officer](/docs/officer) — Officer.person is a Contact
 - [MeetingExtension](/docs/extension) — profile-specific extensions

@@ -1,11 +1,16 @@
 ---
-title: Venue Collection
+title: Venue Register
 ---
 
-# VenueCollection
+# VenueRegister
 
 A registry of [Venues](/docs/venue) indexed by scoped URN. Mirrors
-[ContactCollection](/docs/contact-collection).
+[ContactRegister](/docs/contact-register).
+
+Members carry `urn: urn:edoxen:venue:{scope}:{local-id}`; the
+register's `scope` MUST match the scope segment in member URNs. See
+[Entity resolution](/docs/entity-resolution) for how `ref` /
+`local_ref` / inline venues resolve.
 
 ```yaml
 scope: isotc154
@@ -39,12 +44,14 @@ venues:
 ## Ruby helpers
 
 ```ruby
-collection = Edoxen::VenueCollection.from_yaml(File.read("venues.yaml"))
-collection.find_by_urn("urn:edoxen:venue:isotc154:fairmont-house-hkma")
+register = Edoxen::VenueRegister.from_yaml(File.read("venues.yaml"))
+register.find_by_urn("urn:edoxen:venue:isotc154:fairmont-house-hkma")
 ```
 
 ## See also
 
 - [Venue](/docs/venue) — member shape
-- [ContactCollection](/docs/contact-collection) — parallel registry for Contacts
+- [Entity resolution](/docs/entity-resolution) — how `ref` / `local_ref` / inline resolve
+- [Contact Register](/docs/contact-register) — parallel registry for Contacts
+- [Body Register](/docs/body-register) — parallel registry for Bodies
 - [Localization](/docs/localization) — spelling codes

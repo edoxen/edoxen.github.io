@@ -21,7 +21,7 @@ meetings:
     status: completed
     year: 2025
     date_range: { start: '2025-10-13', end: '2025-10-17' }
-    committee: CIML
+    committee: { code: CIML, name: [{ spelling: eng, value: International Committee of Legal Metrology }] }
     venues:
       - { name: 'Hotel Berlin', address: 'Berlin, Germany' }
     city: BER
@@ -95,8 +95,8 @@ adopted.
 | `city` | `String` | IATA three-letter code (`BER`, `PAR`, `TYO`). |
 | `country_code` | `String` | ISO 3166-1 alpha-2 (`DE`, `FR`, `JP`). |
 | `virtual` | `Boolean` | True if held online. |
-| `committee` | `String` | Owning committee (e.g. "ISO/TC 154"). |
-| `committee_group` | `String` | Sub-committee / working group. |
+| `committee` | `Body` | Owning committee — inline, `{ local_ref: ... }`, or `{ ref: ... }` (see [Body](/docs/body)). |
+| `committee_group` | `Body` | Sub-committee / working group (same type). |
 
 ### People
 
@@ -106,6 +106,9 @@ adopted.
 | `secretary` | `Person` | Recording secretary. |
 | `host` | `String` | Host organization. |
 | `hosts` | `HostRef[0..*]` | Multi-party hosting (hosting committee + secretariat, etc.). |
+| `contact` | `Contact` | General contact for the meeting (inline or reference). |
+| `contacts` | `Contact[0..*]` | Document-scoped [Contacts](/docs/contact) — `local_ref` targets resolve here (see [Entity resolution](/docs/entity-resolution)). |
+| `bodies` | `Body[0..*]` | Document-scoped [Bodies](/docs/body) — `local_ref` targets for `committee` / `committee_group` resolve here. |
 
 ### Links
 

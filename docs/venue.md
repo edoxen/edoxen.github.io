@@ -12,6 +12,9 @@ Boolean` (insufficient — Zoom needs URL + passcode + dial-in numbers).
 
 | Field | Type | Description |
 |---|---|---|
+| `ref` | string | URN reference into a [VenueRegister](/docs/venue-register) (alternative to inline data). |
+| `local_ref` | string | Document-scoped reference — matches the `urn` of an entry in the document's own `venues[]`. |
+| `urn` | string | This venue's registry URN (`urn:edoxen:venue:{scope}:{id}`). |
 | `kind` | enum | `physical` or `virtual` — required discriminator. |
 | `name` | string | Display name (e.g. "Acme Boardroom"). |
 | `label` | string | Short label (e.g. "Microsoft Teams — Directors only"). |
@@ -53,6 +56,16 @@ Populated when `kind: virtual`.
 | `waiting_room` | boolean | Whether a waiting room is enabled. |
 | `registration_required` | boolean | Whether pre-registration is required. |
 
+## Reference vs inline
+
+Like [Contact](/docs/contact), a Venue field follows the three-tier
+[entity resolution](/docs/entity-resolution) pattern: inline data
+(neither `ref` nor `local_ref` set), a document-scoped reference
+(`local_ref` matching the `urn` of a venue in the same document's
+`venues[]`), or a register reference (`ref`) resolved against a
+[VenueRegister](/docs/venue-register). `reference?` is true when either
+is set; when set, other fields are ignored.
+
 ## Hybrid meetings
 
 A Meeting with both physical and virtual venues is hybrid. The
@@ -87,6 +100,8 @@ venues:
 
 ## See also
 
+- [Venue Register](/docs/venue-register) — scoped URN registry of Venues.
+- [Entity resolution](/docs/entity-resolution) — the inline / `local_ref` / `ref` pattern.
 - [Meeting Collection](/docs/meeting-collection) — where venues attach.
 - [MeetingComponent](/docs/meeting-component) — components can pin a
   subset of the meeting's venues via `venue_refs[]`.

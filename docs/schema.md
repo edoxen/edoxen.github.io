@@ -8,9 +8,10 @@ Edoxen validates YAML data against JSON Schema (Draft 7) definitions.
 There are two schema files — one for **Decision** data (formal
 decisions adopted by meetings) and one for **Meeting** data (the
 meetings themselves, including embedded agendas, minutes,
-attendance, and votes). Both schemas also accept **ContactCollection**
-and **VenueCollection** as top-level documents (the URN registry
-pattern).
+attendance, and votes). The decision-side schema also accepts
+**ContactRegister**, **VenueRegister**, and **BodyRegister** as
+top-level documents (the URN registry pattern); the meeting-side
+schema accepts `MeetingCollection`, `Meeting`, and `MeetingSeries`.
 
 ## How localization works in 1.0
 
@@ -43,7 +44,7 @@ metadata:
   dates:
     - { date: 2025-10-14, type: meeting }
   source_urls:
-    - { ref: 'https://oiml.org/…/en.pdf', format: pdf, spelling: eng }
+    - { ref: 'https://oiml.org/.../en.pdf', format: pdf, spelling: eng }
 decisions:
   - identifier:
       - { prefix: OIML, number: '2025/1' }
@@ -136,10 +137,10 @@ decisions:
 Download: [meeting.yaml](/schemas/meeting.yaml)
 ([source](https://github.com/edoxen/edoxen-model/blob/main/schema/meeting.yaml)).
 
-### Contact Collection
+### Contact Register
 
-Validates `ContactCollection` — a registry of Contacts indexed by
-scoped URN.
+Validates `ContactRegister` — a registry of Contacts indexed by
+scoped URN. See [Contact Register](/docs/contact-register).
 
 ```yaml
 scope: oiml
@@ -156,9 +157,10 @@ contacts:
       - { kind: orcid, value: "0000-0002-1234-5678" }
 ```
 
-### Venue Collection
+### Venue Register
 
-Validates `VenueCollection` — a registry of Venues indexed by scoped URN.
+Validates `VenueRegister` — a registry of Venues indexed by scoped URN.
+See [Venue Register](/docs/venue-register).
 
 ```yaml
 scope: oiml
@@ -173,17 +175,40 @@ venues:
     address: 3 Rue Caulaincourt, 75018 Paris, France
 ```
 
+### Body Register
+
+Validates `BodyRegister` — a registry of Bodies (committees, working
+groups). Members are matched by `code` or `ref` — Body has no `urn`
+field. See [Body Register](/docs/body-register).
+
+```yaml
+scope: oiml
+title:
+  - { spelling: eng, value: "OIML Bodies" }
+bodies:
+  - code: CIML
+    kind: committee
+    name:
+      - { spelling: eng, value: "International Committee of Legal Metrology" }
+```
+
 ### URN reference pattern
 
-Any entity-typed field accepts either inline data (full object) or
-a URN reference (`{ ref: urn:edoxen:... }`):
+Entity-typed fields (Contact, Venue, Body) follow the three-tier
+[entity resolution](/docs/entity-resolution) pattern: inline data
+(full object), a document-scoped reference (`{ local_ref: ... }`), or
+a register URN reference (`{ ref: urn:edoxen:... }`):
 
 ```yaml
 # Inline
 contact:
   name: { formatted: "Roman Schwartz" }
 
-# URN reference (resolves against a ContactCollection)
+# Document-scoped (resolves against this document's contacts[])
+contact:
+  local_ref: urn:edoxen:contact:oiml:ciml-president
+
+# Register reference (resolves against a ContactRegister)
 contact:
   ref: urn:edoxen:contact:oiml:ciml-president
 ```
@@ -220,6 +245,8 @@ The schema files are standard JSON Schema (Draft 7). Use `ajv`,
 
 - [Architecture](/docs/architecture) — the information model overview
 - [Localization](/docs/localization) — the per-field localization pattern
-- [Contact Collection](/docs/contact-collection) — the URN registry pattern
-- [Venue Collection](/docs/venue-collection) — venue registries
+- [Contact Register](/docs/contact-register) — the URN registry pattern
+- [Venue Register](/docs/venue-register) — venue registries
+- [Body Register](/docs/body-register) — body registries
+- [Entity resolution](/docs/entity-resolution) — the three-tier reference pattern
 - [Migration guide](/docs/migration) — breaking changes guide

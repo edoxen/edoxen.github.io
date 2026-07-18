@@ -1,16 +1,18 @@
 ---
-title: Contact Collection
+title: Contact Register
 ---
 
-# ContactCollection
+# ContactRegister
 
 A registry of [Contacts](/docs/contact) indexed by scoped URN. Members
-carry `urn: urn:edoxen:contact:{scope}:{local-id}`; the collection's
+carry `urn: urn:edoxen:contact:{scope}:{local-id}`; the register's
 `scope` MUST match the scope segment in member URNs.
 
 Other documents (Meeting, MeetingComponent, HostRef, etc.) reference
 contacts via `ref: urn:edoxen:contact:{scope}:{local-id}` and resolve
-against the matching ContactCollection.
+against the matching ContactRegister. See
+[Entity resolution](/docs/entity-resolution) for the full three-tier
+pattern (inline / document-scoped / register).
 
 ```yaml
 scope: isotc154
@@ -46,26 +48,27 @@ contacts:
 
 ## Storage patterns
 
-A ContactCollection can be serialized as:
+A ContactRegister can be stored as:
 
 1. **Single YAML file** — typical for small registries (10–1000 contacts).
 2. **YAML Stream** — one Contact per document, separated by `---`,
    for large registries that need partial updates. Glossarist-style.
 
-```ruby
-Edoxen::ContactCollection.load_stream("contacts.stream.yaml")
-```
+Stream loading is a service-layer concern (file-system I/O); the model
+owns only the (de)serialisation of one register.
 
 ## Ruby helpers
 
 ```ruby
-collection = Edoxen::ContactCollection.from_yaml(File.read("contacts.yaml"))
-collection.find_by_urn("urn:edoxen:contact:isotc154:jianfang-zhang")
+register = Edoxen::ContactRegister.from_yaml(File.read("contacts.yaml"))
+register.find_by_urn("urn:edoxen:contact:isotc154:jianfang-zhang")
 # => #<Edoxen::Contact urn=... name=[...]>
 ```
 
 ## See also
 
 - [Contact](/docs/contact) — member shape
-- [VenueCollection](/docs/venue-collection) — parallel registry for Venues
+- [Entity resolution](/docs/entity-resolution) — how `ref` / `local_ref` / inline resolve
+- [Venue Register](/docs/venue-register) — parallel registry for Venues
+- [Body Register](/docs/body-register) — parallel registry for Bodies
 - [Localization](/docs/localization) — spelling codes

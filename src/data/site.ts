@@ -52,8 +52,10 @@ export const sidebar: NavItem[] = [
       { text: 'Meeting Collection', link: '/docs/meeting-collection' },
       { text: 'Meeting Series', link: '/docs/meeting-series' },
       { text: 'Meeting Component', link: '/docs/meeting-component' },
+      { text: 'Body', link: '/docs/body' },
+      { text: 'Body Register', link: '/docs/body-register' },
       { text: 'Venue', link: '/docs/venue' },
-      { text: 'Venue Collection', link: '/docs/venue-collection' },
+      { text: 'Venue Register', link: '/docs/venue-register' },
       { text: 'Agenda', link: '/docs/agenda' },
       { text: 'Minutes', link: '/docs/minutes' },
       { text: 'BS 0:2006 Minutes', link: '/docs/bs0-minutes' },
@@ -67,7 +69,7 @@ export const sidebar: NavItem[] = [
     collapsed: false,
     items: [
       { text: 'Contact', link: '/docs/contact' },
-      { text: 'Contact Collection', link: '/docs/contact-collection' },
+      { text: 'Contact Register', link: '/docs/contact-register' },
       { text: 'Officer', link: '/docs/officer' },
     ],
   },
@@ -114,6 +116,7 @@ export const sidebar: NavItem[] = [
     items: [
       { text: 'Structured Identifier', link: '/docs/structured-identifier' },
       { text: 'EntityRef', link: '/docs/entity-ref' },
+      { text: 'Entity Resolution', link: '/docs/entity-resolution' },
       { text: 'Body Vocabulary', link: '/docs/body-vocabulary' },
       { text: 'Source URL', link: '/docs/source-url' },
     ],

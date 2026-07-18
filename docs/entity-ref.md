@@ -75,5 +75,6 @@ fields (non-breaking). The String fields will be removed in 1.0.
 ## See also
 
 - [Structured Identifier](/docs/structured-identifier) — the `{prefix, number}` type used in `identifier`
+- [Entity resolution](/docs/entity-resolution) — the Contact/Venue/Body inline / `local_ref` / `ref` pattern (a different mechanism from EntityRef's own `local_ref`)
 - [Motion](/docs/motion) — pilot entity for EntityRef
 - [Architecture](/docs/architecture) — cross-grain pointer overview

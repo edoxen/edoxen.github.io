@@ -48,13 +48,16 @@ agenda:
 
 | Field | Type | Description |
 |---|---|---|
+| `urn` | `String` | First-class URN, hierarchical under the parent meeting URN (`{meetingUrn}:agenda:{label}`). Optional in source data — computable via `Edoxen::UrnFor.agenda_item` (see below). |
 | `label` | `String` | The printed number (`"4.2"`, `"10.a"`). May be empty for headers. |
 | `kind` | `AgendaItemKind` | One of `numbered`, `unnumbered`, `header`, `opening`, `closing`. |
 | `title` | `String` | Short title as printed. |
 | `description` | `String` | Optional body / context. |
 | `references` | `Reference[0..*]` | Supporting documents (background papers, prior resolutions). |
 | `outcome` | `AgendaItemOutcome` | What happened with this item. |
-| `resolution_ref` | `String` | If the item produced a resolution, its identifier. |
+| `decision_ref` | `String` | URN of the decision this item produced, if any. |
+| `topics` | `Topic[0..*]` | The subject(s) of discussion at this item. |
+| `components` | `String[0..*]` | MeetingComponent identifiers covering this item. |
 
 ### AgendaItemKind
 
@@ -82,6 +85,23 @@ Captures what the meeting did with this item. The enum is
 - `deferred` — pushed to a later meeting
 - `adopted` — meeting adopted the proposal as presented
 - `withdrawn` — proponent withdrew the item
+
+### AgendaItem URNs
+
+An item's `urn` is derived from the parent meeting URN plus the item
+label — `{meetingUrn}:agenda:{label}`. It is optional in source data;
+the gem computes it on demand and can backfill a whole agenda:
+
+```ruby
+Edoxen::UrnFor.agenda_item(meeting_urn: "urn:oiml:ciml:meeting:ciml-60", label: "6.2")
+# => "urn:oiml:ciml:meeting:ciml-60:agenda:6.2"
+
+Edoxen::UrnFor.parse("urn:oiml:ciml:meeting:ciml-60:agenda:6.2")
+# => { meeting_urn: "urn:oiml:ciml:meeting:ciml-60", label: "6.2" }
+
+Edoxen::UrnFor.assign_to_agenda!(meeting.agenda, meeting.urn)
+# sets urn on every item that doesn't already carry one
+```
 
 ## References
 

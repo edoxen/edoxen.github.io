@@ -17,7 +17,7 @@ documents them, it does not own them. Canonical definitions live in
 
 ### Top-level containers
 
-The model has four top-level container roots, used depending on what
+The model has five top-level container roots, used depending on what
 you want to capture:
 
 - **MeetingCollection** — meeting-grain. Holds meetings with agendas,
@@ -25,9 +25,11 @@ you want to capture:
   adopted.
 - **DecisionCollection** — decision-grain. Holds the decisions
   themselves with their admin fields and per-language renderings.
-- **ContactCollection** (1.0) — registry of Contacts indexed by scoped
+- **ContactRegister** (1.0) — registry of Contacts indexed by scoped
   URN. Referenced from Meetings, Components, HostRefs via `ref:`.
-- **VenueCollection** (1.0) — registry of Venues indexed by scoped URN.
+- **VenueRegister** (1.0) — registry of Venues indexed by scoped URN.
+- **BodyRegister** (1.0) — registry of Bodies (committees, working
+  groups); members matched by `code` or `ref`.
 
 ### Decision-grain entities
 
@@ -121,9 +123,12 @@ URN format: `urn:edoxen:{entity}:{scope}:{local-id}`.
 - `scope`: the dataset/registry name (e.g. `isotc154`, `oiml`).
 - `local-id`: local identifier within that scope.
 
-Any entity-typed field accepts either **inline data** (full object) or
-**a URN reference** (`{ ref: urn:edoxen:contact:... }`). Both patterns
-are valid; the discriminator is presence of `ref`.
+Any entity-typed field accepts **inline data** (full object), a
+**document-scoped reference** (`{ local_ref: ... }` resolved against the
+containing document's scoped collection), or **a URN reference**
+(`{ ref: urn:edoxen:contact:... }` resolved against the matching
+top-level Register). The discriminator is presence of `ref` /
+`local_ref`.
 
 ## Site-level presentation terms
 

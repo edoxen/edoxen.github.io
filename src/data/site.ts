@@ -7,12 +7,12 @@ export interface NavItem {
 
 export const nav: NavItem[] = [
   { text: 'Introduction', link: '/docs/introduction' },
+  { text: 'Meetings', link: '/docs/meeting-collection' },
+  { text: 'Decisions', link: '/docs/decision-collection' },
   {
     text: 'Model',
     items: [
       { text: 'Architecture', link: '/docs/architecture' },
-      { text: 'Meetings', link: '/docs/meeting-collection' },
-      { text: 'Decisions', link: '/docs/decision-collection' },
       { text: 'Procedural (Motion/Voting)', link: '/docs/motion' },
       { text: 'Topics', link: '/docs/topic' },
       { text: 'Identity & Contact', link: '/docs/contact' },

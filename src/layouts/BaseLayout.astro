@@ -33,5 +33,9 @@ const pageDesc = description || siteConfig.description
       <slot />
     </main>
     <Footer />
+    <script>
+      import { initEasterEggs } from '../scripts/easter-eggs'
+      initEasterEggs()
+    </script>
   </body>
 </html>

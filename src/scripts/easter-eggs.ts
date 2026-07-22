@@ -8,7 +8,7 @@
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 const discovered = new Set<string>()
-const ALL_EGGS = ['stoichedon', 'assembly', 'gavel', 'resolve', 'lottery', 'ostracize', 'logo-chisel'] as const
+const ALL_EGGS = ['stoichedon', 'assembly', 'gavel', 'resolve', 'lottery', 'ostracize', 'logo-chisel', 'eklesia', 'decree', 'boule', 'sacredfire', 'scribe', 'marathon', 'symposium', 'prophecy'] as const
 
 function discover(name: typeof ALL_EGGS[number]) {
   discovered.add(name)
@@ -458,6 +458,750 @@ function logoChisel(logoEl: HTMLElement) {
 }
 
 // ================================================================
+// 8. Interactive Ekklesia  — console: assembly()
+// Full voting simulation: propose a decree, put the question, see the vote.
+// ================================================================
+function interactiveAssembly() {
+  const existing = document.getElementById('eklesia-modal')
+  if (existing) { existing.remove(); return }
+
+  const backdrop = document.createElement('div')
+  backdrop.id = 'eklesia-modal'
+  backdrop.style.cssText = `position:fixed;inset:0;z-index:100000;background:rgba(8,12,20,0.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:2rem;`
+  document.body.appendChild(backdrop)
+
+  const modal = document.createElement('div')
+  modal.style.cssText = `
+    max-width:600px;width:100%;
+    background:linear-gradient(135deg,#1a1f2e 0%,#141b26 100%);
+    border:1px solid rgba(224,176,74,0.3);
+    border-radius:16px;padding:2.5rem;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 80px rgba(224,176,74,0.08);
+    font-family:'Fraunces',Georgia,serif;color:#e0b04a;
+  `
+  backdrop.appendChild(modal)
+
+  const close = document.createElement('button')
+  close.innerHTML = '×'
+  close.style.cssText = `position:absolute;top:1rem;right:1.5rem;background:none;border:none;color:rgba(224,176,74,0.5);font-size:2rem;cursor:pointer;font-family:serif;`
+  close.onclick = () => backdrop.remove()
+  modal.appendChild(close)
+
+  const header = document.createElement('div')
+  header.innerHTML = `
+    <div style="font-size:0.8rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(224,176,74,0.5);font-family:'JetBrains Mono',monospace;">The Ekklesia of Edoxen</div>
+    <div style="font-size:1.8rem;font-weight:500;margin:0.3rem 0 0.2rem;">Ἐκκλησία</div>
+    <div style="font-size:0.9rem;color:rgba(224,176,74,0.6);font-style:italic;">The sovereign assembly has convened. Quorum: 6000 citizens.</div>
+  `
+  modal.appendChild(header)
+
+  const citizenGrid = document.createElement('div')
+  citizenGrid.style.cssText = `display:flex;flex-wrap:wrap;gap:3px;margin:1.5rem 0;max-width:400px;`
+  modal.appendChild(citizenGrid)
+
+  const citizens: HTMLDivElement[] = []
+  for (let i = 0; i < 60; i++) {
+    const dot = document.createElement('div')
+    dot.style.cssText = `width:10px;height:10px;border-radius:50%;background:rgba(224,176,74,0.2);border:1px solid rgba(224,176,74,0.3);transition:background 0.3s,transform 0.3s;`
+    citizenGrid.appendChild(dot)
+    citizens.push(dot)
+  }
+
+  const inputWrap = document.createElement('div')
+  inputWrap.style.cssText = `margin:1.5rem 0;`
+  modal.appendChild(inputWrap)
+
+  const label = document.createElement('label')
+  label.textContent = 'What is your proposal?'
+  label.style.cssText = `display:block;font-size:0.85rem;color:rgba(224,176,74,0.7);margin-bottom:0.5rem;font-family:'IBM Plex Sans',sans-serif;`
+  inputWrap.appendChild(label)
+
+  const input = document.createElement('input')
+  input.type = 'text'
+  input.placeholder = 'e.g. the harbor shall be expanded...'
+  input.style.cssText = `width:100%;box-sizing:border-box;padding:0.75rem 1rem;background:rgba(0,0,0,0.3);border:1px solid rgba(224,176,74,0.2);border-radius:8px;color:#e0b04a;font-size:1rem;font-family:'IBM Plex Sans',sans-serif;outline:none;`
+  inputWrap.appendChild(input)
+
+  const btn = document.createElement('button')
+  btn.textContent = 'ἐπιψηφίζειν — Put the Question'
+  btn.style.cssText = `margin-top:1rem;padding:0.75rem 1.5rem;background:linear-gradient(135deg,#d4a017,#b45309);color:#1a1f2e;border:none;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;letter-spacing:0.03em;transition:transform 0.15s,box-shadow 0.15s;`
+  inputWrap.appendChild(btn)
+
+  const resultArea = document.createElement('div')
+  resultArea.style.cssText = `margin-top:1.5rem;min-height:60px;`
+  modal.appendChild(resultArea)
+
+  btn.onmouseenter = () => { btn.style.transform = 'translateY(-2px)'; btn.style.boxShadow = '0 4px 20px rgba(212,160,23,0.3)' }
+  btn.onmouseleave = () => { btn.style.transform = ''; btn.style.boxShadow = '' }
+
+  function putQuestion() {
+    const proposal = input.value.trim() || 'the matter before the assembly'
+    btn.disabled = true
+    btn.style.opacity = '0.5'
+    input.disabled = true
+
+    const ayes: HTMLDivElement[] = []
+    const noes: HTMLDivElement[] = []
+    citizens.forEach(dot => {
+      if (Math.random() > 0.35) ayes.push(dot)
+      else noes.push(dot)
+    })
+
+    resultArea.innerHTML = ''
+    const voteBars = document.createElement('div')
+    voteBars.style.cssText = `font-family:'IBM Plex Sans',sans-serif;`
+    resultArea.appendChild(voteBars)
+
+    const ayesBar = document.createElement('div')
+    ayesBar.style.cssText = `margin:0.5rem 0;`
+    voteBars.appendChild(ayesBar)
+
+    const ayesLabel = document.createElement('span')
+    ayesLabel.textContent = 'Ayes'
+    ayesLabel.style.cssText = `display:inline-block;width:50px;color:#4ade80;font-weight:600;`
+    ayesBar.appendChild(ayesLabel)
+
+    const ayesTrack = document.createElement('span')
+    ayesTrack.style.cssText = `display:inline-block;width:300px;height:20px;background:rgba(0,0,0,0.3);border-radius:4px;vertical-align:middle;overflow:hidden;`
+    ayesBar.appendChild(ayesTrack)
+
+    const ayesFill = document.createElement('span')
+    ayesFill.style.cssText = `display:block;height:100%;width:0;background:#4ade80;transition:width 0.05s;`
+    ayesTrack.appendChild(ayesFill)
+
+    const ayesNum = document.createElement('span')
+    ayesNum.textContent = '0'
+    ayesNum.style.cssText = `margin-left:0.5rem;color:#4ade80;`
+    ayesBar.appendChild(ayesNum)
+
+    const noesBar = document.createElement('div')
+    noesBar.style.cssText = `margin:0.5rem 0;`
+    voteBars.appendChild(noesBar)
+
+    const noesLabel = document.createElement('span')
+    noesLabel.textContent = 'Noes'
+    noesLabel.style.cssText = `display:inline-block;width:50px;color:#f87171;font-weight:600;`
+    noesBar.appendChild(noesLabel)
+
+    const noesTrack = document.createElement('span')
+    noesTrack.style.cssText = `display:inline-block;width:300px;height:20px;background:rgba(0,0,0,0.3);border-radius:4px;vertical-align:middle;overflow:hidden;`
+    noesBar.appendChild(noesTrack)
+
+    const noesFill = document.createElement('span')
+    noesFill.style.cssText = `display:block;height:100%;width:0;background:#f87171;transition:width 0.05s;`
+    noesTrack.appendChild(noesFill)
+
+    const noesNum = document.createElement('span')
+    noesNum.textContent = '0'
+    noesNum.style.cssText = `margin-left:0.5rem;color:#f87171;`
+    noesBar.appendChild(noesNum)
+
+    let voteIdx = 0
+    const interval = setInterval(() => {
+      if (voteIdx >= citizens.length) {
+        clearInterval(interval)
+        const passed = ayes.length > noes.length
+        const result = document.createElement('div')
+        result.style.cssText = `margin-top:1.5rem;text-align:center;`
+        result.innerHTML = passed
+          ? `<div style="font-size:2rem;font-weight:600;color:#4ade80;">ἔδοξεν</div><div style="font-size:0.85rem;color:rgba(74,222,128,0.6);font-style:italic;margin-top:0.3rem;">It was resolved.</div>`
+          : `<div style="font-size:2rem;font-weight:600;color:#f87171;">ἀπέδοξε</div><div style="font-size:0.85rem;color:rgba(248,113,113,0.6);font-style:italic;margin-top:0.3rem;">The motion failed.</div>`
+        resultArea.appendChild(result)
+
+        if (passed) {
+          setTimeout(() => {
+            const inscription = document.createElement('div')
+            inscription.style.cssText = `margin-top:1.5rem;padding:1.5rem;background:rgba(0,0,0,0.25);border-left:3px solid #d4a017;border-radius:0 8px 8px 0;font-style:italic;`
+            inscription.innerHTML = `
+              <div style="font-size:0.95rem;color:#e0b04a;margin-bottom:0.5rem;">ἔδοξεν τῇ βουλῇ καὶ τῷ δήμῳ —</div>
+              <div style="font-size:1rem;color:rgba(224,176,74,0.9);line-height:1.6;">The People resolved that ${proposal}.</div>
+              <div style="font-size:0.8rem;color:rgba(224,176,74,0.5);margin-top:0.5rem;font-family:'JetBrains Mono',monospace;">Decree inscribed · ${ayes.length} ayes · ${noes.length} noes</div>
+            `
+            resultArea.appendChild(inscription)
+          }, 800)
+        }
+
+        btn.textContent = 'Propose Another'
+        btn.disabled = false
+        btn.style.opacity = '1'
+        input.disabled = false
+        input.value = ''
+        citizens.forEach(d => { d.style.background = 'rgba(224,176,74,0.2)'; d.style.transform = '' })
+        btn.onclick = putQuestion
+        return
+      }
+
+      const dot = citizens[voteIdx]
+      if (ayes.includes(dot)) {
+        dot.style.background = '#4ade80'
+        dot.style.transform = 'translateX(-4px) scale(1.2)'
+        const current = parseInt(ayesNum.textContent!)
+        ayesNum.textContent = String(current + 1)
+        ayesFill.style.width = `${((current + 1) / citizens.length) * 100}%`
+      } else {
+        dot.style.background = '#f87171'
+        dot.style.transform = 'translateX(4px) scale(1.2)'
+        const current = parseInt(noesNum.textContent!)
+        noesNum.textContent = String(current + 1)
+        noesFill.style.width = `${((current + 1) / citizens.length) * 100}%`
+      }
+      voteIdx++
+    }, reducedMotion ? 1 : 30)
+  }
+
+  btn.onclick = putQuestion
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') putQuestion() })
+
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) backdrop.remove() })
+  const escHandler = (e: KeyboardEvent) => { if (e.key === 'Escape') { backdrop.remove(); document.removeEventListener('keydown', escHandler) } }
+  document.addEventListener('keydown', escHandler)
+
+  backdrop.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: 'forwards' })
+  modal.animate([{ transform: 'scale(0.9) translateY(20px)', opacity: 0 }, { transform: 'scale(1) translateY(0)', opacity: 1 }], { duration: 300, easing: 'cubic-bezier(0.34,1.56,0.64,1)', fill: 'forwards' })
+
+  discover('assembly')
+}
+
+// ================================================================
+// 9. Decree Generator  — console: decree()
+// Generates a random Athenian-style decree from template parts.
+// ================================================================
+function decreeGenerator() {
+  const ov = overlay()
+
+  const actions = [
+    'the harbor of Piraeus shall be expanded',
+    'a statue shall be erected in the agora in honor of the benefactor',
+    'grain shall be distributed to all citizens from the public stores',
+    'a new temple shall be dedicated to Athena on the acropolis',
+    'the tribute of the allied cities shall be reassessed',
+    'three triremes shall be constructed for the defense of the coast',
+    'the annual festival of the Panathenaia shall be extended by two days',
+    'ambassadors shall be sent to Sparta to negotiate peace',
+    'a public inscription of this decree shall be erected on the acropolis',
+    'the weights and measures of the marketplace shall be standardized',
+    'all public records shall be inscribed in both Attic and Ionic scripts',
+    'the proceedings of this assembly shall be recorded for posterity',
+  ]
+  const reasons = [
+    'for the prosperity of the city',
+    'by the will of the gods and the counsel of the wise',
+    'for the preservation of democracy and the common good',
+    'to ensure that justice is visible to all citizens',
+    'as was done by our ancestors and is pleasing to the gods',
+    'for the honor of the city and the fear of her enemies',
+    'so that no citizen may claim ignorance of the law',
+  ]
+  const officials = [
+    'the Council of Five Hundred',
+    'the Prytaneis of the presiding tribe',
+    'the nine Archons',
+    'the Strategoi in command',
+    'the Epistates of the prytany',
+  ]
+
+  const action = actions[Math.floor(Math.random() * actions.length)]
+  const reason = reasons[Math.floor(Math.random() * reasons.length)]
+  const official = officials[Math.floor(Math.random() * officials.length)]
+
+  const card = document.createElement('div')
+  card.innerHTML = `
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(224,176,74,0.5);text-align:center;margin-bottom:0.5rem;">Δόγμα — Decree of the Day</div>
+    <div style="font-family:'Fraunces',Georgia,serif;font-size:1.4rem;color:#e0b04a;text-align:center;margin-bottom:1rem;border-bottom:1px solid rgba(224,176,74,0.2);padding-bottom:1rem;">ἔδοξεν τῇ βουλῇ καὶ τῷ δήμῳ</div>
+    <div style="font-family:'Fraunces',Georgia,serif;font-size:1.15rem;color:rgba(224,176,74,0.9);line-height:1.7;font-style:italic;">
+      The People resolved that <strong style="font-style:normal;color:#e0b04a;">${action}</strong>,
+      ${reason}, and this was approved by ${official}.
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:rgba(224,176,74,0.3);text-align:center;margin-top:1.5rem;">Inscribed in the archonship of ${['Kallias','Kimon','Perikles','Nikias','Alkibiades'][Math.floor(Math.random()*5)]}</div>
+  `
+  card.style.cssText = `
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(0.8);
+    max-width:500px;width:90%;
+    background:linear-gradient(135deg,#1a1f2e,#141b26);
+    border:1px solid rgba(224,176,74,0.25);
+    border-radius:16px;padding:2.5rem;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 80px rgba(224,176,74,0.08);
+    opacity:0;
+  `
+  ov.appendChild(card)
+
+  card.animate([
+    { transform: 'translate(-50%,-50%) scale(0.8) rotate(-2deg)', opacity: 0 },
+    { transform: 'translate(-50%,-50%) scale(1) rotate(0deg)', opacity: 1 },
+  ], { duration: reducedMotion ? 1 : 500, easing: 'cubic-bezier(0.34,1.56,0.64,1)', fill: 'forwards' })
+
+  const hint = document.createElement('div')
+  hint.textContent = 'Press decree() again for another · click to dismiss'
+  hint.style.cssText = `position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-family:'IBM Plex Sans',sans-serif;font-size:0.75rem;color:rgba(224,176,74,0.4);cursor:pointer;`
+  ov.appendChild(hint)
+  hint.onclick = () => { ov.animate([{opacity:1},{opacity:0}], {duration:300,fill:'forwards'}); setTimeout(()=>ov.remove(), 350) }
+  ov.onclick = (e) => { if (e.target === ov) { ov.remove() } }
+
+  discover('decree')
+}
+
+// ================================================================
+// 10. Council of 500  — console: boule()
+// The ten tribes each cast their block vote.
+// ================================================================
+function bouleVote() {
+  const ov = overlay()
+
+  const tribes = [
+    ['Erechtheis', '#e74c3c'], ['Aigeis', '#3498db'], ['Pandionis', '#2ecc71'],
+    ['Leontis', '#9b59b6'], ['Acamantis', '#f39c12'], ['Oeneis', '#1abc9c'],
+    ['Cecropis', '#e67e22'], ['Hippothontis', '#34495e'], ['Aiantis', '#e91e63'], ['Antiochis', '#00bcd4'],
+  ]
+
+  const arena = document.createElement('div')
+  arena.style.cssText = `position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;`
+  ov.appendChild(arena)
+
+  const title = document.createElement('div')
+  title.innerHTML = `<span style="font-family:'Fraunces',Georgia,serif;font-size:1.6rem;color:#e0b04a;">Βουλή</span><span style="font-family:'IBM Plex Sans',sans-serif;font-size:0.85rem;color:rgba(224,176,74,0.5);margin-left:0.5rem;">The Council of Five Hundred</span>`
+  arena.appendChild(title)
+
+  const grid = document.createElement('div')
+  grid.style.cssText = `display:grid;grid-template-columns:repeat(5,1fr);gap:0.75rem;margin:1.5rem 0;max-width:500px;`
+  arena.appendChild(grid)
+
+  const tribeEls: { el: HTMLDivElement; dot: HTMLDivElement; label: HTMLDivElement }[] = []
+  tribes.forEach(([name, color]) => {
+    const card = document.createElement('div')
+    card.style.cssText = `background:rgba(0,0,0,0.25);border:1px solid rgba(224,176,74,0.15);border-radius:10px;padding:0.75rem;text-align:center;`
+    grid.appendChild(card)
+
+    const dot = document.createElement('div')
+    dot.style.cssText = `width:32px;height:32px;border-radius:50%;background:${color};margin:0 auto 0.5rem;opacity:0.3;transition:all 0.3s;`
+    card.appendChild(dot)
+
+    const label = document.createElement('div')
+    label.textContent = name
+    label.style.cssText = `font-family:'Fraunces',Georgia,serif;font-size:0.72rem;color:rgba(224,176,74,0.5);`
+    card.appendChild(label)
+
+    tribeEls.push({ el: card, dot, label })
+  })
+
+  const tally = document.createElement('div')
+  tally.style.cssText = `font-family:'IBM Plex Sans',sans-serif;font-size:0.9rem;color:rgba(224,176,74,0.7);margin-top:0.5rem;`
+  arena.appendChild(tally)
+
+  const motion = document.createElement('div')
+  const motions = [
+    'Shall the decree be inscribed?',
+    'Shall war be declared?',
+    'Shall the alliance be renewed?',
+    'Shall the budget be approved?',
+    'Shall the standard be adopted?',
+  ]
+  motion.textContent = motions[Math.floor(Math.random() * motions.length)]
+  motion.style.cssText = `font-family:'Fraunces',Georgia,serif;font-size:1.1rem;font-style:italic;color:#e0b04a;margin-bottom:1rem;`
+  arena.insertBefore(motion, grid)
+
+  let ayes = 0, noes = 0
+  tribeEls.forEach(({ dot, label }, i) => {
+    setTimeout(() => {
+      const vote = Math.random() > 0.35
+      dot.animate([
+        { transform: 'scale(1)', opacity: 0.3 },
+        { transform: 'scale(1.5)', opacity: 1 },
+        { transform: 'scale(1)', opacity: 1 },
+      ], { duration: 400, fill: 'forwards' })
+      if (vote) {
+        dot.style.background = '#4ade80'
+        dot.style.boxShadow = '0 0 12px rgba(74,222,128,0.5)'
+        label.style.color = '#4ade80'
+        ayes++
+      } else {
+        dot.style.background = '#f87171'
+        dot.style.boxShadow = '0 0 12px rgba(248,113,113,0.5)'
+        label.style.color = '#f87171'
+        noes++
+      }
+      tally.textContent = `${ayes} tribes in favor · ${noes} against`
+    }, reducedMotion ? 0 : i * 200 + 500)
+  })
+
+  setTimeout(() => {
+    const passed = ayes > noes
+    const result = document.createElement('div')
+    result.innerHTML = passed
+      ? `<span style="color:#4ade80;font-size:1.3rem;">ἔδοξεν</span> <span style="color:rgba(224,176,74,0.5);">— carried</span>`
+      : `<span style="color:#f87171;font-size:1.3rem;">ἀπέδοξε</span> <span style="color:rgba(224,176,74,0.5);">— defeated</span>`
+    result.style.cssText = `margin-top:1rem;font-family:'Fraunces',Georgia,serif;font-weight:600;`
+    arena.appendChild(result)
+  }, reducedMotion ? 100 : tribes.length * 200 + 1200)
+
+  setTimeout(() => {
+    ov.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, fill: 'forwards' })
+    setTimeout(() => ov.remove(), 700)
+  }, reducedMotion ? 300 : tribes.length * 200 + 3500)
+  discover('boule')
+}
+
+// ================================================================
+// 11. Eternal Flame of Hestia  — console: sacredfire()
+// A persistent corner flame that responds to clicks.
+// ================================================================
+let flameEl: HTMLDivElement | null = null
+let flameState = 0
+
+function sacredFire() {
+  if (flameEl) { flameEl.remove(); flameEl = null; flameState = 0; return }
+
+  flameEl = document.createElement('div')
+  flameEl.style.cssText = `position:fixed;bottom:20px;right:20px;z-index:99998;cursor:pointer;user-select:none;`
+  document.body.appendChild(flameEl)
+
+  const flameSvg = `<svg width="40" height="56" viewBox="0 0 40 56">
+    <ellipse cx="20" cy="52" rx="14" ry="3" fill="rgba(0,0,0,0.3)"/>
+    <path d="M20 50 Q10 40 12 28 Q14 16 20 8 Q26 16 28 28 Q30 40 20 50 Z"
+          fill="url(#flame-grad)" id="flame-body"/>
+    <path d="M20 46 Q14 38 16 30 Q18 22 20 16 Q22 22 24 30 Q26 38 20 46 Z"
+          fill="#ffeb3b" opacity="0.7" id="flame-inner"/>
+    <defs>
+      <linearGradient id="flame-grad" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0" stop-color="#d84315"/>
+        <stop offset="0.4" stop-color="#ff6f00"/>
+        <stop offset="0.7" stop-color="#ffb74d"/>
+        <stop offset="1" stop-color="#fff9c4"/>
+      </linearGradient>
+    </defs>
+  </svg>`
+  flameEl.innerHTML = flameSvg
+
+  const label = document.createElement('div')
+  label.textContent = 'Ἑστία'
+  label.style.cssText = `font-family:'Fraunces',Georgia,serif;font-size:0.65rem;color:rgba(224,176,74,0.4);text-align:center;margin-top:-4px;`
+  flameEl.appendChild(label)
+
+  const states = [
+    { scale: 0.8, opacity: 0.6, text: 'The flame of Hestia burns steadily.' },
+    { scale: 1.2, opacity: 0.85, text: 'The flame grows warmer. The hearth glows.' },
+    { scale: 1.6, opacity: 1, text: 'The sacred fire blazes! The polis is blessed.' },
+  ]
+  const sayings = [
+    'The hearth is the heart of the polis.',
+    'Where the flame burns, there is home.',
+    'Hestia tends the fire while the assembly debates.',
+    'A city without a hearth is a city without a soul.',
+  ]
+
+  function applyState() {
+    if (!flameEl) return
+    if (flameState >= states.length) {
+      flameEl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, fill: 'forwards' })
+      setTimeout(() => { flameEl?.remove(); flameEl = null; flameState = 0 }, 700)
+      return
+    }
+    const s = states[flameState]
+    flameEl.style.transform = `scale(${s.scale})`
+    flameEl.style.opacity = String(s.opacity)
+    flameState++
+
+    const body = flameEl.querySelector('#flame-body') as SVGPathElement
+    const inner = flameEl.querySelector('#flame-inner') as SVGPathElement
+    if (body && !reducedMotion) {
+      body.animate([
+        { transform: 'scaleY(1) scaleX(1)' },
+        { transform: 'scaleY(1.1) scaleX(0.9)' },
+        { transform: 'scaleY(0.95) scaleX(1.05)' },
+        { transform: 'scaleY(1) scaleX(1)' },
+      ], { duration: 400 + Math.random() * 200, iterations: Infinity, easing: 'ease-in-out' })
+      inner.animate([
+        { transform: 'scaleY(1)' },
+        { transform: 'scaleY(1.15)' },
+        { transform: 'scaleY(0.9)' },
+        { transform: 'scaleY(1)' },
+      ], { duration: 300 + Math.random() * 150, iterations: Infinity, easing: 'ease-in-out' })
+    }
+
+    const msg = document.createElement('div')
+    msg.textContent = s.text
+    msg.style.cssText = `position:fixed;bottom:90px;right:20px;max-width:220px;font-family:'Fraunces',Georgia,serif;font-size:0.8rem;font-style:italic;color:#e0b04a;background:rgba(8,12,20,0.9);padding:0.6rem 1rem;border-radius:8px;border:1px solid rgba(224,176,74,0.2);pointer-events:none;`
+    document.body.appendChild(msg)
+    msg.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 300, fill: 'forwards' })
+    setTimeout(() => { msg.animate([{opacity:1},{opacity:0}], {duration:400,fill:'forwards'}); setTimeout(()=>msg.remove(), 500) }, 2500)
+  }
+
+  flameEl.onclick = applyState
+  applyState()
+  discover('sacredfire')
+}
+
+// ================================================================
+// 12. Chisel Mode  — console: scribe()
+// Transforms the entire page into marble-inscription styling.
+// ================================================================
+let scribeStyle: HTMLStyleElement | null = null
+
+function scribeMode() {
+  if (scribeStyle) {
+    scribeStyle.remove()
+    scribeStyle = null
+    document.body.classList.remove('edoxen-scribe')
+    const notice = document.createElement('div')
+    notice.textContent = 'The chisel rests.'
+    notice.style.cssText = `position:fixed;top:20px;left:50%;transform:translateX(-50%);font-family:'Fraunces',Georgia,serif;font-size:0.9rem;color:#8b6914;background:rgba(255,255,255,0.95);padding:0.5rem 1.5rem;border-radius:20px;z-index:99999;border:1px solid rgba(139,105,20,0.3);`
+    document.body.appendChild(notice)
+    notice.animate([{opacity:0,transform:'translateX(-50%) translateY(-10px)'},{opacity:1,transform:'translateX(-50%) translateY(0)'}],{duration:300,fill:'forwards'})
+    setTimeout(() => { notice.animate([{opacity:1},{opacity:0}],{duration:300,fill:'forwards'}); setTimeout(()=>notice.remove(),400) }, 1500)
+    return
+  }
+
+  scribeStyle = document.createElement('style')
+  scribeStyle.textContent = `
+    .edoxen-scribe {
+      background: linear-gradient(135deg, #f5efe0 0%, #ede4d0 30%, #f2ebda 60%, #e8dcc8 100%) !important;
+    }
+    .edoxen-scribe::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(180,160,130,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 60%, rgba(160,140,110,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(200,180,140,0.05) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .edoxen-scribe .prose {
+      text-shadow: 1px 1px 0 rgba(255,255,255,0.6), -1px -1px 0 rgba(0,0,0,0.08) !important;
+      color: #3a3020 !important;
+    }
+    .edoxen-scribe .prose h1, .edoxen-scribe .prose h2, .edoxen-scribe .prose h3,
+    .edoxen-scribe .prose h4 {
+      color: #8b6914 !important;
+      text-shadow: 1px 1px 0 rgba(255,255,255,0.7), 0 2px 4px rgba(139,105,20,0.1) !important;
+    }
+    .edoxen-scribe .prose a {
+      color: #b45309 !important;
+      border-bottom: 1px solid rgba(180,83,9,0.3);
+    }
+    .edoxen-scribe .prose code {
+      background: rgba(139,105,20,0.1) !important;
+      color: #5c3d1a !important;
+      border-color: rgba(139,105,20,0.2) !important;
+    }
+    .edoxen-scribe .prose pre {
+      background: #2a2318 !important;
+      border-color: #5c3d1a !important;
+    }
+    .edoxen-scribe .prose pre code {
+      color: #e0d0b0 !important;
+      background: none !important;
+      border: none !important;
+    }
+    .edoxen-scribe .prose blockquote {
+      background: rgba(139,105,20,0.06) !important;
+      border-left-color: #8b6914 !important;
+      color: #4a3c20 !important;
+    }
+    .edoxen-scribe .prose table {
+      border-color: rgba(139,105,20,0.3) !important;
+    }
+    .edoxen-scribe .prose th {
+      background: rgba(139,105,20,0.08) !important;
+      color: #5c3d1a !important;
+    }
+    .edoxen-scribe .prose td {
+      border-color: rgba(139,105,20,0.15) !important;
+    }
+    .edoxen-scribe .prose strong {
+      color: #5c3d1a !important;
+    }
+    .edoxen-scribe main, .edoxen-scribe .about-hero {
+      position: relative;
+      z-index: 1;
+    }
+  `
+  document.head.appendChild(scribeStyle)
+  document.body.classList.add('edoxen-scribe')
+
+  const notice = document.createElement('div')
+  notice.innerHTML = '🏛️ <strong>Chisel Mode</strong> — the page is now inscribed in marble. Type <code style="background:rgba(139,105,20,0.15);padding:2px 6px;border-radius:3px;">scribe()</code> to restore.'
+  notice.style.cssText = `position:fixed;top:20px;left:50%;transform:translateX(-50%);font-family:'IBM Plex Sans',sans-serif;font-size:0.85rem;color:#3a3020;background:linear-gradient(135deg,#f5efe0,#ede4d0);padding:0.6rem 1.5rem;border-radius:20px;z-index:99999;border:1px solid rgba(139,105,20,0.3);box-shadow:0 4px 20px rgba(139,105,20,0.15);`
+  document.body.appendChild(notice)
+  notice.animate([{opacity:0,transform:'translateX(-50%) translateY(-10px)'},{opacity:1,transform:'translateX(-50%) translateY(0)'}],{duration:400,fill:'forwards'})
+  setTimeout(() => { notice.animate([{opacity:1},{opacity:0}],{duration:500,fill:'forwards'}); setTimeout(()=>notice.remove(),600) }, 4000)
+
+  discover('scribe')
+}
+
+// ================================================================
+// 13. Marathon Runner  — console: marathon()
+// Pheidippides runs across the screen: νενίκηκαμεν!
+// ================================================================
+function marathonRunner() {
+  const ov = overlay()
+
+  const runner = document.createElement('div')
+  runner.innerHTML = `<svg width="30" height="50" viewBox="0 0 30 50">
+    <circle cx="15" cy="8" r="5" fill="#d4a373"/>
+    <line x1="15" y1="13" x2="15" y2="30" stroke="#d4a373" stroke-width="3" stroke-linecap="round"/>
+    <line x1="15" y1="18" x2="8" y2="26" stroke="#d4a373" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="15" y1="18" x2="22" y2="24" stroke="#d4a373" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="15" y1="30" x2="10" y2="44" stroke="#d4a373" stroke-width="3" stroke-linecap="round"/>
+    <line x1="15" y1="30" x2="20" y2="44" stroke="#d4a373" stroke-width="3" stroke-linecap="round"/>
+  </svg>`
+  runner.style.cssText = `position:absolute;bottom:30px;left:-50px;`
+  ov.appendChild(runner)
+
+  const runAnim = runner.animate([
+    { left: '-50px' },
+    { left: 'calc(100vw + 50px)' },
+  ], { duration: reducedMotion ? 1 : 3000, easing: 'cubic-bezier(0.4,0,0.4,1)', fill: 'forwards' })
+
+  if (!reducedMotion) {
+    runner.animate([
+      { transform: 'translateY(0) rotate(-5deg)' },
+      { transform: 'translateY(-8px) rotate(5deg)' },
+      { transform: 'translateY(0) rotate(-5deg)' },
+    ], { duration: 200, iterations: 15, easing: 'ease-in-out' })
+
+    for (let i = 0; i < 15; i++) {
+      setTimeout(() => {
+        const dust = document.createElement('div')
+        dust.style.cssText = `position:absolute;bottom:35px;width:6px;height:6px;border-radius:50%;background:rgba(212,163,115,0.4);`
+        const x = 30 + i * ((window.innerWidth + 100) / 15)
+        dust.style.left = `${x}px`
+        ov.appendChild(dust)
+        dust.animate([
+          { opacity: 0.6, transform: 'translateY(0) scale(1)' },
+          { opacity: 0, transform: 'translateY(-20px) translateX(-10px) scale(2)' },
+        ], { duration: 600, fill: 'forwards' })
+        setTimeout(() => dust.remove(), 700)
+      }, i * 200)
+    }
+  }
+
+  runAnim.onfinish = () => {
+    const victory = document.createElement('div')
+    victory.innerHTML = `<span style="color:#e0b04a;font-size:2rem;">νενίκηκαμεν!</span><br><span style="color:rgba(224,176,74,0.5);font-size:0.85rem;">— We have won!</span>`
+    victory.style.cssText = `position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);text-align:center;font-family:'Fraunces',Georgia,serif;font-weight:600;opacity:0;`
+    ov.appendChild(victory)
+    victory.animate([
+      { opacity: 0, transform: 'translate(-50%,-50%) scale(0.5)' },
+      { opacity: 1, transform: 'translate(-50%,-50%) scale(1)' },
+    ], { duration: reducedMotion ? 1 : 400, easing: 'cubic-bezier(0.34,1.56,0.64,1)', fill: 'forwards' })
+  }
+
+  setTimeout(() => ov.remove(), reducedMotion ? 200 : 5000)
+  discover('marathon')
+}
+
+// ================================================================
+// 14. Philosophical Quote  — console: symposium()
+// A wisdom quote relevant to governance and decisions.
+// ================================================================
+function symposiumQuote() {
+  const ov = overlay()
+
+  const quotes = [
+    { text: 'The unexamined meeting is not worth attending.', attr: 'Socrates (paraphrased)' },
+    { text: 'In a democracy, the poor will have more power than the rich, because there are more of them.', attr: 'Aristotle, Politics' },
+    { text: 'He who has learned to obey will know how to command.', attr: 'Solon' },
+    { text: 'The root of education is bitter, but its fruit is sweet.', attr: 'Aristotle' },
+    { text: 'Know thyself.', attr: 'Inscription at Delphi' },
+    { text: 'Nothing in excess.', attr: 'Inscription at Delphi' },
+    { text: 'The measure of a man is what he does with power.', attr: 'Pittacus of Mytilene' },
+    { text: 'Time is the most valuable thing a man can spend.', attr: 'Theophrastus' },
+    { text: 'Wisdom begins in wonder.', attr: 'Socrates' },
+    { text: 'A decision is only as good as the record of it.', attr: 'Edoxen, probably' },
+  ]
+  const q = quotes[Math.floor(Math.random() * quotes.length)]
+
+  const card = document.createElement('div')
+  card.innerHTML = `
+    <div style="font-family:'Fraunces',Georgia,serif;font-size:1.5rem;font-style:italic;color:#e0b04a;line-height:1.5;text-align:center;max-width:500px;">
+      "${q.text}"
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:rgba(224,176,74,0.4);margin-top:1.2rem;letter-spacing:0.05em;">— ${q.attr}</div>
+  `
+  card.style.cssText = `position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;opacity:0;padding:2rem;`
+  ov.appendChild(card)
+
+  card.animate([
+    { opacity: 0, transform: 'translate(-50%,-50%) scale(0.9)' },
+    { opacity: 1, transform: 'translate(-50%,-50%) scale(1)' },
+  ], { duration: reducedMotion ? 1 : 600, easing: 'ease-out', fill: 'forwards' })
+
+  const glow = document.createElement('div')
+  glow.style.cssText = `position:absolute;left:50%;top:50%;width:400px;height:400px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(224,176,74,0.06),transparent 70%);pointer-events:none;`
+  ov.insertBefore(glow, card)
+  if (!reducedMotion) {
+    glow.animate([
+      { width: '200px', height: '200px', opacity: 0 },
+      { width: '500px', height: '500px', opacity: 1, offset: 0.5 },
+      { width: '600px', height: '600px', opacity: 0 },
+    ], { duration: 3000, fill: 'forwards' })
+  }
+
+  setTimeout(() => {
+    card.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, fill: 'forwards' })
+    setTimeout(() => ov.remove(), 600)
+  }, reducedMotion ? 500 : 4000)
+  discover('symposium')
+}
+
+// ================================================================
+// 15. Oracle of Delphi  — console: prophecy()
+// The Pythia speaks — enigmatic and smoky.
+// ================================================================
+function oracleProphecy() {
+  const ov = overlay()
+  ov.style.background = 'rgba(8,6,12,0.7)'
+
+  const prophecies = [
+    'You shall find what you seek where three roads meet.',
+    'The eagle has spoken; the serpent has yielded. Your decree is nigh.',
+    'When the owl flies at noon, the assembly shall favor your cause.',
+    'Trust not the one who speaks first, but the one who speaks last.',
+    'The stone that rolls gathers no moss, but the stele that stands outlasts the city.',
+    'Your motion shall pass when the count is even and the moon is waning.',
+    'Beware the ides of the next meeting — a vote shall surprise you.',
+    'The god says: yes. Also no. Also maybe. The omens are mixed.',
+    'A stranger shall bring a motion you did not expect. Vote wisely.',
+    'The Pythia sees... a second coffee in your future. Also victory.',
+  ]
+  const prophecy = prophecies[Math.floor(Math.random() * prophecies.length)]
+
+  for (let i = 0; i < 20; i++) {
+    const smoke = document.createElement('div')
+    smoke.style.cssText = `
+      position:absolute;width:${20+Math.random()*40}px;height:${20+Math.random()*40}px;
+      border-radius:50%;background:rgba(180,160,200,${0.03+Math.random()*0.05});
+      left:${30+Math.random()*40}%;top:50%;filter:blur(8px);
+    `
+    ov.appendChild(smoke)
+    if (!reducedMotion) {
+      smoke.animate([
+        { transform: 'translateY(0) scale(0.5)', opacity: 0 },
+        { transform: `translateY(-${100+Math.random()*200}px) scale(${1.5+Math.random()} )`, opacity: 0.6, offset: 0.5 },
+        { transform: `translateY(-${200+Math.random()*300}px) scale(${2+Math.random()} )`, opacity: 0 },
+      ], { duration: 2000 + Math.random() * 2000, delay: i * 100, fill: 'forwards', easing: 'ease-out' })
+    }
+  }
+
+  const text = document.createElement('div')
+  text.innerHTML = `
+    <div style="font-family:'Fraunces',Georgia,serif;font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(180,160,200,0.4);margin-bottom:1rem;">μαντεῖον Δελφικόν</div>
+    <div style="font-family:'Fraunces',Georgia,serif;font-size:1.3rem;font-style:italic;color:rgba(220,200,240,0.85);line-height:1.6;text-align:center;max-width:450px;">"${prophecy}"</div>
+    <div style="font-family:'Fraunces',Georgia,serif;font-size:0.8rem;color:rgba(180,160,200,0.3);margin-top:1.5rem;font-style:italic;">The Pythia has spoken.</div>
+  `
+  text.style.cssText += `position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;opacity:0;`
+  ov.appendChild(text)
+  text.animate([{ opacity: 0 }, { opacity: 1 }], { duration: reducedMotion ? 1 : 800, delay: reducedMotion ? 0 : 600, fill: 'forwards' })
+
+  setTimeout(() => {
+    ov.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 800, fill: 'forwards' })
+    setTimeout(() => ov.remove(), 900)
+  }, reducedMotion ? 500 : 5500)
+  discover('prophecy')
+}
+
+// ================================================================
 // Discovery Complete — all eggs found
 // ================================================================
 function finalInscription() {
@@ -500,6 +1244,14 @@ function printHelp() {
   console.log('%c  lottery()     Sortition — Athenian random selection', item)
   console.log('%c  ostracize()   Banish someone by ostracism', item)
   console.log('%c  edoxen()      Trigger the stoichedon cascade manually', item)
+  console.log('%c  assembly()    ⚡ Interactive Ekklesia — propose & vote!', item)
+  console.log('%c  boule()       The Council of 500 — tribes cast their votes', item)
+  console.log('%c  decree()      Generate a random Athenian decree', item)
+  console.log('%c  scribe()      Toggle Chisel Mode — page becomes marble', item)
+  console.log('%c  sacredfire()  Light the eternal flame of Hestia', item)
+  console.log('%c  marathon()    Pheidippides runs: νενίκηκαμεν!', item)
+  console.log('%c  symposium()   A philosophical quote for governance', item)
+  console.log('%c  prophecy()    The Oracle of Delphi speaks', item)
   console.log('%c\nHidden interactions:', section)
   console.log('%c  Click the nav logo 5×  ??? ', item)
   console.log(`%c\n  Discovered: ${discovered.size}/${ALL_EGGS.length}`, dim)
@@ -525,6 +1277,8 @@ function matchSequence(target: string[], onMatch: () => void) {
 function setupKeyboard() {
   matchSequence(['e','d','o','x','e','n'], stoichedonCascade)
   matchSequence(['arrowup','arrowup','arrowdown','arrowdown','arrowleft','arrowright','arrowleft','arrowright','b','a'], assemblyMarch)
+  matchSequence(['b','o','u','l','e'], bouleVote)
+  matchSequence(['s','c','r','i','b','e'], scribeMode)
 }
 
 function setupConsole() {
@@ -535,6 +1289,14 @@ function setupConsole() {
     resolve: resolutionStamp,
     lottery: sortition,
     ostracize: ostracism,
+    assembly: interactiveAssembly,
+    boule: bouleVote,
+    decree: decreeGenerator,
+    scribe: scribeMode,
+    sacredfire: sacredFire,
+    marathon: marathonRunner,
+    symposium: symposiumQuote,
+    prophecy: oracleProphecy,
   })
 }
 

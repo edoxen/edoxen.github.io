@@ -1226,6 +1226,227 @@ function finalInscription() {
 }
 
 // ================================================================
+// Owl of Athena — accessible discovery UI
+// A blinking owl in the corner opens a panel listing all easter eggs
+// with one-click invoke buttons. No console required.
+// ================================================================
+
+interface EggMeta {
+  id: string
+  name: string
+  desc: string
+  icon: string
+  trigger: () => void
+  command: string
+  category: 'Interactive' | 'Visual' | 'Mode'
+}
+
+const EGG_CATALOG: EggMeta[] = [
+  { id: 'eklesia', name: 'Interactive Ekklesia', desc: 'Propose a decree and put it to the vote of 60 citizens.', icon: '⚖️', trigger: interactiveAssembly, command: 'assembly()', category: 'Interactive' },
+  { id: 'boule', name: 'Council of 500', desc: 'The ten tribes each cast their block votes.', icon: '🏛️', trigger: bouleVote, command: 'boule()', category: 'Interactive' },
+  { id: 'decree', name: 'Decree of the Day', desc: 'A randomly generated Athenian decree.', icon: '📜', trigger: decreeGenerator, command: 'decree()', category: 'Interactive' },
+  { id: 'scribe', name: 'Chisel Mode', desc: 'Transform the page into marble inscription.', icon: '✒️', trigger: scribeMode, command: 'scribe()', category: 'Mode' },
+  { id: 'sacredfire', name: 'Sacred Fire', desc: 'Light the eternal flame of Hestia.', icon: '🔥', trigger: sacredFire, command: 'sacredfire()', category: 'Mode' },
+  { id: 'stoichedon', name: 'Stoichedon Cascade', desc: 'Six Greek letters ΕΔΟΞΕΝ fall and chisel into a grid.', icon: 'ΕΔ', trigger: stoichedonCascade, command: 'type "edoxen"', category: 'Visual' },
+  { id: 'assembly', name: 'The Assembly Convokes', desc: 'Stele silhouettes march across the screen.', icon: '🗿', trigger: assemblyMarch, command: '↑↑↓↓←→←→BA', category: 'Visual' },
+  { id: 'gavel', name: 'Gavel Bang', desc: 'A parliamentary gavel demands ORDER!', icon: '🔨', trigger: gavelBang, command: 'gavel()', category: 'Visual' },
+  { id: 'resolve', name: 'Resolution Stamp', desc: 'A wax-seal stamp slams down: ἔδοξεν.', icon: '🔖', trigger: resolutionStamp, command: 'resolve()', category: 'Visual' },
+  { id: 'lottery', name: 'Sortition', desc: 'Athenian random selection by lot.', icon: '🎲', trigger: sortition, command: 'lottery()', category: 'Visual' },
+  { id: 'ostracize', name: 'Ostracism', desc: 'Banish someone by pottery shard!', icon: '🏺', trigger: ostracism, command: 'ostracize()', category: 'Visual' },
+  { id: 'marathon', name: 'Marathon Runner', desc: 'Pheidippides brings news of victory.', icon: '🏃', trigger: marathonRunner, command: 'marathon()', category: 'Visual' },
+  { id: 'symposium', name: "Philosopher's Quote", desc: 'Wisdom from Socrates, Aristotle, and the ancients.', icon: '📖', trigger: symposiumQuote, command: 'symposium()', category: 'Visual' },
+  { id: 'prophecy', name: 'Oracle of Delphi', desc: 'The Pythia speaks — enigmatically and smokily.', icon: '🔮', trigger: oracleProphecy, command: 'prophecy()', category: 'Visual' },
+]
+
+let owlEl: HTMLButtonElement | null = null
+let panelEl: HTMLDivElement | null = null
+
+function createOwlButton() {
+  if (owlEl) return
+
+  owlEl = document.createElement('button')
+  owlEl.setAttribute('aria-label', 'Open Hidden Inscriptions — discover easter eggs')
+  owlEl.title = 'The Owl of Athena'
+  owlEl.style.cssText = `
+    position:fixed;bottom:20px;left:20px;z-index:99998;
+    width:52px;height:60px;border:none;background:transparent;
+    cursor:pointer;padding:0;opacity:0.7;
+    transition:opacity 0.3s,transform 0.3s;
+    filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+  `
+  owlEl.innerHTML = `<svg width="52" height="60" viewBox="0 0 60 70" style="overflow:visible;">
+    <ellipse cx="30" cy="44" rx="18" ry="22" fill="#c9a84c"/>
+    <ellipse cx="30" cy="28" rx="20" ry="18" fill="#d4b25e"/>
+    <path d="M14 16 L10 6 L20 18 Z" fill="#b89a3e"/>
+    <path d="M46 16 L50 6 L40 18 Z" fill="#b89a3e"/>
+    <ellipse cx="22" cy="25" rx="8" ry="8" fill="#1a1a14"/>
+    <ellipse cx="38" cy="25" rx="8" ry="8" fill="#1a1a14"/>
+    <circle cx="24" cy="23" r="3" fill="#e0b04a"/>
+    <circle cx="40" cy="23" r="3" fill="#e0b04a"/>
+    <path d="M30 32 L27 37 L33 37 Z" fill="#e0b04a"/>
+    <path d="M20 42 Q30 48 40 42" stroke="#8b6914" stroke-width="1.5" fill="none"/>
+    <line x1="24" y1="66" x2="24" y2="70" stroke="#e0b04a" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="36" y1="66" x2="36" y2="70" stroke="#e0b04a" stroke-width="2.5" stroke-linecap="round"/>
+  </svg>`
+
+  document.body.appendChild(owlEl)
+
+  owlEl.onmouseenter = () => { owlEl!.style.opacity = '1'; owlEl!.style.transform = 'translateY(-2px)' }
+  owlEl.onmouseleave = () => { owlEl!.style.opacity = '0.7'; owlEl!.style.transform = '' }
+  owlEl.onclick = openDiscoveryPanel
+
+  const eyes = [owlEl.querySelectorAll('ellipse')[2], owlEl.querySelectorAll('ellipse')[3]]
+  function blink() {
+    if (!owlEl || document.hidden) return
+    eyes.forEach(eye => {
+      if (eye) eye.animate([
+        { transform: 'scaleY(1)' },
+        { transform: 'scaleY(0.1)' },
+        { transform: 'scaleY(1)' },
+      ], { duration: 150, easing: 'ease-in-out' })
+    })
+    setTimeout(blink, 3000 + Math.random() * 4000)
+  }
+  setTimeout(blink, 2000 + Math.random() * 3000)
+
+  owlEl.animate([
+    { opacity: 0, transform: 'translateY(20px) scale(0.5)' },
+    { opacity: 0.7, transform: 'translateY(0) scale(1)' },
+  ], { duration: 600, delay: 1500, easing: 'cubic-bezier(0.34,1.56,0.64,1)', fill: 'forwards' })
+}
+
+function openDiscoveryPanel() {
+  if (panelEl) { closeDiscoveryPanel(); return }
+
+  panelEl = document.createElement('div')
+  panelEl.setAttribute('role', 'dialog')
+  panelEl.setAttribute('aria-modal', 'true')
+  panelEl.setAttribute('aria-labelledby', 'owl-panel-title')
+  panelEl.style.cssText = `position:fixed;inset:0;z-index:100000;background:rgba(8,12,20,0.85);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto;`
+  document.body.appendChild(panelEl)
+
+  const modal = document.createElement('div')
+  modal.style.cssText = `
+    max-width:580px;width:100%;max-height:85vh;overflow-y:auto;
+    background:linear-gradient(135deg,#1a1f2e 0%,#141b26 100%);
+    border:1px solid rgba(224,176,74,0.3);
+    border-radius:16px;padding:2rem;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 80px rgba(224,176,74,0.08);
+    font-family:'IBM Plex Sans',sans-serif;color:#e0b04a;
+  `
+  panelEl.appendChild(modal)
+
+  const close = document.createElement('button')
+  close.innerHTML = '×'
+  close.setAttribute('aria-label', 'Close')
+  close.style.cssText = `position:absolute;top:0.5rem;right:1rem;background:none;border:none;color:rgba(224,176,74,0.5);font-size:1.8rem;cursor:pointer;line-height:1;`
+  close.onclick = closeDiscoveryPanel
+  modal.appendChild(close)
+
+  const header = document.createElement('div')
+  header.innerHTML = `
+    <div id="owl-panel-title" style="font-family:'Fraunces',Georgia,serif;font-size:1.5rem;font-weight:500;">🦉 Hidden Inscriptions</div>
+    <div style="font-size:0.82rem;color:rgba(224,176,74,0.5);margin-top:0.2rem;font-style:italic;font-family:'Fraunces',Georgia,serif;">The Owl of Athena guards these secrets</div>
+  `
+  modal.appendChild(header)
+
+  const progress = document.createElement('div')
+  const pct = Math.round((discovered.size / ALL_EGGS.length) * 100)
+  progress.innerHTML = `
+    <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:rgba(224,176,74,0.5);margin:1rem 0 0.3rem;">
+      <span>Discovered</span><span>${discovered.size}/${ALL_EGGS.length}</span>
+    </div>
+    <div style="width:100%;height:6px;background:rgba(0,0,0,0.3);border-radius:3px;overflow:hidden;">
+      <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#d4a017,#e0b04a);border-radius:3px;transition:width 0.4s;"></div>
+    </div>
+  `
+  modal.appendChild(progress)
+
+  const categories: EggMeta['category'][] = ['Interactive', 'Mode', 'Visual']
+  categories.forEach(cat => {
+    const eggs = EGG_CATALOG.filter(e => e.category === cat)
+    if (eggs.length === 0) return
+
+    const catHeader = document.createElement('div')
+    catHeader.textContent = cat
+    catHeader.style.cssText = `font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(224,176,74,0.35);margin:1.5rem 0 0.5rem;`
+    modal.appendChild(catHeader)
+
+    eggs.forEach(egg => {
+      const isFound = discovered.has(egg.id)
+      const card = document.createElement('div')
+      card.style.cssText = `
+        display:flex;align-items:center;gap:0.75rem;
+        padding:0.75rem;margin-bottom:0.5rem;
+        background:rgba(0,0,0,${isFound ? '0.2' : '0.15'});
+        border:1px solid rgba(224,176,74,${isFound ? '0.15' : '0.06'});
+        border-radius:10px;transition:border-color 0.2s;
+      `
+
+      const icon = document.createElement('div')
+      icon.textContent = egg.icon
+      icon.style.cssText = `font-size:1.5rem;width:2rem;text-align:center;flex-shrink:0;font-family:'Fraunces',Georgia,serif;`
+      card.appendChild(icon)
+
+      const info = document.createElement('div')
+      info.style.cssText = `flex:1;min-width:0;`
+      info.innerHTML = `
+        <div style="font-family:'Fraunces',Georgia,serif;font-size:0.95rem;font-weight:500;color:${isFound ? '#e0b04a' : 'rgba(224,176,74,0.7)'};">
+          ${egg.name}${isFound ? ' <span style="color:#4ade80;font-size:0.7rem;">✓</span>' : ''}
+        </div>
+        <div style="font-size:0.78rem;color:rgba(224,176,74,0.4);margin-top:0.1rem;line-height:1.3;">${egg.desc}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:rgba(224,176,74,0.25);margin-top:0.2rem;">${egg.command}</div>
+      `
+      card.appendChild(info)
+
+      const btn = document.createElement('button')
+      btn.textContent = '✦'
+      btn.setAttribute('aria-label', `Invoke ${egg.name}`)
+      btn.style.cssText = `
+        flex-shrink:0;width:36px;height:36px;
+        background:rgba(224,176,74,0.1);border:1px solid rgba(224,176,74,0.2);
+        border-radius:8px;color:#e0b04a;font-size:1rem;cursor:pointer;
+        transition:all 0.2s;
+      `
+      btn.onmouseenter = () => { btn.style.background = 'rgba(224,176,74,0.25)'; btn.style.borderColor = 'rgba(224,176,74,0.5)'; card.style.borderColor = 'rgba(224,176,74,0.25)' }
+      btn.onmouseleave = () => { btn.style.background = 'rgba(224,176,74,0.1)'; btn.style.borderColor = 'rgba(224,176,74,0.2)'; card.style.borderColor = 'rgba(224,176,74,0.06)' }
+      btn.onclick = () => {
+        closeDiscoveryPanel()
+        setTimeout(() => egg.trigger(), 300)
+      }
+      card.appendChild(btn)
+
+      modal.appendChild(card)
+    })
+  })
+
+  const tips = document.createElement('div')
+  tips.innerHTML = `
+    <div style="margin:1.5rem 0 0.5rem;padding-top:1rem;border-top:1px solid rgba(224,176,74,0.1);font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(224,176,74,0.3);">Also try</div>
+    <div style="font-size:0.8rem;color:rgba(224,176,74,0.5);line-height:1.6;">
+      Click the nav logo 5× for a surprise.<br>
+      Open browser console (F12) and type <code style="background:rgba(224,176,74,0.1);padding:1px 4px;border-radius:3px;">help()</code> for command access.
+    </div>
+  `
+  modal.appendChild(tips)
+
+  panelEl.onclick = (e) => { if (e.target === panelEl) closeDiscoveryPanel() }
+  const escHandler = (e: KeyboardEvent) => { if (e.key === 'Escape') { closeDiscoveryPanel(); document.removeEventListener('keydown', escHandler) } }
+  document.addEventListener('keydown', escHandler)
+
+  panelEl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: 'forwards' })
+  modal.animate([{ transform: 'scale(0.9) translateY(20px)', opacity: 0 }, { transform: 'scale(1) translateY(0)', opacity: 1 }], { duration: 300, easing: 'cubic-bezier(0.34,1.56,0.64,1)', fill: 'forwards' })
+}
+
+function closeDiscoveryPanel() {
+  if (!panelEl) return
+  const p = panelEl
+  panelEl = null
+  p.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' })
+  setTimeout(() => p.remove(), 250)
+}
+
+// ================================================================
 // Console: help() — lists all easter eggs
 // ================================================================
 function printHelp() {
@@ -1321,8 +1542,8 @@ function setupLogoClick() {
 function printTeaser() {
   const style = 'font-size:14px;font-weight:bold;color:#e0b04a;'
   const sub = 'font-size:11px;color:#6b7280;'
-  console.log('%c🏛️  Edoxen', style)
-  console.log('%cType help() to discover hidden inscriptions.', sub)
+  console.log('%c🦙  Edoxen', style)
+  console.log('%cClick the owl in the corner (or type help()) to discover hidden inscriptions.', sub)
 }
 
 export function initEasterEggs() {
@@ -1330,5 +1551,6 @@ export function initEasterEggs() {
   setupKeyboard()
   setupConsole()
   setupLogoClick()
+  createOwlButton()
   printTeaser()
 }
